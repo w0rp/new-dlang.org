@@ -4,8 +4,9 @@ append head
     title The D Programming Language
 
 append content
-    h1 The D Programming Language
-    h2 Modern convenience. Modelling power. Native efficiency.
+    header
+        h1 The D Programming Language
+        p Modern convenience. Modelling power. Native efficiency.
     .code-sample
     p
         | D is a language with C-like syntax and static typing.
