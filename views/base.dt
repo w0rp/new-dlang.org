@@ -49,7 +49,7 @@ html(lang="en")
                             li
                                 a(href="#") Features
                             li
-                                a(href="#") Chang Log
+                                a(href="#") Change Log
                             li
                                 a(href="#") Bug Tracker
                             li
