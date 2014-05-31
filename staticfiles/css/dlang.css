@@ -1,0 +1,136 @@
+body {
+    font-family: "Source Sans Pro", sans-serif;
+    background: #d7d6d6;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-weight: 600;
+}
+
+code, kbd, pre, samp {
+    font-family: "Source Code Pro", monospace;
+}
+
+.navbar {
+    min-height: 48px;
+    border: 0;
+    border-radius: 0;
+}
+
+.navbar-nav > li > a {
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
+
+.navbar-inverse .navbar-brand,
+.navbar-inverse .navbar-brand:hover,
+.navbar-inverse .navbar-brand:focus {
+    background: url("../image/d-icon.svg") no-repeat center, #a70b0b;
+    width: 56px;
+    height: 48px;
+    padding: 0;
+}
+
+.navbar-static-top {
+    text-transform: uppercase;
+    background-color: #333232;
+    color: #d8d8d8;
+
+    border-top: 4px solid #a70b0b;
+}
+
+.navbar-static-top .container-fluid {
+    padding: 0;
+}
+
+.navbar-static-top .navbar-collapse {
+    padding: 0;
+}
+
+.navbar-static-top .navbar-nav > li > a {
+    color: #d8d8d8;
+}
+
+.navbar-static-top .navbar-nav > li > a:hover {
+    color: white;
+}
+
+.navbar-static-top .navbar-nav > li > a {
+    border-right: 1px solid black;
+}
+
+.navbar-static-top .navbar-nav.navbar-right {
+    margin-right: 0;
+}
+
+.navbar-static-top .navbar-nav.navbar-right > li > a {
+    border-left: 1px solid black;
+}
+
+.page-center > .row > .nav-column {
+    padding: 0;
+}
+
+.nav-stacked {
+    background-color: #f1f1f1;
+    color: #333232;
+}
+
+.nav-stacked.nav-pills > li {
+    margin-top: 0;
+}
+
+.nav-stacked.nav-pills > li > a {
+    background-color: transparent;
+    color: #333232;
+
+    margin-left: 8px;
+    margin-right: 8px;
+
+    padding-left: 4px;
+    padding-right: 4px;
+
+    border-top: 1px solid #cacaca;
+    border-radius: 0;
+}
+
+.nav-stacked.nav-pills > li:first-child > a {
+    border-top-color: transparent;
+}
+
+.nav-stacked.nav-pills > li:hover,
+.nav-stacked.nav-pills > li:focus {
+    background-color: #e5e5e5;
+}
+
+.nav-stacked.nav-pills > li:hover > a,
+.nav-stacked.nav-pills > li:focus > a {
+    border-top-color: transparent;
+}
+
+.nav-stacked.nav-pills > li:hover + li > a,
+.nav-stacked.nav-pills > li:focus + li > a {
+    border-top-color: transparent;
+}
+
+.nav-stacked.nav-pills > li.active {
+    background-color: #333232;
+}
+
+.nav-stacked.nav-pills > li.active > a {
+    background-color: transparent;
+    color: #d8d8d8;
+    border-top-color: transparent;
+}
+
+article {
+    background-color: #f1f1f1;
+    color: #333232;
+
+    overflow: auto;
+    padding: 0 1em;
+}
+
+article ul > li {
+    margin-top: 1em;
+}

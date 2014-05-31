@@ -1,0 +1,12 @@
+{% extends "base.htm" %}
+
+{% block main %}
+  <div class="row">
+    <div class="col-md-4">
+        Sidebar nav stuff goes here.
+    </div>
+    <div id="main" class="col-md-8">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+{% endblock %}

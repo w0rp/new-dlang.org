@@ -1,0 +1,80 @@
+{% extends "base.htm" %}
+
+{% block content %}
+  <h1>The D Programming Language</h1>
+  <h2>Modern convenience. Modelling power. Native efficiency.</h2>
+  <div class="code-sample"></div>
+  <p>
+    D is a language with C-like syntax and static typing.
+    It pragmatically combines efficiency, control, and
+    modelling power, with safety and programmer productivity.
+  </p>
+  <h2>Convenience</h2>
+  <ul>
+    <li>
+      D allows writing large code fragments without redundantly
+      specifying types, like dynamic languages do. On the other hand,
+      static inference deduces types and other code properties, giving
+      the best of both the static and the dynamic worlds.
+      <a href="#">See example</a>.
+    </li>
+    <li>
+      Automatic memory management makes for safe, simple, and robust
+      code. D also supports scoped resource management
+      (aka the <a href="#">RAII</a> idiom) and scope statements
+      for deterministic transactional code that is easy to write
+      and read.
+      <a href="#">See example</a>.
+    </li>
+    <li>
+      Built-in linear and associative arrays, slices, and ranges make
+      daily programming simple and pleasant for tasks, both
+      small and large.
+      <a href="#">See example</a>.
+    </li>
+  </ul>
+  <h2>Power</h2>
+  <ul>
+    <li>
+      The best paradigm is not to impose something at the expense of
+      others. D offers classic polymorphism, value semantics,
+      functional style, generics, generative programming,
+      contract programming, and more &ndash; all harmoniously
+      integrated.
+      <a href="#">See example</a>.
+    </li>
+    <li>
+      D offers an innovative approach to concurrency, featuring true
+      immutable data, message passing, no sharing by default, and
+      controlled mutable sharing across threads.
+      <a href="#">Read more</a>.
+    </li>
+    <li>
+      From simple scripts to large projects, D has the breadth to
+      scale with any application's needs: unit testing, information hiding,
+      refined modularity, fast compilation, precise interfaces.
+      <a href="#">Read more</a>.
+    </li>
+  </ul>
+  <h2>Efficiency</h2>
+  <ul>
+    <li>
+      D compiles naturally to efficient native code.
+    </li>
+    <li>
+      D is designed such that the most <q>obvious</q> code is fast
+      and safe. On occasion a function might need to escape the confines
+      of type safety for ultimate speed and control. For such rare cases
+      D offers native pointers, type casts, access to any C function
+      without intervening translation, and even inline assembly code.
+      <a href="#">See example</a>.
+    </li>
+    <li>
+      The <code>@safe</code>, <code>@trusted</code> and <code>@system</code>
+      modular attributes allow the programmer to best decide the
+      safety-efficiency tradeoffs of an application, and have the compiler
+      check for consistency.
+      <a href="#">Read more</a>.
+    </li>
+  </ul>
+{% endblock %}
