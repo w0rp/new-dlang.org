@@ -1,0 +1,90 @@
+!!! 5
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        script(src="/static/js/jquery-2.1.0.min.js")
+        script(src="/static/js/bootstrap.min.js")
+
+        link(rel="stylesheet", href="/static/css/bootstrap.min.css")
+        link(rel="stylesheet", href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,400italic,700italic,700,600italic")
+        link(rel="stylesheet", href="//fonts.googleapis.com/css?family=Source+Code+Pro:400,600,700")
+
+        link(rel="stylesheet", href="/static/css/dlang.css")
+
+        block head
+    body
+        nav.navbar.navbar-default.navbar-inverse.navbar-static-top
+            .container
+                .row
+                    .col-md-12
+                        .navbar-header
+                            a.navbar-brand(href="/")
+                        .collapse.navbar-collapse
+                            ul.nav.navbar-nav
+                                li
+                                    a(href="#") Download
+                                li
+                                    a(href="#") Documentation
+                                li
+                                    a(href="#") Community
+                            form.navbar-form.navbar-right
+                                .form-group
+                                    input(type="text", class="form-control", placeholder="Search")
+                                button.btn.btn-default Submit
+        //
+            This container is 3 column on the largest devices,
+            the same but a little smaller on medium,
+            goes 2 column on small devices,
+            and goes down to just the 1 column on extra
+            small devices.
+        .container.page-center
+            .row
+                .hidden-xs.col-sm-2.col-md-2.nav-column
+                    nav
+                        ul.nav.nav-pills.nav-stacked
+                            li.active
+                                a(href="/") D 2.065.0
+                            li
+                                a(href="#") Overview
+                            li
+                                a(href="#") Features
+                            li
+                                a(href="#") Chang Log
+                            li
+                                a(href="#") Bug Tracker
+                            li
+                                a(href="#") FAQ
+                            li
+                                a(href="#") Appendices
+                            li
+                                a(href="#") Thanks
+                            li
+                                a(href="#") Sitemap
+                            li
+                                a(href="#") D1 Home
+                .col-sm-10.col-md-7
+                    article
+                        block content
+                .hidden-xs.hidden-sm.col-md-3
+                    aside
+                        block extra-sidebar
+        footer
+            .container
+                .row
+                    .col-md-12
+                        ul.footer-links
+                            li
+                                a(href="/") GitHub
+                            li
+                                a(href="/") Forums
+                            li
+                                a(href="/") Comments
+                            li
+                                a(href="/") Search
+                            li
+                                a(href="/") Downloads
+                            li
+                                a(href="/") Home
+                .row
+                    .col-md-12.copyright-information
+                        | Copyright © 1999-2014 by Digital Mars ®, All Rights Reserved
