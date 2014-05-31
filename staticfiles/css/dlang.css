@@ -67,6 +67,10 @@ code, kbd, pre, samp {
     border-left: 1px solid black;
 }
 
+.navbar-static-top .navbar-form.navbar-right button {
+    margin-left: 4px;
+}
+
 .page-center > .row > .nav-column {
     padding: 0;
 }
@@ -92,6 +96,8 @@ code, kbd, pre, samp {
 
     border-top: 1px solid #cacaca;
     border-radius: 0;
+
+    word-wrap: break-word;
 }
 
 .nav-stacked.nav-pills > li:first-child > a {
@@ -133,4 +139,13 @@ article {
 
 article ul > li {
     margin-top: 1em;
+}
+
+#twitter > a {
+    display: block;
+    width: 100%;
+    padding: 8px;
+
+    background-color: #333232;
+    color: #d8d8d8;
 }

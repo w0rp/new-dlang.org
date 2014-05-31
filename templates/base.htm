@@ -29,17 +29,27 @@
                 <li><a href="#">Documentation</a></li>
                 <li><a href="#">Community</a></li>
               </ul>
-              <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><span class="glyphicon glyphicon-search"></span> Search</a></li>
-              </ul>
+              <form class="navbar-form navbar-right">
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Search">
+                </div>
+                <button class="btn btn-default">Submit</button>
+              </form>
             </div>
           </div>
         </div>
       </div>
     </nav>
+    <!--
+      This container is 3 column on the largest devices,
+      the same but a little smaller on medium,
+      goes 2 column on small devices,
+      and goes down to just the 1 column on extra
+      small devices.
+    -->
     <div class="container page-center">
       <div class="row">
-        <div class="col-md-2 nav-column">
+        <div class="hidden-xs col-sm-2 col-md-2 nav-column">
           <nav>
             <ul class="nav nav-pills nav-stacked">
               <li class="active"><a href="/">D 2.065.0</a></li>
@@ -49,16 +59,21 @@
               <li><a href="#">Bug Tracker</a></li>
               <li><a href="#">FAQ</a></li>
               <li><a href="#">Appendices</a></li>
-              <li><a href="#">Acknowledgements</a></li>
+              <li><a href="#">Thanks</a></li>
               <li><a href="#">Sitemap</a></li>
               <li><a href="#">D1 Home</a></li>
             </ul>
           </nav>
         </div>
-        <div class="col-md-10">
+        <div class="col-sm-10 col-md-7">
           <article>
             {% block content %}{% endblock %}
           </article>
+        </div>
+        <div class="hidden-xs hidden-sm col-md-3">
+          <aside>
+            {% block extra-sidebar %}{% endblock %}
+          </aside>
         </div>
       </div>
     </div>
