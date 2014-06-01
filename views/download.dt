@@ -22,15 +22,14 @@ append content
         | and compilers. Choose the option most appropriate for your
         | usage.
 
-    h2#dmd DMD
-        a.toc-link(href="#dmd") &para;
+
+    |!= h2(toc, "dmd", "DMD")
     p DMD is the Digital Mars reference D compiler.
     p
         | If you are new to D or are unsure about which
         | compiler to use, DMD should be your first choice.
 
-    h3#installing-dmd Installing DMD
-        a.toc-link(href="#installing-dmd") &para;
+    |!= h3(toc, "installing-dmd", "Installing DMD")
     p
         | A variety of installers are available for DMD.
         | Choose the option which best fits your platform.
@@ -102,8 +101,7 @@ append content
                     | dmd.#{dmdVersion}.zip
             span.architectures i386, x86_64
 
-    h2#gdc GDC
-        a.toc-link(href="#gdc") &para;
+    |!= h2(toc, "gdc", "GDC")
     p
         | GDC is a D compiler which uses
         a(href="https://gcc.gnu.org/", title="The GNU Compiler Collection") GCC
@@ -125,8 +123,8 @@ append content
             span.architectures
                 | i386, x86_64, armel, armhf, mips, mipsel, powerpc,
                 | ia64, s390, sparc
-    h2#ldc LDC
-        a.toc-link(href="#ldc") &para;
+
+    |!= h2(toc, "ldc", "LDC")
     p
         | LDC is a D compiler which uses
         a(href="http://llvm.org/") LLVM
@@ -180,8 +178,8 @@ append content
                 a(href="#{ldcURLPrefix}src.tar.gz")
                     | #{ldcFilenamePrefix}src.tar.gz (4MB)
             span.architectures i386, x86_64
-    h2#visuald IDE &ndash; VisualD
-        a.toc-link(href="#visuald") &para;
+
+    |!= h2(toc, "visuald", "VisualD")
     p
         | VisualD is a Visual Studio plugin for the D programming language,
         | providing support for build D projects in Visual Studio.
@@ -198,8 +196,8 @@ append content
                 a(href="https://github.com/D-Programming-Language/visuald/releases/download/v#{visualDVersion}/VisualD-v#{visualDVersion}.exe")
                     | VisualD-v#{visualDVersion}.exe
             span.architectures i386
-    h2#dmd1 DMD &ndash; Version 1
-        a.toc-link(href="#dmd1") &para;
+
+    |!= h2(toc, "dmd1", "DMD \u2013 Version 1")
     p
         | Downloads for version 1 of the D programming language are available
         | here.
@@ -280,8 +278,7 @@ append content
                 a(href="#{dmd1ReleaseSite}dmd.1.030.zip")
                     | dmd.1.030.zip
             span.architectures i386, x86_64
-    h2#dmc DMC &ndash; Digital Mars C and C++ Compiler
-        a.toc-link(href="#dmc") &para;
+    |!= h2(toc, "dmc", "DMC \u2013 Digital Mars C and C++ Compiler")
     p
         | Digital Mars offers a C and C++ compiler, which DMD uses on 32-bit
         | Windows for compiling and linking D programs.
@@ -292,8 +289,7 @@ append content
             a(href="http://downloads.dlang.org/other/dm857c.zip")
                 | dm857c.zip
         span.architectures i386
-    h2#documentation Documentation
-        a.toc-link(href="#documentation") &para;
+    |!= h2(toc, "documentation", "Documentation")
     p Downloadable documentation is also offered.
     ul.download-list
         li
@@ -308,8 +304,7 @@ append content
             span.links
                 a(href="http://www.prowiki.org/upload/duser/spec_DMD_1.00.pdf")
                     | DMD 1.0 pdf
-    h2#other Other
-        a.toc-link(href="#other") &para;
+    |!= h2(toc, "other", "Other")
     ul.download-list
         li
             span.links
@@ -336,26 +331,4 @@ append content
                     | DMD2 compatible cURL 7.24.0
 
 append extra-sidebar
-    #toc
-        header
-            | On This Page
-        ul
-            li
-                a(href="#dmd") DMD
-                ul
-                    li
-                        a(href="#installing-dmd") Installing DMD
-            li
-                a(href="#gdc") GDC
-            li
-                a(href="#ldc") LDC
-            li
-                a(href="#visuald") IDE &ndash; VisualD
-            li
-                a(href="#dmd1") DMD1 &ndash; Version 1
-            li
-                a(href="#dmc") DMC &ndash; C and C++ Compiler
-            li
-                a(href="#documentation") Documentation
-            li
-                a(href="#other") Other
+    |!= toc.write("On This Page")
