@@ -1,0 +1,21 @@
+{
+    "bitwise": true,
+    "curly": true,
+    "eqeqeq": true,
+    "eqnull": true,
+    "forin": true,
+    "freeze": true,
+    "immed": true,
+    "noarg": true,
+    "nonew": true,
+    "strict": true,
+    "maxparams": 3,
+    "maxdepth": 4,
+    "maxlen": 80,
+    "devel": true,
+    "jquery": true,
+    "laxbreak": true,
+    "undef": true,
+    "latedef": true,
+    "browser": true
+}
