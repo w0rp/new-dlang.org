@@ -13,7 +13,7 @@ append content
         | It pragmatically combines efficiency, control, and
         | modelling power, with safety and programmer productivity.
     h2 Convenience
-    ul
+    ul.spaced-points
         li
             | D allows writing large code fragments without redundantly
             | specifying types, like dynamic languages do. On the other hand,
@@ -33,7 +33,7 @@ append content
             | small and large.
             | <a href="#">See example</a>.
     h2 Power
-    ul
+    ul.spaced-points
         li
             | The best paradigm is not to impose something at the expense
             | of others. D offers classic polymorphism, value semantics,
@@ -53,7 +53,7 @@ append content
             | interfaces.
             | <a href="#">Read more</a>.
     h2 Efficiency
-    ul
+    ul.spaced-points
         li D compiles naturally to efficient native code.
         li
             | D is designed such that the most <q>obvious</q> code

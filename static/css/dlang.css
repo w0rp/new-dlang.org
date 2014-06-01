@@ -1,11 +1,92 @@
+/* Set margins and such for sticky footers */
+html, body {
+    margin: 0;
+    padding: 0;
+
+    height: 100%;
+}
+
 body {
     font-family: "Source Sans Pro", sans-serif;
 
     background: #222226;
-    background-image: -moz-linear-gradient(160deg, rgba(183,89,89,1) 0%, #222226 420px);
-    background-image: -webkit-linear-gradient(160deg, rgba(183,89,89,1) 0%, #222226 420px);
-    background-image: -ms-linear-gradient(160deg, rgba(183,89,89,1) 0%, #222226 420px);
-    background-image: linear-gradient(160deg, rgba(183,89,89,1) 0%, #222226 420px);
+}
+
+#site-container {
+    min-height: 100%;
+    position: relative;
+}
+
+#page-wrapper {
+    background: #222226;
+    /*
+    background-image: -moz-linear-gradient(160deg, rgba(183,89,89,1) 0%, #222226 300px);
+    background-image: -webkit-linear-gradient(160deg, rgba(183,89,89,1) 0%, #222226 300px);
+    background-image: -ms-linear-gradient(160deg, rgba(183,89,89,1) 0%, #222226 300px);
+    background-image: linear-gradient(160deg, rgba(183,89,89,1) 0%, #222226 300px);
+    */
+
+    padding-top: 28px;
+    /* The height of the footer + the same padding from the top. */
+    padding-bottom: 145px;
+}
+
+#site-footer {
+    position: absolute;
+    bottom: 0;
+
+    width: 100%;
+
+    /*
+     The footer size must be set exactly to make it stick.
+
+     4px border on the top
+     28px padding on top
+     20px line height for footer links
+     10px padding on bottom of footer links
+     14px padding above copyright information
+     20px line height for copyright information
+     21px padding on the bottom
+
+     117px in total.
+    */
+    height: 117px;
+
+    padding: 28px 0 21px 0;
+
+    border-top: 4px solid #a70b0b;
+
+    background-color: #333232;
+    color: #d8d8d8;
+}
+
+#site-footer ul.footer-links {
+    list-style-type: none;
+    text-align: center;
+
+    margin-bottom: 10px;
+}
+
+#site-footer ul.footer-links > li {
+    display: inline;
+
+    padding: 0 1em;
+
+    border-left: 1px solid #cacaca;
+}
+
+#site-footer ul.footer-links > li:first-child {
+    border-left: none;
+}
+
+#site-footer ul.footer-links > li > a {
+    color: #d8d8d8;
+}
+
+#site-footer .copyright-information {
+    text-align: center;
+
+    padding-top: 14px;
 }
 
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
@@ -46,6 +127,7 @@ header h1 + p {
     color: #d8d8d8;
 
     border-top: 4px solid #a70b0b;
+    margin-bottom: 0;
 }
 
 .navbar-static-top .container-fluid {
@@ -80,8 +162,14 @@ header h1 + p {
     margin-left: 4px;
 }
 
-.page-center > .row > .nav-column {
+.page-center > .row > .nav-column,
+.page-center > .row > .extra-column {
     padding: 0;
+}
+
+.page-center > .row > .extra-column > aside {
+    width: 243px;
+    top: 0px;
 }
 
 .nav-stacked {
@@ -144,47 +232,12 @@ article {
 
     overflow: auto;
     padding: 0 1em;
+
+    padding-bottom: 2em;
 }
 
-article ul > li {
+article ul.spaced-points > li {
     margin-top: 1em;
-}
-
-footer {
-    margin-top: 2em;
-    padding: 2em 0 1.5em 0;
-
-    border-top: 4px solid #a70b0b;
-
-    background-color: #333232;
-    color: #d8d8d8;
-}
-
-footer ul.footer-links {
-    list-style-type: none;
-    text-align: center;
-}
-
-footer ul.footer-links > li {
-    display: inline;
-
-    padding: 0 1em;
-
-    border-left: 1px solid #cacaca;
-}
-
-footer ul.footer-links > li:first-child {
-    border-left: none;
-}
-
-footer ul.footer-links > li > a {
-    color: #d8d8d8;
-}
-
-footer .copyright-information {
-    text-align: center;
-
-    padding-top: 1em;
 }
 
 #twitter > a {
@@ -194,4 +247,52 @@ footer .copyright-information {
 
     background-color: #333232;
     color: #d8d8d8;
+}
+
+h1 > .toc-link,
+h2 > .toc-link,
+h3 > .toc-link,
+h4 > .toc-link {
+    visibility: hidden;
+
+    font-weight: 400;
+    font-size: 0.8em;
+    vertical-align: top;
+    color: inherit;
+    opacity: 0.8;
+}
+
+h1:hover > .toc-link,
+h2:hover > .toc-link,
+h3:hover > .toc-link,
+h4:hover > .toc-link {
+    visibility: visible;
+    text-decoration: none;
+}
+
+#toc {
+    background-color: #f1f1f1;
+    color: #333232;
+
+    overflow: auto;
+}
+
+#toc > header {
+    margin: 0.5em 0;
+    padding-left: 14px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+#toc ul {
+    list-style-type: none;
+    padding-left: 14px;
+}
+
+#toc li {
+    padding-top: 0.25em;
+}
+
+#toc > ul > li:first-child {
+    padding-top: 0;
 }

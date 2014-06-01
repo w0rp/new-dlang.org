@@ -1,0 +1,361 @@
+extends base
+
+append head
+    title Downloads &ndash; The D Programming Language
+
+append content
+    - string dmdVersion = "2.065.0";
+    - string dmd1Version = "1.076";
+    - string dmdReleaseSite = "http://downloads.dlang.org/releases/2014/";
+    - string dmd1ReleaseSite = "http://ftp.digitalmars.com/";
+    - string ldcVersion = "0.12.1";
+    - string ldcReleaseSite = "https://github.com/ldc-developers/ldc/releases/download/" ~ ldcVersion ~ "/";
+    - string ldcFilenamePrefix = "ldc2-" ~ ldcVersion ~ "-";
+    - string ldcURLPrefix = ldcReleaseSite ~ "v" ~ ldcVersion ~ "/" ~ ldcFilenamePrefix;
+    - string visualDVersion = "0.3.37";
+
+    header
+        h1 Downloads
+    p
+        | D code can be developed with a number of
+        | <abbr title="Integrated Development Environment">IDEs</abbr>
+        | and compilers. Choose the option most appropriate for your
+        | usage.
+
+    h2#dmd DMD
+        a.toc-link(href="#dmd") &para;
+    p DMD is the Digital Mars reference D compiler.
+    p
+        | If you are new to D or are unsure about which
+        | compiler to use, DMD should be your first choice.
+
+    h3#installing-dmd Installing DMD
+        a.toc-link(href="#installing-dmd") &para;
+    p
+        | A variety of installers are available for DMD.
+        | Choose the option which best fits your platform.
+    ul.download-list
+        li
+            span.platforms Windows
+            | &mdash;
+            span.links
+                a(href="#{dmdReleaseSite}dmd-#{dmdVersion}.exe")
+                    | dmd-#{dmdVersion}.exe
+            span.architectures i386
+        li
+            span.platforms Mac OSX
+            | &mdash;
+            span.links
+                a(href="#{dmdReleaseSite}dmd.#{dmdVersion}.dmg")
+                    | dmd.#{dmdVersion}.dmg</a>
+            span.architectures x86_64
+        li
+            span.platforms Debian/Ubuntu
+            | &mdash;
+            span.links
+                a(href="#{dmdReleaseSite}dmd_#{dmdVersion}-0_i386.deb")
+                    | dmd_#{dmdVersion}-0_i386.deb
+            span.architectures i386
+        li
+            span.platforms Debian/Ubuntu
+            | &mdash;
+            span.links
+                a(href="#{dmdReleaseSite}dmd_#{dmdVersion}-0_amd64.deb")
+                    | dmd_#{dmdVersion}-0_amd64.deb
+            span.architectures x86_64
+        li
+            span.platforms Fedora
+            | &mdash;
+            span.links
+                a(href="#{dmdReleaseSite}dmd-#{dmdVersion}-0.fedora.i386.rpm")
+                    | dmd-#{dmdVersion}-0.fedora.i386.rpm
+            span.architectures i386
+        li
+            span.platforms Fedora
+            | &mdash;
+            span.links
+                a(href="#{dmdReleaseSite}dmd-#{dmdVersion}-0.fedora.x86_64.rpm")
+                    | dmd-#{dmdVersion}-0.fedora.x86_64.rpm
+            span.architectures x86_64
+        li
+            span.platforms openSUSE
+            | &mdash;
+            span.links
+                a(href="#{dmdReleaseSite}dmd-#{dmdVersion}-0.openSUSE.i386.rpm")
+                    | dmd-#{dmdVersion}-0.openSUSE.i386.rpm
+            span.architectures i386
+        li
+            span.platforms openSUSE
+            | &mdash;
+            span.links
+                a(href="#{dmdReleaseSite}dmd-#{dmdVersion}-0.openSUSE.x86_64.rpm")
+                    | dmd-#{dmdVersion}-0.openSUSE.x86_64.rpm
+            span.architectures x86_64
+
+    p A package containing binaries for all platforms is also available.
+    ul.download-list
+        li
+            span.platforms All
+            | &mdash;
+            span.links
+                a(href="#{dmdReleaseSite}dmd.#{dmdVersion}.zip")
+                    | dmd.#{dmdVersion}.zip
+            span.architectures i386, x86_64
+
+    h2#gdc GDC
+        a.toc-link(href="#gdc") &para;
+    p
+        | GDC is a D compiler which uses
+        a(href="https://gcc.gnu.org/", title="The GNU Compiler Collection") GCC
+        | as its backend.
+        | By using GCC as its backend, GDC can target platforms which
+        | GCC targets, and take advantage of compiler optimisations in GCC.
+    ul.download-list
+        li
+            span.platforms All
+            | &mdash;
+            span.links
+                a(href="http://gdcproject.org/downloads/") Binaries
+            span.architectures i386, x86_64, armel, armhf
+        li
+            span.platforms All
+            | &mdash;
+            span.links
+                a(href="http://wiki.dlang.org/GDC/Installation") Source
+            span.architectures
+                | i386, x86_64, armel, armhf, mips, mipsel, powerpc,
+                | ia64, s390, sparc
+    h2#ldc LDC
+        a.toc-link(href="#ldc") &para;
+    p
+        | LDC is a D compiler which uses
+        a(href="http://llvm.org/") LLVM
+        | as its backend.
+        | By using LLVM as its backend, LDC is able to generate highly
+        | optimised D code for a number of architectures.
+    p
+        | The current LDC version is #{ldcVersion}, which currently
+        | supports version 2.063.2 of the D programming language.
+    ul.download-list
+        li
+            span.platforms Windows
+            | &mdash;
+            span.links
+                a(href="#{ldcURLPrefix}mingw-x86.zip")
+                    | #{ldcFilenamePrefix}mingw-x86.zip (19MB)
+                a(href="#{ldcURLPrefix}mingw-x86.7z")
+                    | .7z (9 MB)
+            span.architectures i386
+        li
+            span.platforms Mac OSX 10.7+
+            | &mdash;
+            span.links
+                a(href="#{ldcURLPrefix}osx-x86_64.tar.gz")
+                    | #{ldcFilenamePrefix}osx-x86_64.tar.gz (28MB)
+                a(href="#{ldcURLPrefix}osx-x86_64.tar.xz")
+                    | .tar.xz (12 MB)
+            span.architectures x86_64
+        li
+            span.platforms Linux
+            | &mdash;
+            span.links
+                a(href="#{ldcURLPrefix}linux-x86.tar.gz")
+                    | #{ldcFilenamePrefix}linux-x86.tar.gz (18MB)
+                a(href="#{ldcURLPrefix}linux-x86.tar.xz")
+                    | .tar.xz (9 MB)
+            span.architectures i386
+        li
+            span.platforms Linux
+            | &mdash;
+            span.links
+                a(href="#{ldcURLPrefix}linux-x86_64.tar.gz")
+                    | #{ldcFilenamePrefix}linux-x86_64.tar.gz (29MB)
+                a(href="#{ldcURLPrefix}linux-x86_64.tar.xz")
+                    | .tar.xz (12 MB)
+            span.architectures x86_64
+        li
+            span.platforms Source
+            | &mdash;
+            span.links
+                a(href="#{ldcURLPrefix}src.tar.gz")
+                    | #{ldcFilenamePrefix}src.tar.gz (4MB)
+            span.architectures i386, x86_64
+    h2#visuald IDE &ndash; VisualD
+        a.toc-link(href="#visuald") &para;
+    p
+        | VisualD is a Visual Studio plugin for the D programming language,
+        | providing support for build D projects in Visual Studio.
+    p
+        | The current VisualD version is #{visualDVersion},
+        | and it supports Visual Studio | 2005, 2008, 2010, 2012, and 2013,
+        | in addition to free
+        | a<href="http://www.microsoft.com/en-gb/download/details.aspx?id=40777">Visual Studio Shells</a>.
+    ul.download-list
+        li
+            span.platforms Windows
+            | &mdash;
+            span.links
+                a(href="https://github.com/D-Programming-Language/visuald/releases/download/v#{visualDVersion}/VisualD-v#{visualDVersion}.exe")
+                    | VisualD-v#{visualDVersion}.exe
+            span.architectures i386
+    h2#dmd1 DMD &ndash; Version 1
+        a.toc-link(href="#dmd1") &para;
+    p
+        | Downloads for version 1 of the D programming language are available
+        | here.
+    p
+        | <strong>Please note:</strong> official support for
+        | version 1 of the D programming langauge has been discontinued
+        | effective December 31, 2012
+    ul.download-list
+        li
+            span.platforms Windows
+            | &mdash;
+            span.links
+                a(href="#{dmd1ReleaseSite}dinstaller.exe")
+                    | dinstaller.exe
+            span.architectures i386
+        li
+            span.platforms Mac OSX
+            | &mdash;
+            span.links
+                a(href="#{dmd1ReleaseSite}dmd.#{dmd1Version}.dmg")
+                    | dmd.#{dmd1Version}.dmg</a>
+            span.architectures x86_64
+        li
+            span.platforms Debian/Ubuntu
+            | &mdash;
+            span.links
+                a(href="#{dmd1ReleaseSite}dmd_#{dmd1Version}-0_i386.deb")
+                    | dmd_#{dmd1Version}-0_i386.deb
+            span.architectures i386
+        li
+            span.platforms Debian/Ubuntu
+            | &mdash;
+            span.links
+                a(href="#{dmd1ReleaseSite}dmd_#{dmd1Version}-0_amd64.deb")
+                    | dmd_#{dmd1Version}-0_amd64.deb
+            span.architectures x86_64
+        li
+            span.platforms Fedora
+            | &mdash;
+            span.links
+                a(href="#{dmd1ReleaseSite}dmd-#{dmd1Version}-0.fedora.i386.rpm")
+                    | dmd-#{dmd1Version}-0.fedora.i386.rpm
+            span.architectures i386
+        li
+            span.platforms Fedora
+            | &mdash;
+            span.links
+                a(href="#{dmd1ReleaseSite}dmd-#{dmd1Version}-0.fedora.x86_64.rpm")
+                    | dmd-#{dmd1Version}-0.fedora.x86_64.rpm
+            span.architectures x86_64
+        li
+            span.platforms openSUSE
+            | &mdash;
+            span.links
+                a(href="#{dmd1ReleaseSite}dmd-#{dmd1Version}-0.openSUSE.i386.rpm")
+                    | dmd-#{dmd1Version}-0.openSUSE.i386.rpm
+            span.architectures i386
+        li
+            span.platforms openSUSE
+            | &mdash;
+            span.links
+                a(href="#{dmd1ReleaseSite}dmd-#{dmd1Version}-0.openSUSE.x86_64.rpm")
+                    | dmd-#{dmd1Version}-0.openSUSE.x86_64.rpm
+            span.architectures x86_64
+    p A package containing binaries for all platforms is also available.
+    ul.download-list
+        li
+            span.platforms All
+            | &mdash;
+            span.links
+                a(href="#{dmd1ReleaseSite}dmd.#{dmd1Version}.zip")
+                    | dmd.#{dmd1Version}.zip
+            span.architectures i386, x86_64
+        li
+            span.platforms All
+            | &mdash;
+            span.links
+                a(href="#{dmd1ReleaseSite}dmd.1.030.zip")
+                    | dmd.1.030.zip
+            span.architectures i386, x86_64
+    h2#dmc DMC &ndash; Digital Mars C and C++ Compiler
+        a.toc-link(href="#dmc") &para;
+    p
+        | Digital Mars offers a C and C++ compiler, which DMD uses on 32-bit
+        | Windows for compiling and linking D programs.
+    ul.download-list
+        span.platforms Windows
+        | &mdash;
+        span.links
+            a(href="http://downloads.dlang.org/other/dm857c.zip")
+                | dm857c.zip
+        span.architectures i386
+    h2#documentation Documentation
+        a.toc-link(href="#documentation") &para;
+    p Downloadable documentation is also offered.
+    ul.download-list
+        li
+            span.platforms ebook
+            | &mdash;
+            span.links
+                a(href="http://digitalmars.com/d/2.0/dlangspec.mobi")
+                    | D Programming Language Specification 2.0
+        li
+            span.platforms English
+            | &mdash;
+            span.links
+                a(href="http://www.prowiki.org/upload/duser/spec_DMD_1.00.pdf")
+                    | DMD 1.0 pdf
+    h2#other Other
+        a.toc-link(href="#other") &para;
+    ul.download-list
+        li
+            span.links
+                a(href="http://www.digitalmars.com/download/freecompiler.html")
+                    | C and C++ compiler downloads
+        li
+            span.links
+                a(href="http://ftp.digitalmars.com/dmdscript.zip")
+                    | DMDScript source
+        li
+            span.links
+                a(href="http://ftp.classicempire.com/empiresrc.zip")
+                    | Empire 2.01 source
+    p
+        | A DMD2 compatible CURL binary is available, for use with D
+        | network code on Windows.
+    p
+        | <em>See also:</em>
+        a(href="http://wiki.dlang.org/Curl_on_Windows") Building Curl on Windows
+    ul.download-list
+        li
+            span.links
+                a(href="http://downloads.dlang.org/other/curl-7.24.0-dmd-win32.zip")
+                    | DMD2 compatible cURL 7.24.0
+
+append extra-sidebar
+    #toc
+        header
+            | On This Page
+        ul
+            li
+                a(href="#dmd") DMD
+                ul
+                    li
+                        a(href="#installing-dmd") Installing DMD
+            li
+                a(href="#gdc") GDC
+            li
+                a(href="#ldc") LDC
+            li
+                a(href="#visuald") IDE &ndash; VisualD
+            li
+                a(href="#dmd1") DMD1 &ndash; Version 1
+            li
+                a(href="#dmc") DMC &ndash; C and C++ Compiler
+            li
+                a(href="#documentation") Documentation
+            li
+                a(href="#other") Other
