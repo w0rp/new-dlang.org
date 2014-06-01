@@ -73,29 +73,39 @@ struct TableOfContents {
         filterHTMLEscape(result, heading);
         result.put(`</header>`);
 
+        byte zeroLevel = 0;
         byte headingLevel = 0;
 
-        foreach(ref entry; entries) {
+        if (entries.length > 0) {
+            zeroLevel = cast(byte) (entries[0]._level - 1);
+            headingLevel = cast(byte) (zeroLevel);
+        }
+
+        foreach(index, ref entry; entries) {
             byte diff = cast(byte) (entry._level - headingLevel);
 
             if (diff > 0) {
                 // Open as many levels as we bump up.
                 foreach(i; 0 .. diff) {
-                    result.put(`<ul>`);
+                    result.put(`<ul><li>`);
                 }
             } else if (diff < 0) {
                 // Close as many levels as we move down.
                 foreach(i; 0 .. -diff) {
-                    result.put(`</ul>`);
+                    result.put(`</li></ul>`);
                 }
+
+                result.put(`<li>`);
+            } else if (index > 0) {
+                result.put(`</li><li>`);
             }
 
-            // Write this link now it's on the right level.
-            result.put(`<li><a href="#`);
+            // Write the link out.
+            result.put(`<a href="#`);
             filterHTMLEscape(result, entry._anchor);
             result.put(`">`);
             filterHTMLEscape(result, entry._title);
-            result.put(`</a></li>`);
+            result.put(`</a>`);
 
             // Set the level to the current one.
             headingLevel = cast(byte) entry._level;
@@ -103,8 +113,8 @@ struct TableOfContents {
 
         // Close any lists left open now, by using the last
         // set tree depth.
-        foreach(index; 0 .. headingLevel) {
-            result.put(`</ul>`);
+        foreach(index; 0 .. headingLevel - zeroLevel) {
+            result.put(`</li></ul>`);
         }
 
         result.put(`</div>`);
