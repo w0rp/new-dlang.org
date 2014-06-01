@@ -33,72 +33,54 @@ append content
     p
         | A variety of installers are available for DMD.
         | Choose the option which best fits your platform.
-    ul.download-list
+    ul.download-list.dmd2
         li
-            span.platforms Windows
-            | &mdash;
             span.links
                 a(href="#{dmdReleaseSite}dmd-#{dmdVersion}.exe")
-                    | dmd-#{dmdVersion}.exe
+                    | Windows
             span.architectures i386
         li
-            span.platforms Mac OSX
-            | &mdash;
             span.links
                 a(href="#{dmdReleaseSite}dmd.#{dmdVersion}.dmg")
-                    | dmd.#{dmdVersion}.dmg</a>
+                    | Mac OSX
             span.architectures x86_64
         li
-            span.platforms Debian/Ubuntu
-            | &mdash;
             span.links
                 a(href="#{dmdReleaseSite}dmd_#{dmdVersion}-0_i386.deb")
-                    | dmd_#{dmdVersion}-0_i386.deb
+                    | Debian/Ubuntu
             span.architectures i386
         li
-            span.platforms Debian/Ubuntu
-            | &mdash;
             span.links
                 a(href="#{dmdReleaseSite}dmd_#{dmdVersion}-0_amd64.deb")
-                    | dmd_#{dmdVersion}-0_amd64.deb
+                    | Debian/Ubuntu
             span.architectures x86_64
         li
-            span.platforms Fedora
-            | &mdash;
             span.links
                 a(href="#{dmdReleaseSite}dmd-#{dmdVersion}-0.fedora.i386.rpm")
-                    | dmd-#{dmdVersion}-0.fedora.i386.rpm
+                    | Fedora
             span.architectures i386
         li
-            span.platforms Fedora
-            | &mdash;
             span.links
                 a(href="#{dmdReleaseSite}dmd-#{dmdVersion}-0.fedora.x86_64.rpm")
-                    | dmd-#{dmdVersion}-0.fedora.x86_64.rpm
+                    | Fedora
             span.architectures x86_64
         li
-            span.platforms openSUSE
-            | &mdash;
             span.links
                 a(href="#{dmdReleaseSite}dmd-#{dmdVersion}-0.openSUSE.i386.rpm")
-                    | dmd-#{dmdVersion}-0.openSUSE.i386.rpm
+                    | openSUSE
             span.architectures i386
         li
-            span.platforms openSUSE
-            | &mdash;
             span.links
                 a(href="#{dmdReleaseSite}dmd-#{dmdVersion}-0.openSUSE.x86_64.rpm")
-                    | dmd-#{dmdVersion}-0.openSUSE.x86_64.rpm
+                    | openSUSE
             span.architectures x86_64
 
     p A package containing binaries for all platforms is also available.
-    ul.download-list
+    ul.download-list.dmd2
         li
-            span.platforms All
-            | &mdash;
             span.links
                 a(href="#{dmdReleaseSite}dmd.#{dmdVersion}.zip")
-                    | dmd.#{dmdVersion}.zip
+                    | All Platforms
             span.architectures i386, x86_64
 
     |!= h2(toc, "gdc", "GDC")
@@ -108,16 +90,12 @@ append content
         | as its backend.
         | By using GCC as its backend, GDC can target platforms which
         | GCC targets, and take advantage of compiler optimisations in GCC.
-    ul.download-list
+    ul.download-list.gdc
         li
-            span.platforms All
-            | &mdash;
             span.links
                 a(href="http://gdcproject.org/downloads/") Binaries
             span.architectures i386, x86_64, armel, armhf
         li
-            span.platforms All
-            | &mdash;
             span.links
                 a(href="http://wiki.dlang.org/GDC/Installation") Source
             span.architectures
@@ -132,51 +110,42 @@ append content
         | By using LLVM as its backend, LDC is able to generate highly
         | optimised D code for a number of architectures.
     p
-        | The current LDC version is #{ldcVersion}, which currently
-        | supports version 2.063.2 of the D programming language.
-    ul.download-list
+        | The current LDC version is <code>#{ldcVersion},</code>
+        | which currently supports version <code>2.063.2</code>
+        | of the D programming language.
+    ul.download-list.ldc
         li
-            span.platforms Windows
-            | &mdash;
             span.links
                 a(href="#{ldcURLPrefix}mingw-x86.zip")
-                    | #{ldcFilenamePrefix}mingw-x86.zip (19MB)
+                    | Windows .zip (19 MB)
                 a(href="#{ldcURLPrefix}mingw-x86.7z")
                     | .7z (9 MB)
             span.architectures i386
         li
-            span.platforms Mac OSX 10.7+
-            | &mdash;
             span.links
                 a(href="#{ldcURLPrefix}osx-x86_64.tar.gz")
-                    | #{ldcFilenamePrefix}osx-x86_64.tar.gz (28MB)
+                    | Mac OSX 10.7+ .tar.gz (28 MB)
                 a(href="#{ldcURLPrefix}osx-x86_64.tar.xz")
                     | .tar.xz (12 MB)
             span.architectures x86_64
         li
-            span.platforms Linux
-            | &mdash;
             span.links
                 a(href="#{ldcURLPrefix}linux-x86.tar.gz")
-                    | #{ldcFilenamePrefix}linux-x86.tar.gz (18MB)
+                    | Linux .tar.gz (18 MB)
                 a(href="#{ldcURLPrefix}linux-x86.tar.xz")
                     | .tar.xz (9 MB)
             span.architectures i386
         li
-            span.platforms Linux
-            | &mdash;
             span.links
                 a(href="#{ldcURLPrefix}linux-x86_64.tar.gz")
-                    | #{ldcFilenamePrefix}linux-x86_64.tar.gz (29MB)
+                    | Linux .tar.gz (29 MB)
                 a(href="#{ldcURLPrefix}linux-x86_64.tar.xz")
                     | .tar.xz (12 MB)
             span.architectures x86_64
         li
-            span.platforms Source
-            | &mdash;
             span.links
                 a(href="#{ldcURLPrefix}src.tar.gz")
-                    | #{ldcFilenamePrefix}src.tar.gz (4MB)
+                    | Source .tar.gz (4 MB)
             span.architectures i386, x86_64
 
     |!= h2(toc, "visuald", "VisualD")
@@ -184,17 +153,15 @@ append content
         | VisualD is a Visual Studio plugin for the D programming language,
         | providing support for build D projects in Visual Studio.
     p
-        | The current VisualD version is #{visualDVersion},
-        | and it supports Visual Studio | 2005, 2008, 2010, 2012, and 2013,
+        | The current VisualD version is <code>#{visualDVersion},</code>
+        | and it supports Visual Studio 2005, 2008, 2010, 2012, and 2013,
         | in addition to free
         | a<href="http://www.microsoft.com/en-gb/download/details.aspx?id=40777">Visual Studio Shells</a>.
-    ul.download-list
+    ul.download-list.visuald
         li
-            span.platforms Windows
-            | &mdash;
             span.links
                 a(href="https://github.com/D-Programming-Language/visuald/releases/download/v#{visualDVersion}/VisualD-v#{visualDVersion}.exe")
-                    | VisualD-v#{visualDVersion}.exe
+                    | Windows
             span.architectures i386
 
     |!= h2(toc, "dmd1", "DMD \u2013 Version 1")
@@ -205,107 +172,82 @@ append content
         | <strong>Please note:</strong> official support for
         | version 1 of the D programming langauge has been discontinued
         | effective December 31, 2012
-    ul.download-list
+    ul.download-list.dmd1
         li
-            span.platforms Windows
-            | &mdash;
             span.links
                 a(href="#{dmd1ReleaseSite}dinstaller.exe")
-                    | dinstaller.exe
+                    | Windows
             span.architectures i386
         li
-            span.platforms Mac OSX
-            | &mdash;
             span.links
                 a(href="#{dmd1ReleaseSite}dmd.#{dmd1Version}.dmg")
-                    | dmd.#{dmd1Version}.dmg</a>
+                    | Mac OSX
             span.architectures x86_64
         li
-            span.platforms Debian/Ubuntu
-            | &mdash;
             span.links
                 a(href="#{dmd1ReleaseSite}dmd_#{dmd1Version}-0_i386.deb")
-                    | dmd_#{dmd1Version}-0_i386.deb
+                    | Debian/Ubuntu
             span.architectures i386
         li
-            span.platforms Debian/Ubuntu
-            | &mdash;
             span.links
                 a(href="#{dmd1ReleaseSite}dmd_#{dmd1Version}-0_amd64.deb")
-                    | dmd_#{dmd1Version}-0_amd64.deb
+                    | Debian/Ubuntu
             span.architectures x86_64
         li
-            span.platforms Fedora
-            | &mdash;
             span.links
                 a(href="#{dmd1ReleaseSite}dmd-#{dmd1Version}-0.fedora.i386.rpm")
-                    | dmd-#{dmd1Version}-0.fedora.i386.rpm
+                    | Fedora
             span.architectures i386
         li
-            span.platforms Fedora
-            | &mdash;
             span.links
                 a(href="#{dmd1ReleaseSite}dmd-#{dmd1Version}-0.fedora.x86_64.rpm")
-                    | dmd-#{dmd1Version}-0.fedora.x86_64.rpm
+                    | Fedora
             span.architectures x86_64
         li
-            span.platforms openSUSE
-            | &mdash;
             span.links
                 a(href="#{dmd1ReleaseSite}dmd-#{dmd1Version}-0.openSUSE.i386.rpm")
-                    | dmd-#{dmd1Version}-0.openSUSE.i386.rpm
+                    | openSUSE
             span.architectures i386
         li
-            span.platforms openSUSE
-            | &mdash;
             span.links
                 a(href="#{dmd1ReleaseSite}dmd-#{dmd1Version}-0.openSUSE.x86_64.rpm")
-                    | dmd-#{dmd1Version}-0.openSUSE.x86_64.rpm
+                    | openSUSE
             span.architectures x86_64
     p A package containing binaries for all platforms is also available.
-    ul.download-list
+    ul.download-list.dmd1
         li
-            span.platforms All
-            | &mdash;
             span.links
                 a(href="#{dmd1ReleaseSite}dmd.#{dmd1Version}.zip")
-                    | dmd.#{dmd1Version}.zip
+                    | All Platforms (#{dmd1Version})
             span.architectures i386, x86_64
         li
-            span.platforms All
-            | &mdash;
             span.links
                 a(href="#{dmd1ReleaseSite}dmd.1.030.zip")
-                    | dmd.1.030.zip
+                    | All Platforms (1.030)
             span.architectures i386, x86_64
     |!= h2(toc, "dmc", "DMC \u2013 Digital Mars C and C++ Compiler")
     p
         | Digital Mars offers a C and C++ compiler, which DMD uses on 32-bit
         | Windows for compiling and linking D programs.
-    ul.download-list
-        span.platforms Windows
-        | &mdash;
-        span.links
-            a(href="http://downloads.dlang.org/other/dm857c.zip")
-                | dm857c.zip
-        span.architectures i386
+    ul.download-list.dmc
+        li
+            span.links
+                a(href="http://downloads.dlang.org/other/dm857c.zip")
+                    | Windows
+            span.architectures i386
     |!= h2(toc, "documentation", "Documentation")
     p Downloadable documentation is also offered.
-    ul.download-list
+    ul.download-list.docs
         li
-            span.platforms ebook
-            | &mdash;
             span.links
                 a(href="http://digitalmars.com/d/2.0/dlangspec.mobi")
                     | D Programming Language Specification 2.0
         li
-            span.platforms English
-            | &mdash;
             span.links
                 a(href="http://www.prowiki.org/upload/duser/spec_DMD_1.00.pdf")
                     | DMD 1.0 pdf
     |!= h2(toc, "other", "Other")
-    ul.download-list
+    ul.download-list.other
         li
             span.links
                 a(href="http://www.digitalmars.com/download/freecompiler.html")

@@ -296,3 +296,35 @@ h4:hover > .toc-link {
 #toc > ul > li:first-child {
     padding-top: 0;
 }
+
+.download-list {
+    list-style-type: none;
+    padding-left: 0.5em;
+}
+
+.download-list > li:before {
+    content: "\2014";
+}
+
+.download-list .architectures {
+    font-style: italic;
+    color: #C7254E;
+
+    margin-left: 0.25em;
+}
+
+.download-list .architectures:before,
+.download-list .architectures:after {
+}
+
+.download-list .architectures:before {
+    content: "(";
+}
+
+.download-list .architectures:after {
+    content: ")";
+}
+
+.download-list .links a + a {
+    margin-left: 0.5em;
+}
