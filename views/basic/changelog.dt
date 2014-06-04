@@ -1,0 +1,84 @@
+extends base
+
+append head
+    title D Programming Language
+
+append content
+    header
+        h1 Changelogs
+    p
+        | Changelogs are available across several versions of the D
+        | programming langauge.
+
+    - void entry(string versionString, string date)
+        li
+            a(href="/changelog/#{versionString}") #{versionString}
+            span.date #{date}
+
+    ul.changelog-version-list
+        - entry("2.065", "February 24, 2014");
+        - entry("2.064", "November 5, 2013");
+        - entry("2.063", "May 28, 2013");
+        - entry("2.062", "February 18, 2013");
+        - entry("2.061", "January 1, 2013");
+        - entry("2.060", "August 2, 2012");
+        - entry("2.059", "April 12, 2012");
+        - entry("2.058", "February 14, 2012");
+        - entry("2.057", "December 13, 2011");
+        - entry("2.056", "October 26, 2011");
+        - entry("2.055", "September 4, 2011");
+        - entry("2.054", "July 10, 2011");
+        - entry("2.053", "May 12, 2011");
+        - entry("2.052", "February 17, 2011");
+        - entry("2.051", "December 21, 2010");
+        - entry("2.050", "October 29, 2010");
+        - entry("2.049", "September 13, 2010");
+        - entry("2.048", "August 8, 2010");
+        - entry("2.047", "June 11, 2010");
+        - entry("2.046", "May 10, 2010");
+        - entry("2.045", "May 4, 2010");
+        - entry("2.044", "April 30, 2010");
+        - entry("2.043", "April 6, 2010");
+        - entry("2.042", "March 19, 2010");
+        - entry("2.041", "March 7, 2010");
+        - entry("2.040", "January 29, 2010");
+        - entry("2.039", "January 1, 2010");
+        - entry("2.038", "December 30, 2009");
+        - entry("2.037", "December 3, 2009");
+        - entry("2.036", "November 5, 2009");
+        - entry("2.035", "October 14, 2009");
+        - entry("2.034", "October 11, 2009");
+        - entry("2.033", "October 5, 2009");
+        - entry("2.032", "September 2, 2009");
+        - entry("2.031", "July 6, 2009");
+        - entry("2.030", "May 11, 2009");
+        - entry("2.029", "April 19, 2009");
+        - entry("2.028", "April 7, 2009");
+        - entry("2.027", "March 31, 2009");
+        - entry("2.026", "March 3, 2009");
+        - entry("2.025", "February 14, 2009");
+        // 2.024 is missing for some reason.
+        - entry("2.023", "January 2, 2009");
+        - entry("2.022", "December 11, 2008");
+        - entry("2.021", "Novemeber 25, 2008");
+        - entry("2.020", "October 20, 2008");
+        - entry("2.019", "September 2, 2008");
+        - entry("2.018", "August 7, 2008");
+        - entry("2.017", "July 11, 2008");
+        - entry("2.016", "July 8, 2008");
+        - entry("2.015", "June 17, 2008");
+        - entry("2.014", "May 16, 2008");
+        - entry("2.013", "April 22, 2008");
+        - entry("2.012", "March 6, 2008");
+        - entry("2.011", "February 18, 2008");
+        - entry("2.010", "January 20, 2008");
+        - entry("2.009", "January 1, 2008");
+        - entry("2.008", "Novemeber 27, 2007");
+        - entry("2.007", "Ocotober 31, 2007");
+        - entry("2.006", "Ocotober 16, 2007");
+        - entry("2.005", "Ocotober 1, 2007");
+        - entry("2.004", "September 5, 2007");
+        - entry("2.003", "July 21, 2007");
+        - entry("2.002", "July 1, 2007");
+        - entry("2.001", "June 27, 2007");
+        - entry("2.000", "June 17, 2007");

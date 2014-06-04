@@ -6,6 +6,12 @@
     "authors": ["w0rp"],
     "license": "BSL-1.0",
     "targetPath": "bin",
+    "preBuildCommands": [
+        "rdmd generate_view_list"
+    ],
+    "dflags": [
+        "-J compile_time_blobs"
+    ],
     "dependencies": {
         "vibe-d": {
             "version": "~master",

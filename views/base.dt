@@ -55,7 +55,7 @@ html(lang="en")
                                     li
                                         a(href="#") Features
                                     li
-                                        a(href="#") Change Log
+                                        a(href="/changelog") Change Log
                                     li
                                         a(href="#") Bug Tracker
                                     li
