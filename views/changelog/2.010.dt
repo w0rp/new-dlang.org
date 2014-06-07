@@ -1,0 +1,34 @@
+extends basic_changelog
+
+append new_features
+    ul
+        li <strong>opAssign</strong> can no longer be overloaded for class objects.
+        li
+            | <strong>WinMain</strong> and <strong>DllMain</strong>
+            | can now be in template mixins.
+        li Added <strong>pure</strong> keyword.
+
+append bugs_fixed
+    ul
+        - bugItem(1319, "compiler crashes with functions that take const ref arguments");
+        - bugItem(1697, "Internal error: ..\\ztc\\cgcod.c 2322 with -O");
+        - bugItem(1700, "ICE attempting to modify member of const return struct");
+        - bugItem(1707, "'==' in TemplateParameterList in IsExpression causes segfault");
+        - bugItem(1711, "typeof with delegate literal not allowed as template parameter");
+        - bugItem(1713, "foreach index with tuples and templates fails");
+        - bugItem(1718, "obscure exit with error code 5");
+        - bugItem(1719, "Compiler crash or unstable code generation with scoped interface instances");
+        - bugItem(1720, "std.math.NotImplemented missing a space in message");
+        - bugItem(1724, "Internal error: toir.c 177");
+        - bugItem(1725, "std.stream.BufferedFile.create should use FileMode.OutNew");
+        - bugItem(1757, "there is an fault in phobos windows api interface");
+        - bugItem(1762, "Wrong name mangling for pointer args of free extern (C++) functions");
+        - bugItem(1767, "rejects-valid, diagnostic");
+        - bugItem(1769, "Typo on the page about exceptions");
+        - bugItem(1773, "excessively long integer literal");
+        - bugItem(1779, "Compiler crash when deducing more than 2 type args");
+        - bugItem(1783, "DMD 1.025 asserts on code with struct, template, and alias");
+        - bugItem(1788, "dmd segfaults without info");
+        li
+            a(href="http://digitalmars.com/webnews/newsgroups.php?search_txt=&group=digitalmars.D.announce&article_id=11066") D.announce/11066:
+            | Re: DMD 1.025 and 2.009 releases

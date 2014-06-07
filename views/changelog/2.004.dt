@@ -1,0 +1,48 @@
+extends basic_changelog
+
+append new_features
+    ul
+        li
+            | Added command line switches <strong>-defaultlib</strong> and
+            | <strong>-debuglib</strong>
+        - bugItem(1445, "Add default library options to sc.ini / dmd.conf");
+        li Changed result type of IsExpression from int to bool.
+        li
+            | Added <strong>isSame</strong> and <strong>compiles</strong>
+            | to <strong>__traits</strong>.
+        li
+            | Added optional <em>TemplateParameterList</em> to
+            | <em>IsExpression</em>.
+        li Added warning when <strong>override</strong> is omitted.
+        li Added <strong>std.hiddenfunc</strong>.
+        li
+            | Added trace_term() to object.d to fix
+            - bugLink(971);
+            | No profiling output is generated if the application
+            | terminates with exit
+        li Multiple module static constructors/destructors allowed.
+        li Added new syntax for string literals (delimited, heredoc, D tokens)
+        li Added __EOF__ token
+
+append bugs_fixed
+    ul
+        li Fixed <a href="http://digitalmars.com/webnews/newsgroups.php?search_txt=&group=digitalmars.D&article_id=56414">D/56414</a>
+        - bugItem(961, "std.windows.registry stack corruption");
+        - bugItem(1315, "CTFE doesn't default initialise arrays of structs");
+        - bugItem(1342, "struct const not accepted as initializer for another struct");
+        - bugItem(1363, "Compile-time issue with structs in 'for'");
+        - bugItem(1375, "CTFE fails for null arrays");
+        - bugItem(1378, "A function call in an array literal causes compiler to crash");
+        - bugItem(1384, "Compiler segfaults when using struct variable like a function with no opCall member.");
+        - bugItem(1388, "multiple static constructors allowed in module");
+        - bugItem(1414, "compiler crashes with CTFE and structs");
+        - bugItem(1421, "Stack Overflow when using __traits(allMembers...)");
+        - bugItem(1423, "Registry: corrupted value");
+        - bugItem(1436, "std.date.getLocalTZA() returns wrong values when in DST under Windows");
+        - bugItem(1446, "Missing comma in Final Const and Invariant page title");
+        - bugItem(1447, "CTFE does not work for static member functions of a class");
+        - bugItem(1448, "UTF-8 output to console is seriously broken");
+        - bugItem(1450, "Registry: invalid UTF-8 sequence");
+        - bugItem(1460, "Compiler crash on valid code");
+        - bugItem(1464, "\"static\" foreach breaks CTFE");
+        - bugItem(1468, "A bug about stack overflow.");

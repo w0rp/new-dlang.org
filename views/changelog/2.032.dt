@@ -1,0 +1,145 @@
+extends basic_changelog
+
+append new_features
+    p Added support for...
+    code
+        pre a[i].var = e2
+    p And ...
+    code
+        pre a[] = e
+
+    ul
+        li Improved exception message for assert(0) in Windows -release builds
+        li Member functions can now be used in CTFE
+        li Operator overloading can now be used in CTFE
+        li Nested functions can now be used in CTFE
+        li
+            | CTFE error messages now explain why the function could not be
+            | interpreted at compile time
+        li synchronized member functions now implicitly typed as shared.
+        li
+            - docLink("std.algorithm");
+            | &mdash; added minPos
+        li
+            - docLink("std.format");
+            | &mdash; added raw specifier for reading
+        li
+            - docLink("std.file");
+            | &mdash; added File.byChunk
+        li
+            - docLink("std.algorithm");
+            | &mdash; added more unittests and checks for user-based
+            | comparison passed to topN
+        li
+            - docLink("std.math");
+            ul
+                li  replaced std.c with core.stdc
+                li
+                    | improved approxEqual to work with ranges, not only
+                    | numbers or arrays
+        li
+            - docLink("std.range");
+            ul
+                li defined Take.popBack whenever sensible
+                li improved iota to accept negative ranges and steps
+
+append bugs_fixed
+    ul
+        - bugItem(601, "statement.html - Formatting/markup errors in BNF");
+        - bugItem(1461, "Local variable as template alias parameter breaks CTFE");
+        - bugItem(1600, "Functions taking only one array cannot be called with property syntax");
+        - bugItem(1604, "Non-final method on final struct is too restrictive (closed with \"invalid\" advise)");
+        - bugItem(1605, "break in switch with goto breaks in ctfe");
+        - bugItem(1616, "std/metastrings.d");
+        - bugItem(1940, "Phobos buildscripts do not work on x86_64");
+        - bugItem(1948, "CTFE fails when mutating a struct in an array");
+        - bugItem(1950, "CTFE doesn't work correctly for structs passed by ref");
+        - bugItem(1969, "ICE(cod1.c) using undefined operator with one const operand");
+        - bugItem(1972, "Foreach range statement breaks CTFE");
+        - bugItem(2150, "cannot get values from const variant");
+        - bugItem(2277, "array ops and const arrays incompatible");
+        - bugItem(2398, "writef(\"%x\") for a pointer is always uppercase");
+        - bugItem(2560, "ICE(cod4.c) on invoking method that takes ref const struct parameter");
+        - bugItem(2564, "CTFE: the index in a tuple foreach is uninitialized (bogus error)");
+        - bugItem(2569, "static arrays in CTFE functions don't compile");
+        - bugItem(2575, "gdb can not show code");
+        - bugItem(2587, "std.process.shell doesn't work for win32");
+        - bugItem(2604, "DW_TAG_module and GDB");
+        - bugItem(2665, "ICE(cod4.c) on certain const struct function return types");
+        - bugItem(2784, "Interfaces should be able to require type definitions (closed with \"invalid\" advise)");
+        - bugItem(2785, "Interfaces should be able to require non-member functions (closed with \"invalid\" advise)");
+        - bugItem(2786, "Interfaces should be able to require constructors (closed with \"invalid\" advise)");
+        - bugItem(2882, "std.random.MersenneTwisterEngine without no seed");
+        - bugItem(2925, "Destructor not called");
+        - bugItem(2937, "postblit not called for foreach arg over array of structs");
+        - bugItem(2940, "null is null cannot be evaluated at compile time");
+        - bugItem(2976, "rename retreatN to retreat");
+        - bugItem(2979, "Xml tags with only attributes return as without attributes ElementParser.parse");
+        - bugItem(2980, "compiler error when writefln( uint )");
+        - bugItem(2987, "D2 phobos BigInt opMul doesn't work correctly");
+        - bugItem(2988, "Chain needs opIndexAssign.");
+        - bugItem(2989, "std.typetuple: add support for any static tuples");
+        - bugItem(2992, "(closed with \"later\" advise)");
+        - bugItem(2996, "std.typetuple: add support for any static tuples");
+        - bugItem(3000, "iota should work with floats");
+        - bugItem(3017, "doc errors in std.range (on behalf of Steven Schveighoffer)");
+        - bugItem(3025, "uniform(float,float) pops first, uniform(int,int) pops last");
+        - bugItem(3037, "Off-by-one error in Stride.length");
+        - bugItem(3039, "-vtls compiler flag not listed in man file");
+        - bugItem(3058, "[CTFE] Cannot return out of foreach range statement");
+        - bugItem(3074, "std.conv.to!(string)(int.min)");
+        - bugItem(3077, "3077 crash exiting main() without result code");
+        - bugItem(3087, "std.range.retro.opIndex out of range");
+        - bugItem(3098, "std.algorithm.reduce example can not compile");
+        - bugItem(3100, "ICE(cast.c) struct with members is shared");
+        - bugItem(3132, "std.string.split should be templated on mutable/const/immutable");
+        - bugItem(3148, "syntax error using invariant");
+        - bugItem(3153, "win32.mak tries to copy phobos.lib, gcstub.obj to nonexistent folder lib");
+        - bugItem(3162, "can't fully use compile-time floats as template parameters");
+        - bugItem(3165, "What kind of integer division does D use?");
+        - bugItem(3166, "\"positive\" -> \"non-negative\" in modulo operator description");
+        - bugItem(3169, "Segfault(cast.c) dividing ulong by int");
+        - bugItem(3170, "Forward reference of nested class fails if outer class is not plain");
+        - bugItem(3183, "Spec of align attribute needs work");
+        - bugItem(3184, "std.algorithm.until should work like \"find\"");
+        - bugItem(3185, "osx is not a directory (complains cannot read std/c/osx/socket.d)");
+        - bugItem(3186, "corrections for http://www.digitalmars.com/d/2.0/dmd-osx.html");
+        - bugItem(3189, "`std.conv.to` : check for a custom `to` method in classes/structs");
+        - bugItem(3192, "asm in a anonymous delegate crash the compiler");
+        - bugItem(3195, "`std.conv` pureness (closed with \"later\" advise)");
+        - bugItem(3196, "Segfault(mtype.c) after almost any error involving a delegate literal");
+        - bugItem(3197, "Minor fixes and additions to std.traits");
+        - bugItem(3199, "sort(chain(...)) doesn't work in some cases");
+        - bugItem(3205, "CTFE: $ cannot be used in lvalues");
+        - bugItem(3212, "Error message says \"mutable\"; should say \"immutable\"");
+        - bugItem(3217, "std.functional.binaryFunImpl doesn't support UDT with string functions , therefore neither does many std.algorithm functions");
+        - bugItem(3218, "Performance of std.xml.encode must be improved");
+        - bugItem(3219, "Inaccurate std.conv.to!(numeric)(numeric) error messages");
+        - bugItem(3224, "std.random documentation bugs");
+        - bugItem(3229, "No return or assert(0) at end of function");
+        - bugItem(3236, "Postblit called but no matching destructor");
+        - bugItem(3239, "std.conv.roundTo does not accept const/immutable/shared");
+        - bugItem(3240, "std.numeric.findRoot only works with real");
+        - bugItem(3242, "splitter does not handle input range made of a unique separator correctly");
+        - bugItem(3245, "Easy bug fix available for disabled unit test code in std.encoding");
+        - bugItem(3246, "ICE(init.c) using indexed array initializer on local array");
+        - bugItem(3249, "sort and setIntersection on array of struct or class");
+        - bugItem(3253, "DMD crashes on function pointer struct member initialization with function literal");
+        - bugItem(3255, "final switch broken with -w switch");
+        - bugItem(3257, "Spec is unclear describing string switch case labels");
+        - bugItem(3260, "\"Error: undefined identifier backend\" when compiling 'write' with 'wchar'");
+        - bugItem(3264, "-O causes wrong \"used before set\" error when using enum.");
+        - bugItem(3281, "ICE(cod1.c) append returned struct to array");
+        li Fixed bug processing spaces in dmd's directory
+        li Fixed assert failure on line 4823 in expression.c
+        li Fixed OSX compile error on samples/d/dhry.d
+        li
+            - docLink("std.format");
+            | &mdash; fixed unlisted bug in documentation
+        li
+            - docLink("std.random");
+            | &mdash; uniform does not work when passed immutable data
+        li
+            - docLink("std.range");
+            | &mdash; fixed unlisted bug in Take.back
+        li unlisted: made entropy work on const/immutable arrays

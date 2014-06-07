@@ -1,0 +1,34 @@
+extends basic_changelog
+
+append new_features
+    ul
+        li Added struct constructors.
+        li
+            | Special member functions _ctor, _dtor, etc., now have two
+            | leading _ in order to not conflict with the user
+            | identifier space.
+
+append bugs_fixed
+    ul
+        - bugItem(1322, "foreach bypasses invariant");
+        - bugItem(1615, "inout is allowed in foreach of string literal");
+        - bugItem(1627, "ICE with a method called _ctor");
+        - bugItem(1633, "Nonsensical \"C style cast illegal\" message with !is");
+        - bugItem(1771, "dmd fails to execute on linux");
+        - bugItem(1773, "excessively long integer literal");
+        - bugItem(1785, "Mixing in an incorrect array literal causes infinite loop.");
+        - bugItem(2176, "Assertion failure: 'sz == es2->sz' on line 1339 in file 'constfold.c' (concatenating strings of different types)");
+        - bugItem(2183, "Bad formatting in std.c.stdlib");
+        - bugItem(2190, "toHash documentation is deprecated [D2.0]");
+        - bugItem(2232, "DMD generates invalid code when an object file is compiled -inline");
+        - bugItem(2241, "DMD abort");
+        - bugItem(2243, "const bool = is(function literal), badly miscast");
+        - bugItem(2262, "-inline breaks -lib library");
+        - bugItem(2286, "movmskpd compiled incorrectly");
+        - bugItem(2287, "std.conv should accept structs defining toString");
+        - bugItem(2289, "Stack overflow on very large BigInt to string.");
+        - bugItem(2308, "CTFE crash on foreach over nonexistent variable");
+        - bugItem(2311, "Static destructors in templates are never run");
+        - bugItem(2314, "Crash on anonymous class variable instantiation");
+        - bugItem(2316, "std.file docs are out of date");
+        - bugItem(2317, "asm offsetof generates: Internal error: ../ztc/cod3.c 2651");

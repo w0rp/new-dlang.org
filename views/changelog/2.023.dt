@@ -1,0 +1,33 @@
+extends basic_changelog
+
+append new_features
+    ul
+        li Improved speed of long division.
+        li Optimizer now takes advantage of immutable and pure.
+        li
+            | Added predefined version <strong>D_Ddoc</strong>
+            | which is predefined when <strong>-D</strong> switch is thrown.
+        li
+            | the type of a string literal is now
+            | <strong>invariant(char)[]</strong> rather than
+            | <strong>invariant(char)[length_of_string]</strong>.
+            | It is still implicitly convertible to the latter.
+            | This is intended to reduce template instantiation bloat.
+        li
+            | Undid fix for
+            - bugLink(2500);
+            | as the fix was arguably worse than the bug.
+
+append bugs_fixed
+    ul
+        - bugItem(1078, "Frontend uses of 'auto' where 'scope' should be used");
+        - bugItem(2517, "DDoc omits abstract on classes");
+        - bugItem(2518, "scope(success) not execuate and RAII variable destructor is not called");
+        - bugItem(2519, "Segfault when >> used in an invalid slice");
+        - bugItem(2527, "Alias Template Params Are Always Same Type As First Instantiation (according to typeof(x).stringof)");
+        - bugItem(2531, "DDoc not generated correctly for struct methods inside static if");
+        - bugItem(2533, "compiler falls with \"assertion failed\" message on wrong code");
+        - bugItem(2534, "dmd.conf is wrong");
+        - bugItem(2537, "compiler crashes on this code:");
+        - bugItem(2541, "cannot use aliased type for decl of foreach variable");
+        - bugItem(2542, "array casts behave differently at compile and runtime");

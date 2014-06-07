@@ -1,0 +1,94 @@
+extends basic_changelog
+
+append new_features
+    ul
+        li added <strong>-vtls</strong> compiler switch
+        li
+            em classic global storage now defaults to TLS (Thread Local Storage).
+            | This is a big change, see
+            a(href="/migrate-to-shared") Migrating To Shared
+            | .
+        li
+            - docLink("std.algorithm");
+            ul
+                li added minPos.
+                li Improvements to Splitter suggested by Brad Roberts.
+                li Splitter now is bidirectional.
+                li
+                    | Splitter has one extra trailing element if it ends with
+                    | a separator.
+                li  | Added variadic arguments for setUnion and
+                    | setIntersection.
+                li
+                    | Added functions setSymmetricDifference and
+                    | largestPartialIntersection.
+                li Improved BinaryHeap's interface and implementation.
+        li
+            - docLink("std.array");
+            | &mdash; Improvements to Appender.
+            | Now it works with string and other immutable-element
+            | arrays, and accepts ranges in put().
+        li
+            - docLink("std.format");
+            | &mdash; added raw specifier for reading
+        li
+            - docLink("std.range");
+            ul
+                li Added iota with two arguments.
+                li Added FrontTransversal and Transversal.
+        li
+            - docLink("std.file");
+            | &mdash; added File.byChunk
+        li
+            - docLink("std.traits");
+            | &mdash; Added isImplicitlyConvertible.
+        li
+            - docLink("std.tuple");
+            | &mdash; Added Tuple.opComp.
+        li
+            | Folded in compiler changes by Unknown W. Brackets
+            | to support Solaris.
+        li
+            | added .typeinfo to ClassInfo
+            - bugLink(2836);
+            | : Navigate from ClassInfo to TypeInfo
+
+append bugs_fixed
+    ul
+        li Fix instruction scheduler bug on Linux
+        li unlisted: made std.numeric.entropy work on const/immutable arrays
+        li Fixed several problems associated with thread local storage
+        - bugItem(642, "error: mixin \"static this\" into where it cannot be");
+        - bugItem(713, "circular const definitions with module operator \".\" cause the compiler to segfault");
+        - bugItem(752, "Assertion failure: 'e->type->ty != Ttuple' on line 4518 in file 'mtype.c'");
+        - bugItem(858, "Forward reference to struct inside class crashes the compiler");
+        - bugItem(884, "Segfault in recursive template");
+        - bugItem(934, "Segfault taking mangleof a forward reference in a template.");
+        - bugItem(1011, "illegal import declaration causes compile time segfault");
+        - bugItem(1054, "regression: circular aliases cause segfaults");
+        - bugItem(1061, "\"asm inc [;\" segfaults compiler.");
+        - bugItem(1305, "Compiler hangs with templated opCmp returning templated class");
+        - bugItem(1385, "Stack Overflow with huge array literal.");
+        - bugItem(1428, "Segfault on template specialization with delegates and tuples");
+        - bugItem(1791, "Segmentation fault with anon class in anon class and non-constant variable init");
+        - bugItem(1916, "segfault on invalid string concat");
+        - bugItem(1946, "Compiler crashes on attempt to implicit cast const typedef to non-const.");
+        - bugItem(2048, "DMD crash on CTFE that involves assigning to member variables of void-initialized struct");
+        - bugItem(2061, "wrong vtable call with multiple interface inheritance");
+        - bugItem(2215, "Forward reference enum with base type within a struct causes Segmentation Fault in the compiler");
+        - bugItem(2309, "Crash on a template mixing in a variadic template with an undefined template identifier");
+        - bugItem(2346, "ICE when comparing typedef'd class");
+        - bugItem(2580, "Documented WinMain for D2 is wrong");
+        - bugItem(2633, "incorrect ModuleInfo declaration in object.di");
+        - bugItem(2695, "pure functions can invoke impure function pointers");
+        - bugItem(2807, "Marking a nested function as 'pure' may cause bad code generations silently accepted");
+        - bugItem(2821, "struct alignment inconsistent with C for { int, long }");
+        - bugItem(2851, "Segfault using C-style struct initializer with too few arguments");
+        - bugItem(2865, "RandomCover not random");
+        - bugItem(2882, "std.random.MersenneTwisterEngine without seed");
+        - bugItem(2890, "deadlock in std.stdio");
+        - bugItem(2893, "qualified types don't have an Unsigned counterpart");
+        - bugItem(2906, "writef problem with formatting floating point");
+        - bugItem(2914, "to!string(struct) is broken");
+        - bugItem(2920, "recursive templates blow compiler stack");
+        - bugItem(2922, "Egregiously bad hashing performance with strings");

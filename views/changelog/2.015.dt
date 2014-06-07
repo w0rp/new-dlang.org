@@ -1,0 +1,50 @@
+extends basic_changelog
+
+append new_features
+    ul
+        li
+            a(href="template#aliasparameters") Template alias arguments
+            | can now be literals.
+        li
+            a(href="template#function-templates") Function templates
+            | can now deduce the return type if they are declared with
+            | <strong>auto</strong>.
+        li
+            | Non-lvalues are no longer matched to <strong>ref</strong> and
+            | <strong>out</strong> parameters when overloading.
+        li
+            | Relaxed hidden hijacking detection when hidden function is
+            | disjoint from overloading with any other virtual function in the
+            | <a href="/function.html#function-inheritance">hierarchy</a>.
+        li
+            | Added
+            a(href="version#PredefinedVersions") version identifier
+            | <strong>D_PIC</strong> when <strong>-fPIC</strong>
+            | switch is used.
+        li
+            | Added
+            a(href="/template#Constraint") Constraints
+            | to templates.
+
+append bugs_fixed
+    ul
+        - bugItem(1383, "Implicit Function Instantiation with typesafe-variadic of delegates doesn't work");
+        - bugItem(1559, "version statement makes code outside of it disappear");
+        - bugItem(1675, "\"Identifier too long\" error with OMF object files");
+        - bugItem(1947, "ICE (Assertion failure: '0' on statement.c:123) with null mixin");
+        - bugItem(1963, "-H creates broken headers");
+        - bugItem(2098, "Outdated docs");
+        - bugItem(2099, "Text and Sample Code Disagree (non-static local invariant declaration)");
+        - bugItem(2112, "the type of undefined variable incorrectly assumed to be int");
+        - bugItem(2118, "Inconsistent use of string vs invariant(char[]) in doc");
+        - bugItem(2123, "Anonymous class crashes");
+        - bugItem(2129, "foreach won't work with invariant limits");
+        - bugItem(2132, "CTFE: can't evaluate ~= at compile time, D2 only.");
+        - bugItem(2133, "anonymous enum without {} doesn't work as asm value");
+        - bugItem(2136, "typeof(super(...)) counted as a constructor call");
+        - bugItem(2140, "static if as final statement with no code causes containing code to be skipped");
+        - bugItem(2143, "Mixed-in identifier is not recognized by static if");
+        - bugItem(2144, "'is' is defined to be the same as '==' for non-class and non-array types, but does not call opEquals");
+        - bugItem(2145, "Phobos buildsystem unable to build html");
+        - bugItem(2146, "Multiple execution of 'static this' defined in template");
+        - bugItem(2149, "Auto variables loose the keyword \"auto\" in di files generated with -H option.");

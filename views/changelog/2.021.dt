@@ -1,0 +1,86 @@
+extends basic_changelog
+
+append new_features
+    ul
+        li
+            | Added <strong>-safe</strong> switch and
+            | <strong>module(system) Identifier;</strong> syntax.
+        li Added range support to foreach statement.
+        li
+            | <strong>scope</strong> parameter storage class means the
+            | parameter will not 'escape' the scope of the function
+            | invocation. Using this for delegate parameters will prevent
+            | some closure allocations by the calling function.
+        li
+            | The lazy storage class now implies <strong>scope</strong>
+            | so that lazy arguments won't trigger a heap allocated closure.
+        li
+            | The 'this' parameter to struct member functions is now a
+            | reference type, rather than a pointer.
+            | <em>This breaks existing code</em>.
+
+    p More changes to druntime:
+
+    table.change-table
+        thead
+            tr
+                th from
+                th to
+        tbody
+            tr
+                td OutOfMemoryException
+                td OutOfMemoryError
+            tr
+                td SwitchException
+                td SwitchError
+            tr
+                td HiddenFuncException
+                td HiddenFuncError
+            tr
+                td ArrayBoundsException
+                td RangeError
+            tr
+                td AssertException
+                td AssertError
+            tr
+                td FinalizeException
+                td FinalizeError
+            tr
+                td onArrayBoundsError
+                td onRangeError
+            tr
+                td stdc.*
+                td core.stdc.*
+            tr
+                td sys.*
+                td core.sys.*
+    ul
+        li
+            | Added core.runtime.loadLibrary() as an experimental feature
+            | for loading dynamic libraries (Win32 only at the moment).
+        li
+            | Added core.runtime.unloadLibrary() as an experimental feature
+            | for unloading dynamic libraries previously loaded by
+            | loadLibrary().
+        li
+            | core.thread.sleep() accepts a long integer specifying
+            | the sleep interval in 100 nanosecond intervals
+            | (the previous release notes said this was a float, IIRC).
+        li
+            | It is no longer necessary to link in druntime separately,
+            | it is inserted into libphobos2.a.
+
+append bugs_fixed
+    ul
+        - bugItem(313, "Fully qualified names bypass private imports");
+        - bugItem(920, "SPEC: Auto classes referenced where scope should be used");
+        - bugItem(929, "Resizing array of associative arrays (uint[char[]][]) causes infinite loop / hang");
+        - bugItem(1372, "Compiler accepts pragma(msg,)");
+        - bugItem(1610, "Enum.stringof is int, not the name of the enum");
+        - bugItem(1663, "pragma(lib, \"\") don't work on linux");
+        - bugItem(1797, "Documentation comments - ///");
+        - bugItem(2428, "Accessing item in enum'd array produced compiler error");
+        - bugItem(2429, "std.stream.File incorrect flag parsing and sharing mode");
+        - bugItem(2431, "Internal error: ../ztc/cgcod.c 1031 when using -O");
+        - bugItem(2470, "Cannot build libraries from other libraries");
+        li unittest functions now always use D linkage

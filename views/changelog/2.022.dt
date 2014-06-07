@@ -1,0 +1,33 @@
+extends basic_changelog
+
+append new_features
+    ul
+        li
+            | Changed IUnknown to use the extern(System) interface
+            | rather that extern(Windows).
+        li Pure functions now get semantically checked.
+        li Nothrow functions now get semantically checked.
+        li <strong>shared</strong> is now a type constructor.
+
+append bugs_fixed
+    ul
+        - bugItem(1518, "Crash using 'scope', 'with' and undefined 'RegExp'");
+        - bugItem(1649, "Variant coercion fails with delegates");
+        - bugItem(1685, "Array index is evaluated twice");
+        - bugItem(1933, "Delimited string constants can cause segfault");
+        - bugItem(1963, "-H creates broken headers");
+        - bugItem(2041, "Spec implies relationship between interfaces and COM objects");
+        - bugItem(2105, "added patch");
+        - bugItem(2441, "header file generation translates enum to manifest");
+        - bugItem(2468, "result type of AndAndExp and OrOrExp deduced incorrectly");
+        - bugItem(2489, "import in struct causes assertion failure");
+        - bugItem(2490, "extern(C++) can not handle structs as return types");
+        - bugItem(2491, "druntime GC wrongly frees data pointed to by TLS.");
+        - bugItem(2492, "ICE building on Linux with -lib option");
+        - bugItem(2499, "Template alias default value cannot be template instantiation");
+        - bugItem(2500, "template struct methods are left unresolved if imported from multiple modules");
+        - bugItem(2501, "member function marked as final override ignores override requirements");
+        - bugItem(2503, "Error 42: Symbol Undefined _D3std7process6systemFAyaZi");
+        - bugItem(2506, "Can't initialize const member in ctor if it is accessed via this.member syntax");
+        - bugItem(1752, "Incorporated some patches");
+        li <strong>extern __thread</strong> now works on Linux.

@@ -1,0 +1,155 @@
+extends basic_changelog
+
+append new_features
+    ul
+        li Changed "op=" to just "op" for template argument to opOpAssign
+        li
+            - docLink("std.algorithm");
+            ul
+                li Added save() to forward ranges
+                li added split() using only one element as separator
+                li added indexOf
+                li fixed unlisted bug in startsWith and endsWith
+                li added skipOver()
+                li added canFind()
+        li
+            - docLink("std.array");
+            | &mdash; Added implementation of save() for T[]s.
+        li
+            - docLink("std.concurrency");
+            | &mdash; Eliminated spurious unittest stdout messages.
+        li
+            - docLink("std.container");
+            | &mdash; Added.
+        li
+            - docLink("std.conv");
+            ul
+                li Added file and line information to conversion errors
+                li
+                    | added brackets '[' and ']' around arrays and associative
+                    | arrays as defaults
+                li added emplace() for non-class types.
+        li
+            - docLink("std.file");
+            | &mdash; Replaced exception upon out-of-memory error with
+            | assert(0).
+        li
+            - docLink("std.functional");
+            | &mdash; toDelegate now accepts callable(function pointers,
+            | delegates and objects implement opCall)
+        li
+            - docLink("std.path");
+            | &mdash; Made basename() generic in string type.
+        li
+            - docLink("std.range");
+            ul
+                li
+                    | Added the existence of the property save as a
+                    | condition for isForwardRange
+                li  added save to the range defined within
+                li replaced a couple of awkward front() implementations
+                li
+                    | defined module-level moveFront() and range member
+                    | moveFront() where appropriate
+                li
+                    | added @property maxLength to Take; arranged things
+                    | such that take() for slice-able ranges returns the
+                    | same type as the slice
+                li eliminated SListRange
+                li defined iota() with one argument
+                li moved BinaryHeap within.
+        li
+            - docLink("std.regex");
+            | &mdash; Qualified indexOf with std.algorithm.
+        li
+            strong std.regexp
+            | &mdash; Qualified indexOf with std.algorithm.
+        li
+            - docLink("std.stdio");
+            | &mdash; Added an error message to enforce() in rawRead().
+        li
+            - docLink("std.string");
+            | &mdash; Improved indexOf(), tolower(), splitter(), chomp().
+        li
+            - docLink("std.traits");
+            | &mdash; New Complex.toString() syntax.
+        li
+            - docLink("std.typecons");
+            | Added AutoImplement.
+        li
+            - docLink("std.utf");
+            | Eliminated decodeFront() and decodeBack() - they aren't needed
+            | since strings are bidirectional ranges.
+        - bugItem(2008, "Poor optimization of functions with ref parameters");
+        - bugItem(3793, "Functions with static arrays as arguments are not inlined");
+        - bugItem(4296, "Reduce parasitic error messages");
+
+append bugs_fixed
+    ul
+        - bugItem(1193, "regression: \"matches more than one template declaration\" doesn't list the location of the conflicting templates");
+        - bugItem(1894, "scope(exit) is ignored except in compound statements");
+        - bugItem(1941, "missing line on inaccesable external private module member");
+        - bugItem(2127, "inliner turns struct \"return *this\" from by-value into by-ref");
+        - bugItem(2276, "Error message missing line number on array operation");
+        - bugItem(2546, "Array Ops silently fail when no slice symbol is used.");
+        - bugItem(2738, "Rebindable should work for interfaces.");
+        - bugItem(2835, "std.socket.TcpSocket doesn't actually connect");
+        - bugItem(2881, "x.stringof returns typeof(x).stringof when x is an enum");
+        - bugItem(3064, "Invalid array operation accepted, generates bad code");
+        - bugItem(3088, "std.xml.check() fails on xml comments");
+        - bugItem(3139, "compiler dies \"Error: out of memory\" with case range");
+        - bugItem(3200, "std.xml doesn't follow spec for Tag.text");
+        - bugItem(3323, "Segfault or ICE(e2ir.c) using struct with destructor almost anywhere");
+        - bugItem(3398, "Attributes inside a union screws data alignment");
+        - bugItem(3465, "isIdeographic can be wrong in std.xml");
+        li
+            | Major improvements to CustomFloat, fixing
+            - bugLink(3520);
+            | : std.numeric.CustomFloat horribly broken
+        - bugItem(3538, "Default value of alias template parameter is instantiated only once.");
+        - bugItem(3547, "for option -od for relative path the path is added twice");
+        - bugItem(3548, "ICE occurs when an array is returned from a function is incorrectly used in an array op expression.");
+        - bugItem(3604, "extern(C) callable function with array parameters broken");
+        - bugItem(3651, "mangleof broken for enums");
+        - bugItem(3653, "Problem sorting array of Rebindable");
+        - bugItem(3658, "Crashing on vector operations (Mac only)");
+        - bugItem(3662, "Wrong compile error within struct constructor and C-style initializer");
+        - bugItem(3667, "Regression(D2 only): broken out(result) in contracts");
+        - bugItem(3786, "bug in std.string.removechars");
+        - bugItem(3854, "Error on static initialization of arrays with trailing comma.");
+        - bugItem(3873, "std.range.repeat should have popBack defined");
+        - bugItem(3876, "std.range.Take back/popBack methods don't work correctly");
+        - bugItem(3880, "std.regex functions with const/immutable Regex object");
+        - bugItem(4003, "The result changes only with the order of source files.");
+        - bugItem(4045, "[CTFE] increasing array length");
+        - bugItem(4052, "[CTFE] increment from array item");
+        - bugItem(4056, "Template instantiation with bare parameter not documented");
+        - bugItem(4073, "core.cpuid crashes");
+        - bugItem(4078, "[CTFE] Failed return of dynamic array item");
+        - bugItem(4084, "Ignored missing main() closing bracket");
+        - bugItem(4109, "writeln doesn't work with empty static array");
+        - bugItem(4143, "fix warnings in dmd build");
+        - bugItem(4156, "Segfault with array+=array");
+        - bugItem(4169, "building dmd with a modern gcc produces a buggy compiler");
+        - bugItem(4175, "linux.mak doesn't declare sufficient dependencies to support parallel builds");
+        - bugItem(4188, "std.file.remove throws Exception on success");
+        - bugItem(4193, "Regression 2.046, ICE(expression.c): initialising class member with const forward reference");
+        - bugItem(4202, "Changset 1517 doesn't compile");
+        - bugItem(4207, "std.cover.setDestDir does not work.");
+        - bugItem(4208, "druntime should not depend on Phobos");
+        - bugItem(4212, "DWARF: void arrays cause gdb errors");
+        - bugItem(4213, "Strange behaviour with static void[] arrays");
+        - bugItem(4219, "hasAliasing does not care about immutable");
+        - bugItem(4220, "I cannot apply @safe to intrinsic operation(eg: std.math.sqrt)");
+        - bugItem(4228, "std.array.replace contains 2 bugs");
+        - bugItem(4230, "version(unittest)");
+        - bugItem(4231, "Solitary opUnary Postincrement and Postdecrement user defined operators are broken.");
+        - bugItem(4242, "ICE(module.c): importing a module with same name as package");
+        - bugItem(4249, "std.regex fails to compile with debug=regex");
+        - bugItem(4252, "[CTFE] No array bounds checking in assignment to char[] array");
+        - bugItem(4257, "ICE(interpret.c): passing parameter into CTFE as ref parameter");
+        - bugItem(4259, "Header generation omits leading '@' for properties");
+        - bugItem(4262, "Header generation omits 'enum' for enum declarations");
+        - bugItem(4263, "Header generation omits '@system' attribute");
+        - bugItem(4270, "Missing line number in 'can only catch class objects' error message");
+        - bugItem(4300, "BigInt * int doesn't work well");

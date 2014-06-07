@@ -1,0 +1,41 @@
+extends basic_changelog
+
+append new_features
+    ul
+        li
+            | Added <strong>D_Version2</strong> predefined identifier
+            | to indicate this is a D version 2.0 compiler
+        li
+            | Added <strong>__VENDOR__</strong> and
+            | <strong>__VERSION__</strong>.
+        li
+            | Now an error to use both const and invariant as storage
+            | classes for the same declaration
+        li
+            | The <strong>.init</strong> property for a variable is
+            | now based on its type, not its initializer.
+
+append bugs_fixed
+    ul
+        li <strong>std.compiler</strong> now is automatically updated.
+        li Fixed problem catting mutable to invariant arrays.
+        li Fixed CFTE bug with e++ and e--.
+        - bugItem(1254, "Using a parameter initialized to void in a compile-time evaluated function doesn't work");
+        - bugItem(1256, "\"with\" statement with symbol");
+        - bugItem(1259, "Inline build triggers an illegal error msg \"Error: S() is not an lvalue\"");
+        - bugItem(1260, "Another tuple bug");
+        - bugItem(1261, "Regression from overzealous error message");
+        - bugItem(1262, "Local variable of struct type initialized by literal resets when compared to .init");
+        - bugItem(1263, "Template function overload fails when overloading on both template and non-template class");
+        - bugItem(1268, "Struct literals try to initialize static arrays of non-static structs incorrectly");
+        - bugItem(1269, "Compiler crash on assigning to an element of a void-initialized array in CTFE");
+        - bugItem(1270, "-inline produces an ICE");
+        - bugItem(1272, "problems with the new 1.0 section");
+        - bugItem(1274, "2.0 beta link points to dmd.zip which is the 1.x chain");
+        - bugItem(1275, "ambiguity with 'in' meaning");
+        - bugItem(1276, "static assert message displayed with escaped characters");
+        - bugItem(1277, "\"in final const scope\" not considered redundant storage classes");
+        - bugItem(1279, "const/invariant functions don't accept const/invariant return types");
+        - bugItem(1280, "std.socket.Socket.send (void[],SocketFlags) should take a const(void)[] instead");
+        - bugItem(1283, "writefln: formatter applies to following variable");
+        - bugItem(1286, "crash on invariant struct member function referencing globals");

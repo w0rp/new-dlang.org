@@ -1,0 +1,81 @@
+extends basic_changelog
+
+append new_features
+    ul
+        li
+            - docLink("std.string");
+            | &mdash; Made munch more general and added function chompPrefix.
+        li
+            - docLink("std.variant");
+            | &mdash; Added documentation for variantArray
+        li
+            - docLink("std.traits");
+            | &mdash; Added CommonType template, fixed isStaticArray.
+        li
+            strong std.bitarray
+            | &mdash; scheduled for deprecation
+        li
+            - docLink("std.bitmanip");
+            | &mdash; new module with the content of std.bitarray plus
+            | the bitfields, FloatRep, and DoubleRep templates
+        li
+            - docLink("std.process");
+            | &mdash; Made getpid visible in Linux builds
+        li
+            - docLink("std.math");
+            | &mdash; Made nextafter visible for all floating types. Added approxEqual template.
+        li
+            strong std.contracts
+            | &mdash; Added enforce signature taking an exception
+        li
+            - docLink("std.conv");
+            | &mdash; Made conv_error a template parameterized on the types being converted.
+        li
+            - docLink("std.stdio");
+            | &mdash; Cosmetic changes.
+        li
+            - docLink("std.system");
+            | &mdash; Cosmetic changes.
+        li
+            - docLink("std.file");
+            | &mdash; Fixed bug in function dirEntries.
+        li
+            - docLink("std.random");
+            | &mdash; Major addition of engines and distributions.
+        li
+            - docLink("std.format");
+            | &mdash; Added raw ('r') format specifier for writef*.
+        li
+            - docLink("std.path");
+            | &mdash; Added rel2abs (Linux version only).
+        li
+            - docLink("std.algorithm");
+            | &mdash; new module
+        li
+            - docLink("std.typecons");
+            | &mdash; new module
+        li
+            - docLink("std.functional");
+            | &mdash; new module
+        li
+            - docLink("std.numeric");
+            | &mdash; new module
+        li Added const/invariant structs, classes and interfaces.
+        li Added const and invariant to IsExpressions.
+        li Added typeof(return) type specifier.
+        li
+            | Changed the way coverage analysis is done so it is independent
+            | of order dependencies among modules.
+        li Revamped const/invariant.
+
+append bugs_fixed
+    ul
+        - bugItem(70, "valgrind: Conditional jump or move depends on uninitialised value(s) in elf_findstr");
+        - bugItem(71, "valgrind: Invalid read of size 4 in elf_renumbersyms");
+        - bugItem(204, "Error message on attempting to instantiate an abstract class needs to be improved");
+        - bugItem(1508, "dmd/linux template symbol issues");
+        - bugItem(1651, ".di file generated with -H switch does not translate function() arguments correctly");
+        - bugItem(1655, "Internal error: ..\\ztc\\cgcod.c 1817");
+        - bugItem(1656, "illegal declaration accepted");
+        - bugItem(1664, "(1.23).stringof generates bad code");
+        - bugItem(1665, "Internal error: ..\\ztc\\cod2.c 411");

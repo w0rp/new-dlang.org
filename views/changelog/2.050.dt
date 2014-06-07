@@ -1,0 +1,105 @@
+extends basic_changelog
+
+append new_features
+    ul
+        li added talign() and argTypes() to TypeInfo
+        li Upgrade zlib support to zlib 1.2.5
+        li
+            - docLink("std.stdio");
+            | &mdash; Added ByChunk. This struct is a InputRange like ByLine.
+            | File.byChunk returns ByChunk
+        li
+            - docLink("std.traits");
+            | &mdash; Most higher-order ranges now work with
+            | const/immutable arrays and other ranges with a natural tail
+            | const, and ranges w/ const/immutable elements.
+        - bugItem(4888, "Heavy reliance on Bug 3534 in Phobos range usage");
+        - bugItem(4987, "C function pointer syntax needs to be deprecated");
+        li
+            - docLink("std.typecons");
+            | &mdash; Several improvements to the Tuple struct template:
+            ul
+                li
+                    | Tuple members are now accessible with the syntax
+                    | a[0], a[1] etc.
+                li
+                    | Eliminated an internal union. See
+                    - bugLink(4421);
+                    | and
+                    - bugLink(4846);
+                li
+                    | Worked around
+                    - bugLink(4424);
+                    | Got opAssign back.
+                li Made Tuple.slice!(from, to) to preserve field names if any.
+                li Added isTuple!(T) template.
+            ul
+                li Deprecated defineEnum
+        li
+            - docLink("std.algorithm");
+            ul
+                li changed filter() such that filter is curryable
+                li Added function balancedParens
+        li
+            - docLink("std.typecons");
+            | &mdash; Several improvements to the Tuple struct template:
+        li Added relaxed purity checking rules.
+
+append bugs_fixed
+    ul
+        li Unlisted bug: std.exception.pointsTo() calls postblit on subobjects.
+        li Unlisted bug: std.typetuple.staticMap!() doesn't work with empty/single tuples.
+        li Unlisted bug: std.traits: Interfaces should have indirections, aliasing, etc.
+        li Unlisted bug: std.socket: Race condition - gethostbyname and gethostbyaddr on Linux return static data. The call was synchronized, but using the data wasn't
+        li Unlisted bug: signed long comparisons under OS X
+        - bugItem(941, "std.regexp fails to match when grouping certain sub-expressions");
+        - bugItem(1482, "std.file docs are insufficient");
+        - bugItem(1635, "DirEntry.isfile() and DirEntry.isdir() broken");
+        - bugItem(1733, "parse() function does not handle all build-in types");
+        - bugItem(2073, "Variant.coerce!() fails");
+        - bugItem(2142, "getopt() incorrectly processes bundled command-line options");
+        - bugItem(2310, "Inconsistent formatting of arrays in std.stdio.write() and std.conv.to!(string)()");
+        - bugItem(2424, "std.functional binaryRevertArgs : \"revert\" should be \"reverse\"");
+        - bugItem(2451, "Adding structs that use opAssign or postblit to an AA is broken");
+        - bugItem(2655, "Allow alternation patterns in std.path.fnmatch");
+        - bugItem(2669, "Variant does not have opApply or another iteration mechanism");
+        - bugItem(2718, "Inconsistent string parameters in Phobos functions");
+        - bugItem(2838, "std.file.rmdirRecurse fails");
+        - bugItem(2930, "Problems in std.range documentation");
+        - bugItem(2943, "Struct copying in presence of alias member this only copies alias this member");
+        - bugItem(2965, "std.date: timezone not initialized");
+        - bugItem(3157, "[patch] Pipes should be closed with pclose");
+        - bugItem(3318, "[PATCH]Rebindable.get is not accessible");
+        - bugItem(3570, "mkdirRecurse throws exception on trailing empty directory.");
+        - bugItem(3602, "ICE(tocsym.c) compiling a class, if its super class has preconditions");
+        - bugItem(3665, "Regression(1.051, 2.036) Assignment with array slicing does not work");
+        - bugItem(4344, "Sockets with multiple threads report missing/failed WSAStartup");
+        - bugItem(4398, "dmd always uses Windows name mangling for _d_throw");
+        - bugItem(4439, "The declaration of the in6addr_* in druntime is wrong.");
+        - bugItem(4465, "ICE(symbol.c): immutable type inference with ^^2");
+        - bugItem(4524, "Regression(2.026) Bus error with nested struct");
+        - bugItem(4623, "Non-integer type allowed as static array size");
+        - bugItem(4634, "typo in levenshteinDistanceAndPath documentation");
+        - bugItem(4641, "Associative arrays of structs with alias this broken.");
+        - bugItem(4742, "int % BigInt should work.");
+        - bugItem(4775, "No substitution on writef(\"%%%s\", \"hi\").");
+        - bugItem(4825, "Regression(1.057, 2.040) \"Error: non-constant expression\" with -inline");
+        - bugItem(4866, "Static-to-dynamic converted manifest constant array gets non-converted type in static/constraint if");
+        - bugItem(4869, "auto return + inheritance + modules = compiler crashes(toctype.c)");
+        - bugItem(4873, "Assertion failure: '0' on line 1483 in file 'expression.c'");
+        - bugItem(4882, "std.traits hasUnsharedAliasing does not work for function type.");
+        - bugItem(4897, "CodeView: No locals or parameters are shown when debugging, because of missing function info");
+        - bugItem(4890, "GC.collect() deadlocks multithreaded program.");
+        - bugItem(4925, "[ICE] segfault with module-scope assert(0)");
+        - bugItem(4926, "ICE: PREC_zero assertion failure due to unset precedence");
+        - bugItem(4938, "Regression(2.047) dmd segfault when compiling");
+        - bugItem(4941, "Built-in tuple slice boundaries are not CTFE'd");
+        - bugItem(4949, "ICE on invalid static if using value of 'this'");
+        - bugItem(4951, "InternetAddress fails to resolve host when multithreading.");
+        - bugItem(4959, "std.conv.parse error \"no digits seen\" on string starting with zero.");
+        - bugItem(4992, "ICE(glue.c) or segfault: using int[new]");
+        - bugItem(5003, "regex(replace with delegate) sample doesn't work.");
+        - bugItem(5026, "ICE(expression.c) Incomplete mixin expression + char[] to char assignment");
+        - bugItem(5049, "std.algortihm.bringToFront() returns wrong value.");
+        - bugItem(5052, "take!(Take!R) should return Take!R, not Take!(Take!R).");
+        - bugItem(5071, "passing value by ref to a function with an inner dynamic closure results in a wrong code");

@@ -1,0 +1,8 @@
+extends basic_changelog
+
+append bugs_fixed
+    ul
+        - bugItem(1586, "DMD and GDC segfaults on incomplete code segment");
+        - bugItem(2064, "Segfault with mixin(for/foreach) with empty loop body");
+        - bugItem(2812, "sqrt(2.0) is about -2.7341e-53");
+        - bugItem(2804, "Impure nested functions should be legal inside pure functions");

@@ -1,0 +1,63 @@
+extends basic_changelog
+
+append new_features
+    ul
+        li Conditional expressions ?: can now be modifiable lvalues.
+        li
+            | The type inferred from an ArrayLiteral is now a dynamic array,
+            | not a static one.
+        li Added support for op= for array.length
+        li
+            | Array and associative array types are now determined by using
+            | ?: across all the elements, not just using the first one.
+        li
+            | Array concatenation with elements now allows implicit
+            | conversion of the elements to the array element type.
+        li No more comma operators allowed between [ ].
+        li ClassInfo now merged into TypeInfo_Class.
+        - bugItem(3379, "[tdpl] Parameter names not visible in the if clause of a template");
+        - bugItem(3380, "[tdpl] typeid(obj) should return the dynamic type of the object");
+        li
+            | Removed <strong>-safe</strong> command line switch,
+            | added <strong>-noboundscheck</strong> command line switch.
+        - bugItem(3481, "PATCH: opPow(), x ^^ y as a power operator");
+        li Added opDispatch
+        li properties can only have 0 or 1 arguments
+        li properties cannot be overloaded with non-properties
+        li
+            - docLink("std.math");
+            ul
+                li
+                    | Added FloatControl, IeeeFlags for enabling
+                    | floating-point exceptions.
+                li Inverse trig functions are now pure nothrow.
+
+append bugs_fixed
+    ul
+        li
+            - docLink("std.array");
+            | &mdash; Fixed unlisted bug in array().
+        - bugItem(111, "appending a dchar to a char[]");
+        - bugItem(2664, "OSX standard math functions are less accurate");
+        - bugItem(2802, "VariantN.opCmp!(T) fails when T != VariantN");
+        - bugItem(2967, "spec does not mention that inline asm is a valid \"return\" statement");
+        - bugItem(2977, "std.random.unpredictableSeed() should use thread ID somewhere");
+        - bugItem(3115, ">>> and >>>= generate wrong code");
+        - bugItem(3171, "% not implemented correctly for floats");
+        - bugItem(3311, "std.range.chain shouldn't have opIndexAssign if arguments aren't mutable");
+        - bugItem(3375, "[tdpl] Ternary operator doesn't yield an lvalue");
+        - bugItem(3381, "[tdpl] Incorrect assessment of overriding in triangular-shaped hierarchy");
+        - bugItem(3388, "[tdpl] contracts should allow throw expressions");
+        - bugItem(3390, "[tdpl] out(result) contract should not be able to rebind result");
+        - bugItem(3407, "[tdpl] Compiling with -safe -release must keep all bound checks");
+        - bugItem(3433, "[tdpl] Comparing structs for equality is not member-by-member");
+        - bugItem(3469, "ICE(func.c): Regression. Calling non-template function as a template, from another module");
+        - bugItem(3478, "\"no effect in expression\" error on return to void");
+        - bugItem(3494, "Segfault(mtype.c) using typeof(return) inside an auto function");
+        - bugItem(3495, "Segfault(typinf.c) instantiating D variadic function with too few arguments");
+        - bugItem(3496, "ICE(cgelem.c, optimizer bug) cast(void *)(x&1)== null.");
+        - bugItem(3502, "Fix for dropped Mac OS X 10.5");
+        - bugItem(3521, "Optimized code access popped register");
+        - bugItem(3540, "Another DWARF line number fix");
+        - bugItem(3551, "nested struct => dmd adds a hidden pointer");
+        - bugItem(3553, "ICE when a function argument defaults to __LINE__");

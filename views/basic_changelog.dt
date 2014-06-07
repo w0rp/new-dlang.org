@@ -1,0 +1,32 @@
+extends base
+
+append head
+    title D Programming Language Version #{thisVersion} Change Log
+
+append content
+    - import std.array;
+    - void docLink(string moduleName)
+        - string linkModuleName = moduleName.replace(".", "_");
+        a(href="/phobos/#{linkModuleName}") #{moduleName}
+
+    - void bugLink(uint bugID)
+        a(href="https://issues.dlang.org/show_bug.cgi?id=#{bugID}")
+            | Bugzilla #{bugID}
+    - void bugItem(uint bugID, string comment)
+        li
+            - bugLink(bugID);
+            | &mdash; #{comment}
+
+    header
+        h1 Change Log &ndash; v#{thisVersion}
+
+    |!= h2(toc, "new-features", "New / Changed Features")
+
+    block new_features
+
+    |!= h2(toc, "bugs-fixed", "Bugs Fixed")
+
+    block bugs_fixed
+
+append extra-sidebar
+    |!= toc.write("On This Page")

@@ -1,0 +1,109 @@
+extends basic_changelog
+
+append new_features
+    ul
+        li
+            | __traits allMembers and and derivedMembers now return a tuple
+            | of strings rather than an array of strings. Enclose __traits
+            | in [ ] to make array literal. This makes it possible for
+            | foreach statements to iterate at compile time over it.
+        li Interface member functions can now have contracts.
+        li
+            | Added new
+            a(href="/operatoroverloading") operator overloading
+            | regime.
+        li
+            | Warnings no longer halt the parsing/semantic passes, though
+            | they still return an error status and still do not generate
+            | output files. They also no longer count as errors when testing
+            | with "compiles" traits.
+        li
+            | Added <strong>-wi</strong> switch for
+            - bugLink(2567);
+        li
+            | Mixin template definitions should be preceded with
+            strong mixin
+        li Add <strong>!in</strong> operator.
+        li Associative array contents can now be compared for equality
+        li
+            | Use of <strong>length</strong> inside of [ ] is
+            | now deprecated, use $ instead
+        li
+            | Added <strong>toDelegate()</strong> to std.functional to
+            | convert function pointers to delegates.
+        li Implemented attributes for constructors.
+        li
+            | Implemented qualifiers for struct literals, like
+            strong immutable(S)(1,2,3)
+        li Array equality can now be done with differing array element types.
+        li Add simple spell checking.
+        - bugItem(3378, "[tdpl] ++x should be an lvalue");
+        li string, wstring are now bidirectional (not random) ranges
+        li
+            - docLink("std.algorithm");
+            ul
+                li defined move with one argument
+                li levenshtein distance generalized to with all forward ranges
+                li take now has swapped arguments
+        li
+            - docLink("std.array");
+            ul
+                li empty for arrays is now a @property
+                li
+                    | front and back for a string and wstring automatically
+                    | decodes the first/last character
+                li popFront, popBack for string and wstring obey the UTF stride
+        li
+            - docLink("std.conv");
+            | &mdash; changed the default array formatting from
+            | "[a, b, c]" to "a b c"
+        li
+            - docLink("std.range");
+            | &mdash; swapped order of arguments in take
+        li
+            - docLink("std.stdio");
+            | &mdash; added readln template
+        li
+            - docLink("std.variant");
+            | &mdash; now works with statically-sized arrays and const data
+        li
+            - docLink("std.traits");
+            | &mdash; added isNarrowString
+        li The default type for [1,2,3] is now int[] rather than int[3].
+
+append bugs_fixed
+    ul
+        - bugItem(2321, "spec on inline asm can be misunderstood");
+        - bugItem(2463, "No line number in \"statement is not reachable\" warning");
+        - bugItem(3029, "Bug in array value mangling rule");
+        - bugItem(3306, "bad function/delegate literal generated into header files");
+        - bugItem(3373, "bad codeview debug info for long and ulong");
+        li
+            | Posix only,
+            - bugLink(3420);
+            | &mdash; [PATCH] Allow string import of files using subdirectories
+        - bugItem(3450, "incorrect result for is (typeof({ ... }())) inside a struct");
+        - bugItem(3453, "Linking order affects proper execution (Mac OSX only)");
+        - bugItem(3491, "typeof((string[string]).init) == AssociativeArray!(string, string), doesn't implicitly convert to string[string].");
+        - bugItem(3500, "super behaves differently with -inline");
+        - bugItem(3558, "Optimizer bug results in false if condition being taken");
+        - bugItem(3582, "core.stdc.ctype functions are not pure");
+        - bugItem(3619, "Thread crash on exit");
+        - bugItem(3637, "Array append patch to prevent stomping and to enhance thread-local append performance");
+        - bugItem(3644, "Wrong UCHAR_MAX value in module core.stdc.limits");
+        - bugItem(3670, "Declarator grammar rule is broken");
+        - bugItem(3689, "Grammar does not allow const(int)");
+        - bugItem(3692, "ICE(mtype.c) with associative arrays when std.variant is imported");
+        - bugItem(3695, "__EOF__ token not documented");
+        - bugItem(3697, "StructTemplateDeclaration and others missing constraint in rule");
+        - bugItem(3710, "Typo in allMembers description?");
+        - bugItem(3736, "corrupted struct returned by function with optimizations (-O)");
+        - bugItem(3737, "SEG-V at expression.c:6255 from bad opDispatch");
+        - bugItem(3763, "std.stdio.readlnImpl absurdly inefficient and overflows stack");
+        - bugItem(3768, "reapeted quotes in ddoc.html");
+        - bugItem(3769, "Regression: Segfault(constfold.c) array literals and case statements");
+        - bugItem(3775, "Segfault(cast.c): casting no-parameter template function using property syntax");
+        - bugItem(3776, "Wrong CHAR_MIN value in module core.stdc.limits");
+        - bugItem(3781, "ICE(interpret.c): using no-argument C-style variadic function in CTFE");
+        - bugItem(3803, "compiler segfaults");
+        - bugItem(3840, "Jump to: section in the docs should be sorted");

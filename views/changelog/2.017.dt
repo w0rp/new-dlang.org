@@ -1,0 +1,9 @@
+extends basic_changelog
+
+append bugs_fixed
+    ul
+        - bugItem(2207, "overload resolution fails with deprecation");
+        - bugItem(2208, "Deprecated function declarations cannot use deprecated types");
+        - bugItem(2209, "Typo in doc for offsetof");
+        - bugItem(2212, "phobos itself should be able to be compiled with '-w' switch");
+        - bugItem(2264, "typo in documentation regarding atof.");

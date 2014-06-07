@@ -1,0 +1,8 @@
+extends basic_changelog
+
+append new_features
+
+append bugs_fixed
+    ul
+        - bugItem(3663, "struct forward reference regresssion");
+        - bugItem(3664, "struct forward declaration causes enum to conflict with itself");

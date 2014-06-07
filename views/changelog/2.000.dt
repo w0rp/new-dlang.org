@@ -1,0 +1,25 @@
+extends basic_changelog
+
+append new_features
+    ul
+        li
+            | Added aliases <strong>string</strong>,
+            | <strong>wstring</strong>, and <strong>dstring</strong>
+            | for strings.
+        li
+            | Added <strong>.idup</strong> property
+            | for arrays to create invariant copies.
+        li Added const, invariant, and final.
+        li
+            | <strong>in</strong> parameter storage class now
+            | means final scope const.
+        li
+            | foreach value variables now default to final
+            | if not declared as inout.
+        li class and struct invariant declarations now must have a ().
+
+append bugs_fixed
+    ul
+        li Added missing \n to exception message going to stderr.
+        li Fixed default struct initialization for CTFE.
+        - bugItem(1226, "ICE on a struct literal");

@@ -1,0 +1,28 @@
+extends basic_changelog
+
+append new_features
+    ul
+        li
+            | Now supports
+            a(href="/arrays#array-operations") array operations
+            | .
+
+append bugs_fixed
+    ul
+        li Added hash to generated module names when building libs to reduce collisions
+        - bugItem(1622, "parameters to TypeInfo_Struct.compare seem to be switched around.");
+        - bugItem(1644, "Template instantiation should automatically cast to const to make const-ness irrelevant when argument is const anyways");
+        - bugItem(2216, "bad code generation for static arrays of zero length static arrays");
+        - bugItem(2223, "Typo in error message");
+        - bugItem(2231, "missing bigint document");
+        - bugItem(2242, "linux system calls are canceled by GC");
+        - bugItem(2247, "bad header file generated for if (auto o = ...) {}");
+        - bugItem(2248, ".di should be a supported file extension");
+        - bugItem(2250, "Update of user32.lib and kernel32.lib");
+        - bugItem(2254, "Size of executable almost triples");
+        - bugItem(2258, "Docs -> Inline Assembler -> Operand Types -> qword missing");
+        - bugItem(2259, "Assertion failure: '0' on line 122 in file 'statement.c'");
+        - bugItem(2266, "opEquals documentation still says it returns int");
+        - bugItem(2269, "D BUG: cosine of complex");
+        - bugItem(2272, "synchronized attribute documentation");
+        - bugItem(2273, "Whitespace is not inserted after commas");

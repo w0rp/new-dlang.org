@@ -1,0 +1,124 @@
+extends basic_changelog
+
+append new_features
+    ul
+        li Added <strong>-man</strong> switch to browse manual.
+        li
+            | Added <strong>-lib</strong> switch to generate library files.
+            | Also causes multiple object files to be generated from one
+            | source module.
+        li
+            | When generating an executable file, only one object file is
+            | now generated containing all the modules that were compiled,
+            | rather than one object file per module.
+        li
+            | Rewrote the
+            a(href="/rdmd") rdmd
+            | utility to properly track dependencies and command-line
+            | compiler options (currently only working under Linux).
+        li
+            | Changed the Phobos makefile <strong>linux.mak</strong>
+            | to take advantage of the new <strong>-lib</strong>
+            | feature. Improved full build speed by 3x.
+        li
+        li
+            - docLink("std.algorithm");
+            | &mdash; Changed the map() function so that it deduces the
+            | return type. Also map can be now curried.
+        li
+            strong std.contracts
+            | &mdash; Added file and line information to enforce.
+            | Added errnoEnforce that formats the error message according
+            | to errno. Added corresponding ErrnoException class.
+        li
+            - docLink("std.conv");
+            | &mdash; Made std.to curryable. Changed std.to to throw
+            | exception when object-to-object cast fails. Eliminated some
+            | superfluous printfs.
+        li
+            - docLink("std.encoding");
+            | &mdash; Added new functions encodedLength(dchar) and
+            | encode(dchar, ref E[])
+        li
+            - docLink("std.encoding");
+            | &mdash; Got rid of types Utf8, Utf16, Utf32, Ascii, Latin1,
+            | Windows1252. Introduced types AsciiChar, AsciiString,
+            | Latin1Char, Latin1String, Windows1252Char, Windows1252String.
+        li
+            - docLink("std.encoding");
+            | &mdash; For now commented out std.encoding.to.
+        li
+            - docLink("std.file");
+            | &mdash; Changed Boolean function signatures (e.g. exists) to
+            | return bool instead of int. Got rid of some gotos. Added the
+            | readText, lastModified, mkdirRecurse, and rmdirRecurse
+            | functions.
+        li
+            - docLink("std.functional");
+            | &mdash; Improved compose so it accepts an unbounded number of
+            | functions. Added the pipe function.
+        li
+            - docLink("std.getopt");
+            | &mdash; Added new option stopOnFirstNonOption. Also
+            | automatically expand dubious option groups with embedded
+            | spaces in them (useful for shebang scripts)
+        li
+            - docLink("std.match");
+            | &mdash; improved integral powers
+        li
+            - docLink("std.md5");
+            | &mdash; Improved signature of sum so it takes multiple arrays.
+            | Added getDigestString.
+        li
+            - docLink("std.path");
+            | &mdash; changed signatures of test functions from bool to int.
+            | Implemented rel2abs for Windows. Improved join so that it
+            | accepts multiple paths. Got rid of some gotos with the help of
+            | scope statements.
+        li
+            - docLink("std.process");
+            | &mdash; added getenv and setenv. Improved system() so it
+            | returns the exit code correctly on Linux.
+        li
+            - docLink("std.random");
+            | &mdash; added the dice function - a handy (possibly biased) dice.
+        li
+            - docLink("std.typecons");
+            | &mdash; Finalized and documented the stupendous
+            | Rebindable template.
+        li
+            - docLink("std.utf");
+            | &mdash; added the codeLength function. Got rid of some gotos.
+
+append bugs_fixed
+    ul
+        li
+            - docLink("std.format");
+            | &mdash; Fixed unlisted bug in raw write for arrays
+        li
+            - docLink("std.getopt");
+            | &mdash; Fixed unlisted bug in dealing with one-letter options
+            | with bundling disabled
+        - bugItem(2014, "fopen fails on large files.");
+        - bugItem(2031, "Documentation: template value parameters");
+        - bugItem(2032, "Documentation for creating a class on the stack is unintuitive");
+        - bugItem(2037, "Article on hijacking is outdated");
+        - bugItem(2038, "Remove hello2.html from samples directory");
+        - bugItem(2039, "-ignore switch is missing from compiler docs");
+        - bugItem(2054, "Const system broken on struct assignment.");
+        - bugItem(2055, "(ICE) Compiler crash on struct initializer with too many elements");
+        - bugItem(2056, "Const system does not allow certain safe casts/conversions involving deep composite types");
+        - bugItem(2058, "Describe hidden value passed to class member functions");
+        - bugItem(2063, "std.xml access violation for nested, closed tags");
+        - bugItem(2065, "Return value of std.file.exists() is inverted.");
+        - bugItem(2067, "call from anonymous class makes access violation.");
+        - bugItem(2071, "spec doesn't mention pointer arithmetic with two pointer operands");
+        - bugItem(2072, "std.typecons documentation anomaly.");
+        - bugItem(2074, "Variant arithmetic operations fail. For now the fix is to comment out all right-hand side operators. Suggestions for a better fix are welcome.");
+        - bugItem(2075, "Spec does not specify how array literals are stored.");
+        - bugItem(2084, "operator ?: does not compute the tightest type");
+        - bugItem(2086, "Describe relationship between string and char[] more explicitly");
+        - bugItem(2089, "Issues with CTFE and tuple indexes");
+        - bugItem(2090, "Cannot alias a tuple member which is a template instance");
+        - bugItem(2100, "Assertion failure: '0' on line 4842 in file 'expression.c'");
+        - bugItem(2109, "asm {lea EAX, [0*0+EAX]; } rejected.");
