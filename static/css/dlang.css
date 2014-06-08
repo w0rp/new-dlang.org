@@ -349,3 +349,17 @@ h4:hover > .toc-link {
 .download-list .links a + a {
     margin-left: 0.5em;
 }
+
+.changelog-version-list {
+    font-size: 16px;
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.changelog-version-list > li > a {
+    color: black;
+}
+
+.changelog-version-list > li > a > .version {
+    color: #428BCA;
+}

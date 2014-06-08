@@ -1,0 +1,894 @@
+extends base
+
+append head
+    title D Programming Language Version #{thisVersion} Change Log
+
+append content
+    header
+        h1 Change Log &ndash; v#{thisVersion}
+
+    |!= h2(toc, "language-ehancements", "Language Enhancements")
+
+    |!= h3(toc, "package-modules", "Package Modules")
+
+    p
+        | The new package import feature allows you to define a library
+        | module which has the purpose of publicly importing any other
+        | modules in that library. The user can then simply import this
+        | one module and use the library as if the user import all the
+        | modules at once. For example:
+
+    strong libweb/client.d:
+
+    code
+        pre
+            | module libweb.client;
+            |
+            | void runClient() { }
+
+    strong libweb/server.d:
+
+    code
+        pre
+            | module libweb.server;
+            |
+            | void runServer() { }
+
+    strong libweb/package.d:
+
+    code
+        pre
+            | module libweb;
+            |
+            | public import libweb.client;
+            | public import libweb.server;
+
+    p
+        | Notice that the package module must always have the file name
+        | <strong>package.d</strong>. The module name is the qualified name
+        | of the package. The user then uses the standard import syntax
+        | to import a package module, simply using the module declaration
+        | name to import the package:
+
+    strong test.d:
+
+    code
+        pre
+            | module test;
+            |
+            | import libweb;
+            |
+            | void main()
+            | {
+            |     startServer();
+            |     startClient();
+            | }
+
+    p The following is an example of a package module of a sub-package:
+
+    strong libweb/utils/package.d:
+
+    code
+        pre
+            | // fully qualified name of the package, not just "utils"!
+            | module libweb.utils;
+            |
+            | // publicly import modules from within the 'libweb.utils' package.
+            | public import libweb.utils.conv;
+            | public import libweb.utils.text;
+
+    p To import this subpackage, use the standard module import declaration:
+
+    code
+        pre
+            | module test;
+            |
+            | import libweb.utils;
+            |
+            | void main()
+            | {
+            | }
+
+    |!= h4(toc, "package-modules-rationale", "Rationale")
+
+    p
+        | Until now <em>public import</em> modules were implementable,
+        | but only by convention. The user would typically have to import a
+        | specific module specified by the library author, e.g.
+        | <strong>libweb.all</strong> or <strong>libweb._</strong>.
+        | Introducing the package import feature standardizes this common
+        | convention of library authors
+
+    |!= h3(toc, "eponymous-template-syntax", "Eponymous Template Syntax")
+
+    p
+        | The new eponymous template syntax allows you to write shorter
+        | templates without having to explicitly define and repeat the
+        | template name when using traditional eponymous templates.
+        | For example, before 2.064 eponymous templates were written and
+        | used like the following:
+
+    code
+        pre
+            | template Tuple(T...) { alias Tuple = T; }
+            |
+            | template isIntOrFloat(T)
+            | {
+            |     static if (is(T == int) || is(T == float))
+            |         enum isIntOrFloat = true;
+            |     else
+            |         enum isIntOrFloat = false;
+            | }
+            |
+            | void main()
+            | {
+            |     alias Tup = Tuple!(int, float, string);
+            |     // int is an int or a float
+            |     static assert(isIntOrFloat!(Tup[0]));
+            |     // float is an int or a float
+            |     static assert(isIntOrFloat!(Tup[1]));
+            |     // string is neither an int nor a float
+            |     static assert(!isIntOrFloat!(Tup[2]));
+            | }
+
+    p
+        | With the new eponymous syntax, the implementation code becomes
+        | much simpler:
+
+    code
+        pre
+            | alias Tuple(T...) = T;
+            |
+            | enum isIntOrFloat(T) = is(T == int) || is(T == float);
+            |
+            | void main()
+            | {
+            |     alias Tup = Tuple!(int, float, string);
+            |     // int is an int or a float
+            |     static assert(isIntOrFloat!(Tup[0]));
+            |     // float is an int or a float
+            |     static assert(isIntOrFloat!(Tup[1]));
+            |     // string is neither an int nor a float
+            |     static assert(!isIntOrFloat!(Tup[2]));
+            | }
+
+    p
+        | Notice how you need to start the declaration of such a template
+        | with an <strong>alias</strong> or <strong>enum</strong>,
+        | rather than starting it with the keyword <strong>template</strong>.
+
+    |!= h4(toc, "eponymous-template-syntax-limitations", "Limitations")
+
+    p
+        | Currently you cannot define template constraints for these types
+        | of templates. This limitation may be lifted in a future release.
+
+    |!= h3(toc, "postfix-after-new", "Postfix Expressions After 'new'")
+
+    p
+        | Before 2.064, you could not both instantiate a new class and call
+        | a method or access a property of the object without having to wrap
+        | the <strong>new</strong> expression in parentheses:
+
+    code
+        pre
+            | class Server
+            | {
+            |     this(string[] args) { }
+            |     void run() { }
+            | }
+            |
+            | void main(string[] args)
+            | {
+            |     (new Server(args)).run();
+            | }
+
+    p
+        | In 2.064 this limitation has been lifted,
+        | allowing you to write the code as follows:
+
+    code
+        pre
+            | class Server
+            | {
+            |     this(string[] args) { }
+            |     void run() { }
+            | }
+            |
+            | void main(string[] args)
+            | {
+            |     new Server(args).run();
+            | }
+
+    p
+        | <strong>Note:</strong> When instantiating a class with the default
+        | constructor, you must insert an empty set of parentheses before
+        | accessing a field or calling a method on the object:
+
+    code
+        pre
+            | class Server
+            | {
+            |     this() { }
+            |     void run() { }
+            | }
+            |
+            | void main()
+            | {
+            |     // error
+            |     new Server.run();
+            |     // ok
+            |     new Server().run();
+            | }
+
+    |!= h3(toc, "ifti-enclosing-scope", "IFTI & Enclosing Scope")
+
+    p
+        | Implicit Function Template Instantiation now supports enclosing
+        | type/scope deduction. This allows you to write code such as
+        | the following:
+
+    code
+        pre
+            | struct A
+            | {
+            |     struct Foo { }
+            | }
+            |
+            | struct B
+            | {
+            |     struct Foo { }
+            | }
+            |
+            | /**
+            | Templated function which expects
+            | the second argument to be of type 'Foo',
+            | which is a nested in the type 'T'.
+            | */
+            | void call(T)(T t, T.Foo foo) { }
+            |
+            | void main()
+            | {
+            |     auto a = A();
+            |     auto a_f = A.Foo();
+            |     // ok
+            |     call(a, a_f);
+            |
+            |     auto b = B();
+            |     auto b_f = B.Foo();
+            |     // ok
+            |     call(b, b_f);
+            |
+            |     // fails: b_f is typed as B.Foo, not A.Foo
+            |     call(a, b_f);
+            | }
+
+    p
+        | This
+        abbr(title="Implicit Template Function Instantiation") IFTI
+        | feature also allows you to retrieve the module of a
+        | symbol, by using an <strong>alias</strong> template parameter,
+        | rather than a type one:
+
+    code
+        pre
+            | module my_module;
+            |
+            | struct A
+            | {
+            |     struct B { }
+            | }
+            |
+            | void foo(alias Mod)(Mod.A, Mod.A.B)
+            | {
+            |     // 'Mod' is deduced to be the module 'my_module'
+            |     // which encloses the struct 'A'
+            |     static assert(__traits(isSame, Mod, my_module));
+            | }
+            |
+            | void main()
+            | {
+            |     A a;
+            |     A.B b;
+            |     // ok
+            |     foo(a, b);
+            | }
+
+    |!= h3(toc, "ddoc-symbol-warning", "DDoc Symbol Mismatch Warning")
+
+    p
+        | DDoc can now warn the user when the symbol names in a ddoc comment
+        | do not match the actual code. Here is an example documented
+        | function, where the parameter names are wrongly documented.
+
+    code
+        pre
+            | /**
+            |     This is the sum function.
+            |
+            |     params:
+            |         x = The first parameter
+            |         y = The second parameter
+            | */
+            | int sum(int a, int b)
+            | {
+            |     return a + b;
+            | }
+
+    p
+        | Generating the documentation with warnings enabled
+        | will emit the following:
+
+    code
+        pre dmd -D -c -w test.d
+
+    code
+        pre
+            | test.d(8): Warning: Ddoc: function declaration has no parameter 'x'
+            | test.d(8): Warning: Ddoc: function declaration has no parameter 'y'
+
+    p
+        | This feature can help ensure that the documentation for library
+        | code is always kept up-to-date.
+
+    p
+        | <strong>Note:</strong> Remember to use the <strong>-w</strong>
+        | switch when building the documentation with the <strong>-D</strong>
+        | switch in order to enable these warnings.
+
+    |!= h3(toc, "string-literal-charp", "Slicing String Literals and char*")
+
+    p
+        | To help ease interacting with C libraries which expect strings as
+        | null-terminated pointers, slicing string <strong>literals</strong>
+        | (<em>not</em> variables!) will now allow the implicit
+        | conversion to a <strong>char</strong> pointer:
+
+    code
+        pre
+            | extern(C) void call(const(char)* str) { }
+            |
+            | void main()
+            | {
+            |     const(char)* abc = "abc";
+            |     // already previously allowed
+            |     call(abc);
+            |
+            |     const(char)* ab = "abc"[0 .. 2];
+            |     // allowed in 2.064
+            |     call(ab);
+            | }
+
+    |!= h3(toc, "templates-and-overloads", "Templates and Overloads")
+
+    p
+        | Templated and non-template functions can now be overloaded against
+        | each other:
+
+    code
+        pre
+            | auto foo(int n) { return 1; }
+            | auto foo(T)(T t) { return 2; }
+            |
+            | void main()
+            | {
+            |     assert(foo(100) == 1);
+            |     assert(foo("a") == 2);
+            |
+            |     // Integer literal 10L can be converted to int
+            |     // without loss of precision.
+            |     // Then the call matches to foo(int n).
+            |     assert(foo(10L) == 1);
+            |
+            |     // A runtime variable 'num' typed long
+            |     // is not implicitly convertible to int.
+            |     // Then the call matches to foo(T)(T t).
+            |     long num = 10L;
+            |     assert(foo(num) == 2);
+            | }
+
+    |!= h3(toc, "cross-moduletemplate-overloads", "Cross-module Template Overloads")
+
+    p
+        | Template declarations are now overloadable just like regular
+        | function declarations. Templates with matching names from
+        | multiple modules will introduce an overload set:
+
+    code
+        pre
+            | module a;
+            |
+            | template Traits(T) if (is(T == double))
+            | {
+            |     enum Traits = "abc";
+            | }
+            |
+            | auto func(T, A...)(A args) if (is(T == double))
+            | {
+            |     return 1;
+            | }
+
+    code
+        pre
+            | module b;
+            |
+            | template Traits(T) if (is(T == string))
+            | {
+            |     enum Traits = "def";
+            | }
+            |
+            | auto func(T, A...)(A args) if (is(T == string))
+            | {
+            |     return 2;
+            | }
+
+    code
+        pre
+            | module c;
+            | import a, b;
+            |
+            | // matches to a.Traits
+            | static assert(Traits!double == "abc");
+            | // matches to b.Traits
+            | static assert(Traits!string == "def");
+            |
+            | void main()
+            | {
+            |     // matches to a.func(T, A...)
+            |     assert(func!double(1, "msg") == 1);
+            |
+            |     // matches to b.func(T, A...)
+            |     assert(func!string(1, "msg") == 2);
+            | }
+
+    |!= h3(toc, "cross-moduletemplate-overload-limitations", "Limitations")
+
+    p
+        | Merging template overload sets by using an alias declaration
+        | is currently not supported. The limitation will be lifted
+        | in a future release.
+
+    |!= h2(toc, "compiler-changes", "Compiler Changes")
+
+    |!= h3(toc, "printing-dependencies", "Printing Dependencies")
+
+    p
+        | You can now use the <strong>-deps</strong> switch without having
+        | to specify a filename. The dependencies will then be printed to
+        | standard output, allowing both users and tools to introspect the
+        | dependencies in the output.
+
+    p The types of dependencies which are printed out are as follows:
+
+    dl
+        dt depsImport
+        dd
+            | Module imports found (same as -deps=file output,
+            | except prefixed with depsImport)
+        dt depsVersion
+        dd Versions (except standard ones and ones set in the module itself)
+        dt depsFile
+        dd
+            | String imports found, e.g.
+            code string x = import("foo.txt");
+        dt depsLib
+        dd
+            | Libraries specified with a
+            code pragma(lib)
+            | statement
+        dt depsDebug
+        dd
+            | Any
+            code debug()
+            | statements found (except the ones set in the module itself)
+
+    |!= h2(toc, "compiler-enchancements", "Compiler Enhancements")
+
+    |!= h3(toc, "getunittests-trait", "'getUnitTests' Trait")
+
+    p
+        | A new trait, <strong>getUnitTests</strong>, has been introduced.
+        | With the new <strong>getUnitTests</strong> trait you can
+        | retrieve all unittest in a module or an aggregate, and then run the
+        | tests manually. Here's an example of implementing a custom unittest
+        | running routine which prints out some additional statistics:
+
+    code
+        pre
+            | import core.runtime;
+            | import core.exception;
+            | import std.stdio;
+            |
+            | shared static this()
+            | {
+            |     // this overrides the default D runtime
+            |     // unittest runner function, since we're providing
+            |     // a __traits-based one in our main function.
+            |     Runtime.moduleUnitTester = { return true; };
+            | }
+            |
+            | unittest
+            | {
+            |     // passes.
+            |     assert(1);
+            | }
+            |
+            | unittest
+            | {
+            |     // fails.
+            |     assert(0);
+            | }
+            |
+            | unittest
+            | {
+            |     // passes.
+            |     assert(1);
+            | }
+            |
+            | void main()
+            | {
+            |     // collect all thrown exceptions.
+            |     Throwable[] errors;
+            |     // count the number of unittests which pass.
+            |     size_t passCount;
+            |
+            |     // iterate over each unittest (this is a tuple).
+            |     foreach (test; __traits(getUnitTests, my_module))
+            |     {
+            |         try
+            |         {
+            |             test();
+            |             passCount++;
+            |         }
+            |         catch (Throwable error)
+            |         {
+            |             errors ~= error;
+            |         }
+            |     }
+            |
+            |     // print out the errors or the statistics.
+            |     if (errors.length)
+            |     {
+            |         writeln("Some unittests failed:\n");
+            |         foreach (error; errors)
+            |             writeln(error);
+            |     }
+            |     else
+            |     {
+            |         writefln(
+            |             "All unittests passed. Passed unittest count: %s",
+            |             passCount
+            |         );
+            |     }
+            | }
+
+    p
+        | <strong>Note:</strong> You must compile with the
+        | <strong>-unittest</strong> flag to be able to retrieve the unittests.
+
+    p
+        | <strong>Note:</strong> By default the D runtime provides its
+        | own unittest execution function. If you want to avoid it from being
+        | invoked at runtime (before the main function is called) you need to
+        | set a custom one by assigning to
+        | <strong>Runtime.moduleUnitTester</strong> in the module constructor.
+        | The one used in the above test-case simply returns
+        | <strong>true</strong>, which allows the <strong>main</strong>
+        | function to be called.
+
+    p
+        | <strong>Note:</strong> The <strong>getUnitTests</strong> trait is
+        | not recursive. This means that calling it on a module will not
+        | retrieve unittests which are nested in aggregates in that module.
+
+    |!= h3(toc, "getvirtualindex-trait", "'getVirtualIndex' Trait")
+
+    p
+        | A <strong>getVirtualIndex</strong> trait has been introduced
+        | for getting the index of a virtual function. You can use this trait
+        | to get the index of a virtual method in the virtual method table:
+
+    code
+        pre
+            | class C
+            | {
+            |     void foo() { }
+            |     void bar() { }
+            | }
+            |
+            | class D : C
+            | {
+            |     void doo() { }
+            |     void doo(int) { }
+            |     void doo(double) { }
+            | }
+            |
+            | void main()
+            | {
+            |     /**
+            |         Note that each class implicitly inherits from the
+            |         Object class, so the following will most likely not
+            |         begin with index 0.
+            |     */
+            |     pragma(msg, __traits(getVirtualIndex, D.foo));
+            |     pragma(msg, __traits(getVirtualIndex, D.bar));
+            |
+            |    /**
+            |        When dealing with overloads you can use the
+            |        getOverloads trait to index into a specific method
+            |    */
+            |    alias dooOverloads = __traits(getOverloads, D, "doo");
+            |
+            |    pragma(msg, __traits(getVirtualIndex, dooOverloads[0]));
+            |    pragma(msg, __traits(getVirtualIndex, dooOverloads[1]));
+            |    pragma(msg, __traits(getVirtualIndex, dooOverloads[2]));
+            | }
+
+    |!= h3(toc, "isoverridefunction-trait", "'isOverrideFunction' Trait")
+
+    p
+        | The <strong>isOverrideFunction</strong> trait has been introduced
+        | which indicates whether or not a function is overriding:
+
+    code
+        pre
+            | class Base
+            | {
+            |     void foo() { }
+            | }
+            |
+            | class Foo : Base
+            | {
+            |     override void foo() { }
+            |     void bar() { }
+            | }
+            |
+            | static assert (__traits(isOverrideFunction, Base.foo) == false);
+            | static assert (__traits(isOverrideFunction, Foo.foo)  == true);
+            | static assert (__traits(isOverrideFunction, Foo.bar)  == false);
+
+    |!= h2(toc, "phobos-enhancements", "Phobos Enhancements")
+
+    |!= h3(toc, "structural-typesafe-conversion", "Structural Typesafe Conversion")
+
+    p
+        | The structural typesafe conversion functions
+        | <strong>wrap</strong> and <strong>unwrap</strong> were introduced
+        | into
+        - docLink("std.typecons");
+
+    p
+        | Sometimes you may want your class to be usable with a function
+        | which expects a specific interface argument type, but you do not
+        | necessarily want to edit the class to inherit that interface.
+        | The class could also be implemented in another library for which
+        | you do not have the source code, which means you wouldn't be
+        | able to edit the inheritance list of that class.
+
+    p
+        | The new <strong>wrap</strong> function allows you to perform
+        | a structural cast, allowing a class object to act as if it were
+        | an object of another type. For example (note: for now please pass
+        | the <strong>-allinst</strong> flag to dmd when compiling):
+
+    code
+        pre
+            | import std.typecons;
+            |
+            | interface IDrawable
+            | {
+            |     void drawLine(int x1, int y1, int x2, int y2);
+            | }
+            |
+            | // note: it does not inherit IDrawable.
+            | class ImageDraw
+            | {
+            |     void drawLine(int x1, int y1, int x2, int y2) { }
+            | }
+            |
+            | /** Draw a rectangle outline. */
+            | void drawRect(IDrawable draw)
+            | {
+            |     draw.drawLine(  0,   0, 100,   0);
+            |     draw.drawLine(100,   0, 100, 100);
+            |     draw.drawLine(  0, 100, 100, 100);
+            |     draw.drawLine(  0,   0,   0, 100);
+            | }
+            |
+            | void main()
+            | {
+            |     auto imageDraw = new ImageDraw();
+            |     // error: can't call this, ImageDraw is not an IDrawable.
+            |     drawRect(imageDraw);
+            |
+            |     // perform a structural cast.
+            |     IDrawable i = wrap!IDrawable(imageDraw);
+            |     // and now imageDraw can act as an IDrawable.
+            |     drawRect(i);
+            | }
+
+    p
+        | The <strong>wrap</strong> function can also be used with classes
+        | which define an <strong>opDispatch</strong> function, for example:
+
+    code
+        pre
+            | import std.typecons;
+            |
+            | interface IDrawable
+            | {
+            |     void drawLine(int x1, int y1, int x2, int y2);
+            |     void drawRect(int x, int y, int width, int height);
+            | }
+            |
+            | class ImageDraw
+            | {
+            |     void opDispatch(string name, Args...)(Args args)
+            |         if (name == "drawLine")
+            |     {
+            |         // ...
+            |     }
+            |
+            |     void opDispatch(string name, Args...)(Args args)
+            |         if (name == "drawRect")
+            |     {
+            |         // ...
+            |     }
+            | }
+            |
+            | /** Draw some shapes. */
+            | void drawShapes(IDrawable draw)
+            | {
+            |     draw.drawLine(0, 100, 100, 0);
+            |     draw.drawRect(0, 0, 100, 100);
+            | }
+            |
+            | void main()
+            | {
+            |     auto imageDraw = new ImageDraw();
+            |     IDrawable i = wrap!IDrawable(imageDraw);
+            |     drawShapes(i);
+            | }
+
+    p You can unwrap a structurally cast object back to its original type:
+
+    code
+        pre
+            | interface IDrawable
+            | {
+            |     void drawLine(int x1, int y1, int x2, int y2);
+            | }
+            |
+            | class ImageDraw
+            | {
+            |     void drawLine(int x1, int y1, int x2, int y2) { }
+            | }
+            |
+            | void main()
+            | {
+            |     auto imageDraw = new ImageDraw();
+            |
+            |     // perform a structural cast (note the simple UFCS syntax).
+            |     IDrawable i = imageDraw.wrap!IDrawable;
+            |
+            |     // get back the original type (ditto, using UFCS syntax).
+            |     ImageDraw draw = i.unwrap!ImageDraw;
+            | }
+
+    p And you can structurally cast to multiple interface types:
+
+    code
+        pre
+            | import std.typecons;
+            |
+            | unittest
+            | {
+            |     interface IStoppable { void stop(); }
+            |     interface IRunnable { void run(); }
+            |
+            |     class Timer
+            |     {
+            |         void run() { }
+            |         void stop() { }
+            |     }
+            |
+            |     auto timer = new Timer();
+            |     auto obj = timer.wrap!(IStoppable, IRunnable);
+            |
+            |     // extract the individual structurally casted types
+            |     // from the wrapped type
+            |     IStoppable iStop = obj;
+            |     IRunnable  iRun  = obj;
+            |
+            |     iRun.run();
+            |     iStop.stop();
+            | }
+
+    |!= h3(toc, "more-pure-functions", "More Pure Functions")
+
+    p
+        | <strong>std.conv.to</strong> and <strong>std.string.format</strong>
+        | are now pure functions:
+
+    code
+        pre
+            | import std.conv;
+            | import std.string;
+            |
+            | // this main is a pure function.
+            | void main() pure
+            | {
+            |     string date = format("%s.%s.%s", 2013, 12, 10);
+            |     int one = to!int(1.0);
+            | }
+
+    |!= h3(toc, "generic-strip-functions", "Generic 'strip' Functions")
+
+    p
+        | Generic <strong>strip/stripLeft/stripRight</strong> functions have
+        | been added to
+        - docLink("std.algorithm");
+
+    p
+        | The new generic strip functions allow you to not only strip strings
+        | but also any other Input range (<strong>stripLeft</strong>) or
+        | Bidirectional range (<strong>strip/stripRight</strong>), for example:
+
+    code
+        pre
+            | import std.algorithm;
+            |
+            | void main()
+            | {
+            |     // strip whitespace.
+            |     assert("  foobar  ".strip!(a => a == ' ')() == "foobar");
+            |
+            |     // an audio waveform.
+            |     float[] data = [0.0, 0.0, 0.1, 0.5, 0.2];
+            |
+            |     // strip leading silence in the waveform.
+            |     assert(data.strip!(a => a < 0.1)().length == 3);
+            | }
+
+    |!= h3(toc, "buffered-translate", "Buffered std.string.translate")
+
+    p
+        | To avoid implicit memory allocations <strong>translate</strong> in
+        - docLink("std.string");
+        | now features overloads which can take an output range to
+        | write the contents to. For example:
+
+    code
+        pre
+            | import std.array;
+            | import std.string;
+            |
+            | void main()
+            | {
+            |     dchar[dchar] transTable = ['a' : '1', 'b' : '2', 'c': '3'];
+            |
+            |     // create our output range by using the Phobos Appender.
+            |     auto buffer = appender!(dchar[])();
+            |
+            |     // don't remove any characters.
+            |     auto toRemove = null;
+            |
+            |     translate("abcdef", transTable, toRemove, buffer);
+            |     assert(buffer.data == "123def");
+            |
+            |     // or use a static array to avoid heap allocations.
+            |     // note: if the buffer is too small an exception will be thrown.
+            |     dchar[6] dbuffer;
+            |     translate("abcdef", transTable, toRemove, dbuffer[]);
+            |     assert(dbuffer == "123def");
+            | }
+
+    |!= h3(toc, "thisexepath-function", "thisExePath function")
+
+    p
+        | The <strong>thisExePath</strong> function has been introduced
+        | for retrieving the executable path of the currently running
+        | process:
+
+append extra-sidebar
+    |!= toc.write("On This Page")

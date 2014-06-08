@@ -12,8 +12,10 @@ append content
 
     - void entry(string versionString, string date)
         li
-            a(href="/changelog/#{versionString}") #{versionString}
-            span.date #{date}
+            a(href="/changelog/#{versionString}")
+                span.version #{versionString}
+                | &mdash;
+                span.date #{date}
 
     ul.changelog-version-list
         - entry("2.065", "February 24, 2014");
