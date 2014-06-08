@@ -1,4 +1,4 @@
-extends basic_changelog
+extends old_changelog
 
 append bugs_fixed
     ul

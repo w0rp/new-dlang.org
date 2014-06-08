@@ -172,6 +172,10 @@ header h1 + p {
     top: 0px;
 }
 
+.page-center > .row > .extra-column > aside.scrollable {
+    overflow: auto;
+}
+
 .nav-stacked {
     background-color: #f1f1f1;
     color: #333232;
@@ -299,15 +303,19 @@ h4:hover > .toc-link {
 
 #toc ul {
     list-style-type: none;
-    padding-left: 14px;
+    padding-left: 16px;
 }
 
 #toc li {
-    padding-top: 0.25em;
+    padding-top: 0.5em;
 }
 
 #toc > ul > li:first-child {
     padding-top: 0;
+}
+
+#toc a {
+    color: #333;
 }
 
 .download-list {

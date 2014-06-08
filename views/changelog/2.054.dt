@@ -1,0 +1,181 @@
+extends base_changelog
+
+append new_features
+    ul
+        li Implement @safe
+        li Implement @property
+        li Automatic inference for @safe, pure, nothrow
+        li Allow labelled break and continue in CTFE
+        li Warn about switch case fallthrough
+        li Pointers are now supported in CTFE
+        li Heap-allocated structs are now supported in CTFE
+        li Added SSSE3 instructions to inline assembler
+        li Change from warning to deprecated: non-final switch statements must have a default statement
+        li Change from warning to deprecated: function is hidden by function
+        li Add warning about switch case fallthrough
+        li Add warning about calling pure nothrow functions and ignoring the result
+        li Allow associative arrays with key of type bool
+        li Added inference for purity and safety
+        li Change win32 dmd to not emit a map file unless asked for with -map
+        li Added <strong>-property</strong> switch
+        - bugItem(5823, "@property call syntax restriction not implemented");
+        li Added core.sys.posix.netdb
+        li
+            | For functions which have a version which takes a
+            | core.time.Duration and another version which takes an integral
+            | value, the version which takes an integral value is now
+            | scheduled for deprecation.
+        li std.array.insertInPlace supports inserting of multiple ranges/elements in one go
+        li Added std.array.uninitializedArray and std.array.minimallyInitializedArray
+        li
+            | Various functions in std.string were renamed to match Phobos'
+            | naming conventions and be properly camelcased. The old names are
+            | still there but have been scheduled for deprecation.
+        li
+            | Various functions in std.uni were renamed so that they don't
+            | have "Uni" in their name, since it was decided that it was not
+            | desirable to repeat a module's name in its functions' names.
+            | The old names are still there but have been scheduled for
+            | deprecation.
+        li
+            | std.ctype has been scheduled for deprecation. std.ascii
+            | has been added to replace it.
+        li Major performance improvements for std.algorithm.sort
+        li std.string.atoi has been removed; replace it with std.conv.to!int
+        li Switched to using posix.mak instead of various .mak files
+
+append druntime_bugs_fixed
+    ul
+        - bugItem(4323, "std.demangle incorrectly handles template floating point numbers");
+        - bugItem(5272, "Postblit not called on copying due to array append");
+        - bugItem(5956, "Undocumented mangling of struct value");
+        - bugItem(6135, "Thread/GC interaction bug on OS X");
+
+append library_bugs_fixed
+    ul
+        - bugItem(2108, "regexp.d: The greedy dotstar isn't so greedy");
+        - bugItem(3136, "Incorrect and strange behavior of std.regexp.RegExp if using a pattern with optional prefix and suffix longer than 1 char");
+        - bugItem(3457, "rdmd fails silently in a particular setup where the compiler is not the expected");
+        - bugItem(3479, "writef/writefln: positional precision not working");
+        - bugItem(3564, "Rdmd failing to link external C libraries");
+        - bugItem(3752, "File.byLine fetches lines in a confusing manner");
+        - bugItem(4367, "std.regex: Captures is not a random access range");
+        - bugItem(4574, "std.regex: breaks with empy string regex");
+        - bugItem(4608, "std.string.chomp documentation mismatch implementation");
+        - bugItem(5019, "In std.regex, empty capture at end of string causes error");
+        - bugItem(5059, "String assignment in foreach loop breaks immutability");
+        - bugItem(5458, "scope for function parameters is not documented");
+        - bugItem(5511, "std.regex optional capture with no-match cause error");
+        - bugItem(5598, "rdmd does not fail on invalid filename");
+        - bugItem(5673, "Add lookahead and forgetful matching support std.regex");
+        - bugItem(5705, "Swapping identical struct with hasElaborateAssign causes \"overlapping array copy\" exception");
+        - bugItem(5836, "std.typetuple.staticIndexOf's example code missing %s in call to writefln");
+        - bugItem(5857, "std.regex (...){n,m} is bogus when (...) contains repetitions");
+        - bugItem(5869, "std.thread needs to be removed");
+        - bugItem(6026, "DLL example needs update due to missing core.dll_helper");
+        - bugItem(6076, "regression, std.regex: \"c.*|d\" matches \"mm\"");
+        - bugItem(6101, "Documentation for dead modules still distributed with DMD");
+        - bugItem(6113, "singletons in std.datetime are not created early enough");
+        - bugItem(6193, "Appender.clear() functionality or documentation");
+
+append dmd_bugs_fixed
+    ul
+        - bugItem(693, "'this' can't be used as an alias parameter for a mixin");
+        - bugItem(1373, "typeof(func).stringof fails when func has parameters.");
+        - bugItem(1411, "ref Tuple should transform to Tuple of ref's");
+        - bugItem(1570, "Wrong return for address operator");
+        - bugItem(2180, "filename error with #line");
+        - bugItem(2521, "Not possible to return immutable value by ref");
+        li Temp destructors now called if exception is thrown
+        - bugItem(2625, "Creating new struct with literal bypasses immutability of members if struct is in array");
+        - bugItem(3147, "Incorrect value range propagation for addition");
+        - bugItem(3359, "Cannot parse pure/const/immutable functions with inferred return type");
+        - bugItem(3445, "partial fix");
+        - bugItem(3511, "ref return property confused with property setter");
+        - bugItem(3632, "modify float is float to do a bitwise compare");
+        - bugItem(3688, "Can't have declaration with assignment to const/immutable inside if condition");
+        - bugItem(3722, "A method without an in contract should always succeed, even if overridden");
+        - bugItem(3799, "isStaticFunction trait evaluates to true for non-static nested functions");
+        - bugItem(4031, "Should be able to access const value-type globals from pure functions");
+        - bugItem(4040, "const/immutable on the right in auto return class methods");
+        - bugItem(4063, "[CTFE] key not found in AA gives bad error message");
+        - bugItem(4065, "[CTFE] AA \"in\" operator doesn't work");
+        - bugItem(4107, "Duplicate documentation for member function templates");
+        - bugItem(4132, "pointer arithmetic accepted in @safe functions");
+        - bugItem(4170, "Missing line number on compile-time array index");
+        - bugItem(4258, "\"auto ref\" doesn't work in one or more cases");
+        - bugItem(4448, "[CTFE] labeled break doesn't work in CTFE");
+        - bugItem(4494, "ICE(cod1.c) Array literal filled with results of void function");
+        - bugItem(4633, "typeof({return 1;}()) declaration fails if inside main");
+        - bugItem(4661, "Array Literal Incompatible Type Error Msg Should Include Line Number");
+        - bugItem(4706, "Overloading auto return w/ non-auto return = strange error msg");
+        - bugItem(4745, "Non-uniform handling of commas in static initialization of structs");
+        - bugItem(4885, "Uninitialize Pointers Allowed in @safe code");
+        - bugItem(4910, "[CTFE] Cannot evaluate a function that has failed at once");
+        - bugItem(4963, "ICE(type.c:320) for struct append where T.sizeof < 3");
+        - bugItem(4969, "nothrow check can't handle multiple catches");
+        - bugItem(5088, "Cannot cast const(int) to long in @safe function");
+        - bugItem(5258, "[CTFE] Stack overflow with struct by ref");
+        - bugItem(5284, "Array ops punch through const system");
+        - bugItem(5327, "Creating new struct with literal bypasses immutability of members of members of the struct");
+        - bugItem(5396, "[CTFE] Invalid code with nested functions in CTFE");
+        - bugItem(5415, "@Safe functions not working");
+        - bugItem(5497, "-- now produces error message instead of wrong code");
+        - bugItem(5551, "opUnary-opBinary conflict");
+        - bugItem(5574, "Struct destructor freaks out when an array of struct with single element is instantiated inside a class");
+        - bugItem(5615, "[CTFE] std.string.indexOf broken at compile time");
+        - bugItem(5633, "[CTFE] ICE(constfold.c): is expression with struct, struct pointer, array literal...");
+        - bugItem(5657, "Temporary object destruction");
+        - bugItem(5659, "Conditional operator, array literal, and std.traits.CommonType return a wrong common type");
+        - bugItem(5676, "[CTFE] segfault using tuple containing struct that has opAssign");
+        - bugItem(5682, "[CTFE] Silently wrong result possibly related to operator overloading and expression order");
+        - bugItem(5693, "Segfault with address of template struct opCall");
+        - bugItem(5708, "[CTFE] Incorrect string constant folding with -inline");
+        - bugItem(5771, "Template constructor and auto ref do not work");
+        - bugItem(5819, "DMD doesn't error/warn about illegal asm for 64bit mode");
+        - bugItem(5845, "Regression(2.041) [CTFE] \"stack overflow\" with recursive ref argument");
+        - bugItem(5856, "overloading on const doesn't work for operator overload");
+        - bugItem(5859, "Declaration inside if condition doesn't call destructor");
+        - bugItem(5861, "Wrong filename in error message when an invalid delegate in a template parameter is typeof()-ed");
+        - bugItem(5885, "wrong codegen for OPu32_d");
+        - bugItem(5897, "unrelated struct type casting should ignite construction");
+        - bugItem(5936, "Invalid code with nested functions in CTFE");
+        - bugItem(5946, "failing lookup 'this' from function in template");
+        - bugItem(5954, "[CTFE] enum structs with ctor");
+        - bugItem(5959, "Return by reference with nested function should be allowed");
+        - bugItem(5962, "Template function declaration with prefixed storage class and auto occurs conflict");
+        - bugItem(5963, "iasm does not accept 64bit integer literal");
+        - bugItem(6001, "[CTFE] ICE(interpret.c) mutating ref array");
+        - bugItem(6015, "[CTFE] Strange behavior of assignment appears in a situation");
+        - bugItem(6049, "[CTFE] Array literals of structs with invariant() are wrong");
+        - bugItem(6052, "[CTFE] Struct elements in an array are treated like reference type");
+        - bugItem(6053, "[CTFE] Two ICEs involving pointers (dereference and assign; pointer variable on stack)");
+        - bugItem(6054, "[CTFE] ICE when returning a returned compile-time associative array containing a key of an idup-ed array literal");
+        - bugItem(6059, "Incompatible types in array literal shows __error and error");
+        - bugItem(6072, "[CTFE] Regression(git master): Cannot declare variable inside an 'if' condition");
+        - bugItem(6075, "Cannot set value to associative array from a weakly-pure function when the value type has a (pure) opAssign");
+        - bugItem(6077, "[CTFE] Cannot append null array to null array.");
+        - bugItem(6078, "[CTFE] ICE on foreach over array struct member which is null");
+        - bugItem(6079, "[CTFE] Array index out of bound detection is off-by-one");
+        - bugItem(6090, "DDoc parenthesis escape issues.");
+        - bugItem(6100, "[CTFE] Regression: struct return values wrong if used in array initializer");
+        - bugItem(6109, "'nothrow' does not check slice indices");
+        - bugItem(6111, "Escaping reference to local variable not detected");
+        - bugItem(6119, "Assertion failure: '0' on line 1118 in file 'glue.c'");
+        - bugItem(6120, "[CTFE] ICE on calling constructor of template struct with -inline in function/delegate literal.");
+        - bugItem(6123, "[CTFE] Cannot call a template member method inside delegate/function literal with -inline.");
+        - bugItem(6137, "[CTFE] Foreach on semantically wrong initialized array crashes the compiler");
+        - bugItem(6145, "Meaningless second error message for complex size of static array");
+        - bugItem(6150, "runnable/testsocket.d");
+        - bugItem(6158, "winsamp and dhry samples need an update");
+        - bugItem(6161, "iasm opcode family Jcc use absolute address instead of relative for functions");
+        - bugItem(6164, "[CTFE] Local arrays in a recursive local function behave funny");
+        - bugItem(6198, "[GSoC] ICE(e2ir.c) With circular import");
+        - bugItem(6229, "%= and /= no longer work on char type");
+        - bugItem(6230, "Member functions can no longer be weakly pure");
+        - bugItem(6234, "64-bit array append generates inline code to copy new data, but does not call postblit");
+        - bugItem(6241, "test sdtor.d on osx not catching");
+        - bugItem(6242, "Disallow inoperant \"in\" contracts");
+        - bugItem(6264, "ICE on testing opSlice in static if");
+        - bugItem(6267, "Can't increment alias this'd struct from ref return");
+        - bugItem(6279, "Regression(2.054 beta): array-vararg with pointer type not working in safe code");

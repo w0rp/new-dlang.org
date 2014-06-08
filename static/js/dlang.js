@@ -6,9 +6,17 @@ $(function() {
     var asideTopStop = +$aside.data("offset-top");
     var asideBottomStop = +$aside.data("offset-bottom");
 
+    if ($aside.find("#twitter").length === 0) {
+        // Hack to only enable scrolling when the aside isn't holding
+        // the Twitter module.
+        $aside.addClass("scrollable");
+    }
+
     function adjustSidebar() {
         var scrollTop = window.pageYOffset
             || document.documentElement.scrollTop;
+
+        var windowHeight = $(window).height();
 
         if (scrollTop > asideTopStop) {
             var docHeight = Math.max(
@@ -19,31 +27,35 @@ $(function() {
                 document.documentElement.offsetHeight
             );
 
-            var itemHeight = $aside.height();
+            // Calculate the number of pixels by which the fixed element's
+            // height in the window would overrun the stopping point
+            // at the bottom.
+            var overrun = asideBottomStop -
+                (docHeight - (scrollTop + windowHeight));
 
-            if (docHeight - (scrollTop + itemHeight) < asideBottomStop) {
-                // The bottom of the element would now be below the bottom
-                // stop point, so hold it in place.
-                var newTopPos =
-                    docHeight
-                    - asideBottomStop
-                    - asideTopStop
-                    - itemHeight;
+            asideStyle.position = "fixed";
+            asideStyle.top = "0px";
 
-                asideStyle.position = "relative";
-                asideStyle.top = newTopPos + "px";
+            if (overrun >= 0) {
+                // We are running over the bottom, so
+                // subtract that difference.
+                asideStyle.maxHeight = windowHeight - overrun + "px";
             } else {
                 // We are just past the top point,
                 // but the bottom of the element isn't at the bottom.
-                asideStyle.position = "fixed";
-                asideStyle.top = "0px";
+                asideStyle.maxHeight = windowHeight + "px";
             }
         } else {
             asideStyle.position = "relative";
             asideStyle.top = "0px";
+
+            asideStyle.maxHeight =
+                windowHeight - (asideTopStop - scrollTop) + "px";
         }
     }
 
     $(window).scroll(adjustSidebar);
     $(window).resize(adjustSidebar);
+
+    adjustSidebar();
 });

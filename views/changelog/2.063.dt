@@ -1,0 +1,1841 @@
+extends base
+
+append head
+    title D Programming Language Version #{thisVersion} Change Log
+
+append content
+    header
+        h1 Change Log &ndash; v#{thisVersion}
+
+    |!= h2(toc, "language-changes", "Language Changes")
+
+    |!= h3(toc, "const-immutable-warn", "Const/Immutable Warnings")
+
+    p
+        | Const and immutable fields with initializers are now warned about.
+        | Eventually, they will be deprecated, and then will trigger an error.
+        | Such fields should now be changed to enum or static.
+
+    p In a future release, a new behavior for them will be enabled:
+
+    p
+        | Fields in an aggregate which are not static will always be
+        | addressable. This means they will occupy space in the object:
+
+    code
+        pre
+            | struct S
+            | {
+            |     // used to be implicitly static in 2.062, now warns.
+            |     // In a future release it will become non-static.
+            |     immutable int[] arr = [1, 2];
+            |
+            |     // ditto
+            |     const int[] arr2 = [1, 2];
+            | }
+
+    p
+        | This means that code which accessed such declarations without the
+        | <strong>this</strong> reference will no longer compile. Additionally
+        | code which depended on the size of a structure with such fields
+        | will have to be fixed:
+
+    code
+        pre
+            | struct S
+            | {
+            |     immutable int[] arr = [1, 2];
+            | }
+            |
+            | void main()
+            | {
+            |     // becomes an error in a future release,
+            |     // 'arr' will require the 'this' reference.
+            |     auto x = S.arr;
+            |
+            |     // S is size 1 in 2.062 and 2.063.
+            |     // In a future release this will change and the following
+            |     // static assert will pass.
+            |
+            |     // ptr + length for the array
+            |     static assert(S.sizeof == size_t.sizeof + size_t.sizeof);
+            | }
+
+    p
+        | To make the field static again, simply use the static keyword.
+        | Alternatively make the field an <strong>enum</strong> to turn it
+        | into a manifest constant:
+
+    code
+        pre
+            | struct S
+            | {
+            |     static immutable int[] arr = [1, 2];
+            |     enum arr2 = [1, 2];
+            | }
+    p
+        | Note however that manifest constants which are arrays are
+        | allocated on each usage, so you may prefer using
+        | <strong>static</strong> instead.
+
+    |!= h4(toc, "const-immutable-warn-rationale", "Rationale")
+
+    p
+        | Making a field implicitly static based on whether it is
+        | const/immutable and has an initializer leads to confusion. The
+        | <strong>static</strong> keyword can be used to explicitly
+        | make any field static.
+
+    |!= h3(toc, "constructor-qualifiers", "Constructor Qualifiers")
+
+    p
+        | Constructor qualifiers are taken into account when
+        | constructing objects.
+        | A qualified constructor is now invoked when a
+        | <strong>const/immutable/shared</strong> aggregate object is
+        | instantiated, respectively:
+
+    code
+        pre
+            | import std.stdio;
+            |
+            | class C
+            | {
+            |     this()           { writeln("1"); }
+            |     this() const     { writeln("2"); }
+            |     this() immutable { writeln("3"); }
+            |     this() shared    { writeln("4"); }
+            | }
+            |
+            | void main()
+            | {
+            |     // writes "1"
+            |     auto a = new C;
+            |     // writes "2"
+            |     auto b = new const C;
+            |     // writes "3"
+            |     auto c = new immutable C;
+            |     // writes "4"
+            |     auto d = new shared C;
+            | }
+
+    p
+        | This has the consequence that aggregates which have only
+        | <strong>immutable</strong> or <strong>shared</strong> constructors
+        | can no longer be used to instantiate mutable objects:
+
+    code
+        pre
+            | class C
+            | {
+            |     this() immutable { }
+            |     this() shared { }
+            | }
+            |
+            | void main()
+            | {
+            |     // disallowed
+            |     auto c1 = new C;
+            |     // ok
+            |     auto c2 = new immutable C;
+            |     // ok
+            |     auto c3 = new shared C;
+            | }
+
+    p
+        | On the other hand, aggregates which do not have
+        | <strong>shared</strong> or <strong>immutable</strong>
+        | constructors can no longer be used to construct
+        | <strong>shared</strong> or <strong>immutable</strong>
+        | objects, respectively:
+
+    code
+        pre
+            | class C
+            | {
+            |     this() { }
+            | }
+            |
+            | void main()
+            | {
+            |     // ok
+            |     auto c1 = new C;
+            |     // disallowed
+            |     auto c2 = new immutable C;
+            |     // disallowed
+            |     auto c3 = new shared C;
+            | }
+
+    p
+        | However, if an aggregate has a <strong>pure</strong> constructor
+        | it can be used to construct an object with any type constructor:
+
+
+    code
+        pre
+            | class C
+            | {
+            |     this() pure { }
+            | }
+            |
+            | void main()
+            | {
+            |     // ok
+            |     auto c1 = new C;
+            |     // ok
+            |     auto c2 = new immutable C;
+            |     // ok
+            |     auto c3 = new shared C;
+            | }
+
+    |!= h3(toc, "struct-member-compare", "Struct Member Comparison")
+
+    p
+        | Struct members which require non-bitwise comparison are now
+        | property compared.
+        | In earlier releases some struct members such as arrays would be
+        | bitwise-compared in a comparison operation. This has now been
+        | changed to be a structural comparison instead:
+
+    code
+        pre
+            | struct S
+            | {
+            |     char[] data;
+            | }
+            |
+            | void main ()
+            | {
+            |     auto s1 = S("foo".dup);
+            |     auto s2 = S("foo".dup);
+            |
+            |     // both are unique data
+            |     assert(s1.data !is s2.data);
+            |
+            |     // passes in 2.063
+            |     assert(s1 == s2);
+            |     // equivalent of above
+            |     assert(s1.data == s2.data);
+            | }
+
+    p
+        | If an <strong>opEquals</strong> function is not present the compiler
+        | rewrites the expression <strong>s1 == s2</strong> to
+        | <strong>s1.tupleof == s2.tupleof</strong>. Comparing
+        | <strong>.tupleof</strong> expressions is also a feature new to D
+        | in the 2.063 release.
+
+    |!= h3(toc, "array-copy-require-slice", "Array Copy with Slice Syntax")
+
+    p
+        | Array copy operations now always require using the slice syntax.
+        | The right-hand-side of an array copy operation now requires using
+        | the slice syntax:
+
+    code
+        pre
+            | void main()
+            | {
+            |     int[][2] x;
+            |     int[] y;
+            |     int[] z;
+            |
+            |     // copies z (pointer + length) 2 times to x
+            |     x[] = z;
+            |     // copies each element of z into y (compiler emits warning)
+            |     y[] = z;
+            | }
+
+    p
+        | If the user intended to write such code they must use the slice
+        | syntax for both the source and target arrays:
+
+    code
+        pre
+            | void main()
+            | {
+            |     int[][2] x;
+            |     int[] y;
+            |     int[] z;
+            |
+            |     // copies each element of z into y (no warnings)
+            |     y[] = z[];
+            | }
+
+    |!= h4(toc, "array-copy-require-slice-rationale", "Rationale")
+
+    p
+        | The compiler will emit a warning to make the user aware that the
+        | copy operation is arbitrarily expensive.
+
+    |!= h3(toc, "types-typeof", "Types in typeof")
+
+    p
+        | Types no longer act as arguments in <strong>typeof</strong>
+        | expressions.
+        | A type can no longer be passed to a function as a value of that type
+
+    code
+        pre
+            | T[] foo(T)(T t)
+            | {
+            |     return null;
+            | }
+            |
+            | void main()
+            | {
+            |     alias int Int;
+            |
+            |     // used to work (only with an alias), now a compiler error
+            |     alias typeof(foo(Int)) IntArray;
+            | }
+
+    p
+        | If the user wants to pass an argument of a certain type, they can
+        | use the <strong>.init</strong> property:
+
+    code
+        pre
+            | T[] foo(T)(T t)
+            | {
+            |     return null;
+            | }
+            |
+            | void main()
+            | {
+            |     // ok
+            |     alias typeof(foo(int.init)) IntArray;
+            | }
+
+    |!= h4(toc, "types-typeof-rationale", "Rationale")
+
+    p
+        | Treating types as expressions in special contexts only leads
+        | to confusion. Instead, the <strong>.init</strong> property can
+        | be used for such purposes.
+
+    |!= h3(toc, "index-variable", "foreach Index by Reference")
+
+    p
+        | The index variable in a foreach range is no longer implicitly a
+        | reference. It is now by default a value type:
+
+    code
+        pre
+            | void main()
+            | {
+            |     size_t count;
+            |     foreach (n; 0 .. 10)
+            |     {
+            |         ++n;
+            |         ++count;
+            |     }
+            |     // passes
+            |     assert(count == 10);
+            | }
+
+    p
+        | If the user wants to modify the index variable he must use the
+        | <strong>ref</strong> keyword:
+
+    code
+        pre
+            | void main()
+            | {
+            |     size_t count;
+            |     foreach (ref n; 0 .. 10)
+            |     {
+            |         ++n;
+            |         ++count;
+            |     }
+            |     assert(count == 5);
+            | }
+
+    |!= h4(toc, "index-variable-rationale", "Rationale")
+
+    p
+        | Making the index variable implicitly <strong>ref</strong> can
+        | introduce bugs that are hard to track down.
+
+    |!= h3(toc, "aa-no-default-init", "AA Default Initilization")
+
+    p
+        | Associative array entries are no longer default-initialized
+        | before assignment. This used to be the case:
+
+    code
+        pre
+            | void main()
+            | {
+            |     int[int] aa;
+            |     // no Error thrown in 2.062
+            |     aa[1] = aa[1] + 1;
+            |     // worked in 2.062
+            |     assert(aa[1] == 1);
+            | }
+
+    p
+        | In 2.063, accessing an entry which does not exist will now
+        | throw a RangeError:
+
+    code
+        pre
+            | void main()
+            | {
+            |     int[int] aa;
+            |     // RangeError thrown in 2.063
+            |     aa[1] = aa[1] + 1;
+            | }
+
+    |!= h4(toc, "aa-no-default-init-rationale", "Rationale")
+
+    p Default-initialization during assignment can be a source of bugs.
+
+    |!= h3(toc, "const-attribute-inherited", "const Inheritance")
+
+    p Method overrides no longer inherit constness of the base method:
+
+    code
+        pre
+            | class A
+            | {
+            |     void foo() const { }
+            | }
+            |
+            | class B : A
+            | {
+            |     // used to work in 2.062, now an error
+            |     // note missing 'const' on the end.
+            |     override void foo() { }
+            | }
+
+
+    p
+        | If the user wants to override a const method he has to
+        | mark the overriden method as const:
+
+    code
+        pre
+            | class A
+            | {
+            |     void foo() const { }
+            | }
+            |
+            | class B : A
+            | {
+            |     // ok, trailing const is used.
+            |     override void foo() const { }
+            | }
+
+    p
+        | The feature allows introducing new overloads based on the
+        | constness of the method:
+
+    code
+        pre
+            | class A
+            | {
+            |     void foo() const { }
+            | }
+            |
+            | class B : A
+            | {
+            |     // introduces new overload (not override!)
+            |     void foo() { }
+            |
+            |     // if the above overload is introduced the user must either:
+            |     // a: re-introduce the const overload
+            |     //    to prevent function hijacking
+            |
+            |     // without this you will get a compiler error
+            |     alias super.foo foo;
+            |
+            |     // or b: provide a properly typed override:
+            |     override void foo() const { }
+            | }
+
+    |!= h3(toc, "typeof-null", "typeof(null) and Slices")
+
+    p
+        | <code>typeof(null)</code> no longer implicitly converts to
+        | <code>T[]</code>. The following code used to be allowed:
+
+    code
+        pre
+            | void f(int[] function() del)
+            | {
+            |     // fails
+            |     assert(!del());
+            | }
+            |
+            | typeof(null) g() { return null; }
+            |
+            | void main()
+            | {
+            |     f(&amp;g);
+            |     f(() => null);
+            | }
+
+    p
+        | However the implicit conversion would end up generating wrong code.
+        | To work around this, make sure the return type is typed properly,
+        | or use (T[]).init in the return expression of a lambda expression:
+
+    code
+        pre
+            | void f(int[] function() del)
+            | {
+            |     // passes
+            |     assert(!del());
+            | }
+            |
+            | // fixed return type
+            | int[] g() { return null; }
+            |
+            | void main()
+            | {
+            |     // ok
+            |     f(&g);
+            |     // ok
+            |     f(() => (int[]).init);
+            | }
+
+    |!= h3(toc, "template-this-parameter", "Template This Parameter")
+
+    p
+        | The
+        a(href="/template#TemplateThisParameter") Template This Parameter
+        | can now be used to infer the qualifier of <strong>this</strong>
+        | to member functions:
+
+    code
+        pre
+            | struct S
+            | {
+            |     void foo(this T)()
+            |     {
+            |     }
+            | }
+            |
+            | void main()
+            | {
+            |      immutable S s;
+            |      // makes S.foo immutable
+            |      s.foo();
+            | }
+
+    |!= h3(toc, "array-slices-rvalues", "Array Slice r-values")
+
+    p
+        | Array slices are no longer l-values. This means an address can no
+        | longer be taken of a slice, and slices cannot be passed by ref
+        | to functions:
+
+    code
+        pre
+            | void foo(ref int[] arr) { arr = new int[10]; }
+            |
+            | void main()
+            | {
+            |     int[] arr;
+            |     // ok
+            |     foo(arr);
+            |     assert(arr.length == 10);
+            |
+            |     // disallowed in 2.063, the slice is an r-value
+            |     foo(arr[]);
+            |     // disallowed in 2.063, cannot take address of r-value
+            |     auto ptr = &amp;arr[1..2];
+            | }
+
+    p
+        | To work around this you can make your function take an r-value
+        | if it doesn't need to reassign and resize the slice, but only needs
+        | to read or modify its contents. Otherwise, to accept both l-values
+        | and r-values you can make your function take its argument
+        | by <strong>auto ref</strong>:
+
+    code
+        pre
+            | void take(int[] arr) { }
+            | void takeRef(ref int[] arr) { }
+            | void takeAutoRef(T)(auto ref T[] arr) { }
+            |
+            | void main()
+            | {
+            |     int[] arr = [1, 2, 3, 4];
+            |     // ok
+            |     take(arr);
+            |     // ok
+            |     takeRef(arr);
+            |     // ok
+            |     takeAutoRef(arr);
+            |
+            |     int[] arr2 = arr[1 .. 2];
+            |     // ok, arr2 is a variable
+            |     take(arr2);
+            |     // ditto
+            |     takeRef(arr2);
+            |     // ditto
+            |     takeAutoRef(arr2);
+            |
+            |     // ok
+            |     take(arr[1 .. 2]);
+            |     // error, cannot pass r-value by reference
+            |     takeRef(arr[1 .. 2]);
+            |     // ok
+            |     takeAutoRef(arr[1 .. 2]);
+            | }
+
+    |!= h4(toc, "array-slices-rvalues-rationale", "Rationale")
+
+    p
+        | Passing slices by reference had no observable effect when
+        | reassigning or resizing such a slice at the call site, therefore
+        | such slices should by default be r-values. For example, the
+        | following code used to be allowed but is now a compile-time error:
+
+    code
+        pre
+            | void reAssign(ref int[] arr) { arr = new int[2]; }
+            | void reSize(ref int[] arr)   { arr.length = 10; }
+            |
+            | void main()
+            | {
+            |     int[] arr = [1, 2, 3, 4];
+            |
+            |     // reassigning has no observable effect at the call site
+            |     reAssign(arr[0 .. 4]);
+            |     assert(arr == [1, 2, 3, 4]);
+            |
+            |     // resizing has no observable effect at the call site
+            |     reSize(arr[0 .. 4]);
+            |     assert(arr.length == 4);
+            | }
+
+    |!= h3(toc, "non-static-this", "Non-static 'this'")
+
+    p
+        | Accessing a non-static field without a <code>this</code> reference
+        | is now only allowed in certain contexts.
+        | Accessing non-static fields used to be allowed in many contexts,
+        | but is now limited to only a few:
+
+    p
+        | <strong>offsetof</strong>, <strong>init</strong>, and other
+        | built-in properties are allowed:
+
+    code
+        pre
+            | struct S { int field; }
+            |
+            | void main()
+            | {
+            |     // ok, statically known
+            |     auto a = S.field.offsetof;
+            |     // ditto
+            |     auto c = S.field.max;
+            |     // disallowed, no `this` reference
+            |     auto d = S.field;
+            | }
+
+    p When invoking static methods of a non-static field:
+
+    code
+        pre
+            | struct Foo
+            | {
+            |     static struct Bar
+            |     {
+            |         static int get() { return 0; }
+            |     }
+            |
+            |     Bar bar;
+            | }
+            |
+            | void main()
+            | {
+            |     // ok, equivalent to `typeof(Foo.bar).get()'
+            |     static assert(Foo.bar.get() == 0);
+            | }
+
+    p
+        | When accessing static fields implicitly using an
+        a(href="/class#AliasThis") alias this
+        | expression:
+
+    code
+        pre
+            | struct Foo
+            | {
+            |     static struct Bar
+            |     {
+            |         static int get() { return 0; }
+            |     }
+            |
+            |     Bar bar;
+            |     alias bar this;
+            | }
+            |
+            | void main()
+            | {
+            |     // ok, equivalent to 'typeof(Foo.bar).get()'
+            |     static assert(Foo.get() == 0);
+            | }
+
+    |!= h3(toc, "array-implicit-pointer", "Arrays & Pointers")
+
+    p
+        | Arrays no longer implicitly convert to a pointer.
+        | The implicit conversion of an array to a pointer was a deprecated feature:
+
+    code
+        pre
+            | void foo(int* p) { }
+            |
+            | void main()
+            | {
+            |     int[] arr = [1, 2];
+            |     // ok if -d switch is used during compilation
+            |     foo(arr);
+            | }
+
+    p
+        | This feature has now been completely removed. The workaround is
+        | to either use the <strong>.ptr</strong> property, or explicitly
+        | pass the pointer to the first element:
+
+    code
+        pre
+            | void foo(int* p) { }
+            |
+            | void main()
+            | {
+            |     int[] arr = [1, 2];
+            |     // compile time error
+            |     foo(arr);
+            |     // ok
+            |     foo(arr.ptr);
+            |     // ok
+            |     foo(&arr[0]);
+            | }
+
+    |!= h2(toc, "language-enchancements", "Language Enhancements")
+
+    |!= h3(toc, "unique-immutable", "Unique and Immutable")
+
+    p
+        | Expressions which return unique objects can be implicitly casted to
+        | <strong>immutable</strong>.
+
+    p
+        | Expressions such as <strong>new</strong> for objects and arrays,
+        | and <strong>dup</strong> for arrays, can now be inferred to be
+        | unique. This allows the compiler to implicitly convert such an
+        | expression to immutable:
+
+    code
+        pre
+            | class C { }
+            |
+            | void main()
+            | {
+            |     // ok
+            |     immutable int[] arr1 = new int[](3);
+            |     // ok in 2.063
+            |     immutable int[] arr2 = [1, 2, 3].dup;
+            |     // ok in 2.063
+            |     immutable C[] arr3 = [new C, new C].dup;
+            | }
+
+    |!= h3(toc, "array-void-init", "Initializing Void Static Arrays")
+
+    p A static array of void could not be initialized in user-code:
+
+    code
+        pre
+            | void main()
+            | {
+            |     // error in 2.062
+            |     void[2] varr1;
+            |     // error in 2.062
+            |     void[2] varr2 = (void[2]).init;
+            |     // ok in 2.062
+            |     void[2] varr3 = void;
+            | }
+
+    p In 2.063, an explicit initializer can be used:
+
+    code
+        pre
+            | void main()
+            | {
+            |     // still an error in 2.063
+            |     void[2] varr1;
+            |     // ok in 2.063
+            |     void[2] varr2 = (void[2]).init;
+            |     // ok in 2.063
+            |     void[2] varr3 = void;
+            | }
+    p
+        | The <strong>.init</strong> property effectively
+        | zero-initializes the array.
+
+    |!= h4(toc, "array-void-init-rationale", "Rationale")
+
+    p
+        | The restriction has been lifted to allow generic code to use
+        | <strong>.init</strong> without having to specialize for
+        | static void arrays.
+
+    |!= h3(toc, "aggregate-multiple-invariant", "Multiple Invariants")
+
+    p
+        | If an aggregate type has multiple invariants,
+        | the invariants' bodies will be merged into a single invariant
+        | function and will be run in sequence. Note that the code in one
+        | invariant cannot reference code or data in another invariant:
+
+    code
+        pre
+            | struct S
+            | {
+            |     int x;
+            |
+            |     void foo() { }
+            |
+            |     invariant()
+            |     {
+            |         int local;
+            |         assert(x != 0);
+            |     }
+            |
+            |     invariant()
+            |     {
+            |         // invariant does not have access to the body
+            |         // of the other invariant.
+            |
+            |         // local = 1;
+            |         assert(x % 2 == 0);
+            |     }
+            | }
+            |
+            | void main()
+            | {
+            |     S s = S(2);
+            |     // invoking public function triggers both invariants
+            |     // in sequence
+            |     s.foo();
+            | }
+
+    |!= h3(toc, "is-expression-identifiers", "'is' Expression Identifiers")
+
+    p
+        | In some cases the
+        a(href="/expression#IsExpression") is expression
+        | required an identifier even when you didn't have a use for it:
+
+    code
+        pre
+            | void main()
+            | {
+            |     alias AA = string[int];
+            |
+            |     static if (is(AA _ == V[K], V, K))
+            |     {
+            |         // prints string[int]
+            |         pragma(msg, _);
+            |         // prints int
+            |         pragma(msg, K);
+            |         // prints string
+            |         pragma(msg, V);
+            |     }
+            | }
+
+    p The identifier is no longer required, so the above can be rewritten to:
+
+    code
+        pre
+            | void main()
+            | {
+            |     alias AA = string[int];
+            |
+            |     static if (is(AA == V[K], V, K))
+            |     {
+            |         // prints string[int]
+            |         pragma(msg, AA);
+            |         // prints int
+            |         pragma(msg, K);
+            |         // prints string
+            |         pragma(msg, V);
+            |     }
+            | }
+
+    |!= h3(toc, "dynamic-to-static", "Dynamic to Static Arrays")
+
+    p
+        | Dynamic arrays of known size can be implicitly cast to static
+        | arrays in some contexts.
+        | In some contexts the compiler knows the size of a dynamic array or
+        | of a slice of an array. In such a case the compiler will allow
+        | an implicit conversion to a static array of the same size:
+
+    code
+        pre
+            | void foo(int[4] x) { }
+
+            | void main()
+            | {
+            |     int[] arr = [1, 2, 3, 4, 5, 6, 7, 8];
+            |     // ok
+            |     foo(arr[0 .. 4]);
+            | }
+
+    p
+        | Another example, where a string is converted to a reference
+        | to a static array:
+
+    code
+        pre
+            | string str = "aaaabbbbccccdddd";
+            |
+            | void foo(ref const(char)[16] buf)
+            | {
+            |     assert(buf.ptr is str.ptr);
+            | }
+            |
+            | void main()
+            | {
+            |     // ok
+            |     foo(str[0..16]);
+            | }
+
+    |!= h4(toc, "dynamic-to-static-limitations", "Limitations")
+
+    p
+        | This feature does not yet work with complex expressions where it
+        | might be reasonable to assume the size of a slice:
+
+    code
+        pre
+            | void foo(int[4] x) { }
+            |
+            | void main()
+            | {
+            |     int[] arr = [1, 2, 3, 4, 5, 6, 7, 8];
+            |     foreach (i; 0 .. 4)
+            |     {
+            |         // not yet supported
+            |         foo(arr[i .. i + 4]);
+            |     }
+            | }
+
+    |!= h3(toc, "tuple-void-intialization", "Tuple Void Initialization")
+
+    p You can now void-initialize a tuple variable:
+
+    code
+        pre
+            | template Tuple(T...)
+            | {
+            |     alias T Tuple;
+            | }
+            |
+            | void main()
+            | {
+            |     // ok
+            |     Tuple!(int, int) tup1 = void;
+            | }
+
+    p Upon such initialization the values in the tuple are undetermined.
+
+    |!= h3(toc, "template-constraints-inheritance", "Template Contraints and Inheritance")
+
+    p Template constraints can now be put after the inheritance list.
+
+    p
+        | Template constraints used to be allowed only before the inheritance
+        | list, leading to code where the inheritance list could be hard to
+        | spot:
+
+    code
+        pre
+            | class Foo(T1, T2)
+            | if (is(T1 == int) && is(T2 == string)) : Base
+            | {
+            | }
+
+    p This restriction has been lifted, so you can now write:
+
+    code
+        pre
+            | class Foo(T1, T2) : Base
+            | if (is(T1 == int) && is(T2 == string))
+            | {
+            | }
+
+    |!= h3(toc, "tuple-equality", "Tuples and Equality")
+
+    p Tuples can now be compared for equality:
+
+    code
+        pre
+            | struct Tuple(T...) { T field; alias field this; }
+            |
+            | void main()
+            | {
+            |     auto tup1 = Tuple!(int, int)(1, 2);
+            |     auto tup2 = Tuple!(int, int)(1, 2);
+            |     auto tup3 = Tuple!(int, int)(1, 3);
+            |
+            |     // works since 2.063
+            |     assert(tup1 == tup2);
+            |     // works since 2.063
+            |     assert(tup1 != tup3);
+            | }
+
+    p
+        | This also means you can now compare
+        | <strong>ParameterStorageClassTuple</strong> instances from
+        | std.traits:
+
+    code
+        pre
+            | import std.traits;
+            |
+            | void func1(ref int x, ref int y) { }
+            | void func2(ref float x, ref float y) { }
+            |
+            | void main()
+            | {
+            |     alias Storages = ParameterStorageClassTuple;
+            |     assert(Storages!func1 == Storages!func2);
+            | }
+
+    p
+        | In addition to that, builtin <strong>.tupleof</strong> expressions
+        | can be used to easily compare fields of an aggregate:
+
+    code
+        pre
+            | struct S
+            | {
+            |     char[] a, b;
+            |
+            |     // Implements an equality test
+            |     // against another instance of this type.
+            |     bool opEquals(S rhs) {
+            |         return this.tupleof == rhs.tupleof;
+            |     }
+            | }
+            |
+            | void main()
+            | {
+            |     S s1 = S("a".dup, "b".dup);
+            |     S s2 = S("a".dup, "b".dup);
+            |     assert(s1 == s2);
+            | }
+
+    p
+        | This also allows you to implement a structural equality test
+        | against an instance of a different type:
+
+    code
+        pre
+            | struct S1
+            | {
+            |     char[] a, b;
+            |
+            |     // Implements a structural equality test
+            |     // against any other type T
+            |     bool opEquals(T)(T rhs) {
+            |         return this.tupleof == rhs.tupleof;
+            |     }
+            | }
+            |
+            | struct S2
+            | {
+            |     string x, y;
+            | }
+            |
+            | void main()
+            | {
+            |     auto s1 = S1("123".dup, "456".dup);
+            |     auto s2 = S2("123", "456");
+            |     assert(s1 == s2);
+            | }
+
+    p
+        | Since tuples can be sliced you can use this feature to
+        | compare a subset of tuples:
+
+    code
+        pre
+            | struct S
+            | {
+            |     int a, b, c, d, e;
+            |
+            |     bool opEquals(S rhs)
+            |     {
+            |         // compares a, b, d, and e
+            |         return this.tupleof[0..2] == rhs.tupleof[0..2] &&
+            |                this.tupleof[3..5] == rhs.tupleof[3..5];
+            |     }
+            | }
+            |
+            | void main()
+            | {
+            |     S s1 = S(1, 2, 0, 3, 4);
+            |     S s2 = S(1, 2, 1, 3, 4);
+            |     assert(s1 == s2);
+            | }
+
+    |!= h3(toc, "reinit-const-fields", "Reinitialising Const Fields")
+
+    p
+        | You can now initialize a field in a const constructor even if such
+        | a field already has an initializer:
+
+    code
+        pre
+            | struct S
+            | {
+            |     bool field = true;
+            |
+            |     this(int v) const
+            |     {
+            |         // ok
+            |         field = false;
+            |     }
+            | }
+
+    |!= h3(toc, "isnested-trait", "isNested Trait")
+
+    p
+        | A new trait,
+        a(href="/traits#isNested") isNested
+        | has been added for discovery of aggregates and functions with
+        | context pointers:
+
+    code
+        pre
+            | void main()
+            | {
+            |     int x;
+            |
+            |     struct S1 { void f() { x++; } }
+            |     static struct S2 { }
+            |
+            |     void f1() { x++; }
+            |     static void f2() { }
+            |
+            |     static assert(__traits(isNested, S1));
+            |     static assert(__traits(isNested, f1));
+            |     static assert(!__traits(isNested, S2));
+            | }
+
+    |!= h3(toc, "templates-inside-functions", "Templates Inside Functions")
+
+    p Templates can now be nested inside of functions:
+
+    code
+        pre
+            | void test()
+            | {
+            |     template ArrayOf(T) { alias ArrayOf = T[]; }
+            |     static assert(is(ArrayOf!int == int[]));
+            | }
+
+    p
+        | Allowing <strong>template</strong>s inside of functions will
+        | enable better encapsulation and avoid the pollution of
+        | module-scoped symbol names.
+
+    |!= h3(toc, "scoped-local-ufcs", "Scoped Local UFCS")
+
+    p
+        | Functions that are made available through a local import are
+        | now picked up when using Uniform Function Call Syntax:
+
+    code
+        pre
+            | module foo;
+            | string concat(string arg1, string arg2) { return arg1 ~ arg2; }
+
+    code
+        pre
+            | module test;
+            | void main()
+            | {
+            |     import foo;
+            |     // UFCS now works
+            |     assert("foo".concat("bar") == "foobar");
+            | }
+
+    p
+        | This feature also works for imports within aggregates.
+        | Note that local imports have a higher precedence than
+        | module-scoped imports.
+
+    |!= h3(toc, "new-special-keywords", "New Special Keywords")
+
+    p
+        | A new set of
+        a(href="/traits#specialkeywords") special keywords
+        | were added: <strong>__FUNCTION__</strong>,
+        | <strong>__PRETTY_FUNCTION__</strong> and
+        | <strong>__MODULE__</strong>: Together with <strong>__FILE__</strong>
+        | and <strong>__LINE__</strong> they form a complete feature set that
+        | is useful in debugging code:
+
+    code
+        pre
+            | module test;
+            | import std.stdio;
+            |
+            | void test(string file = __FILE__, size_t line = __LINE__,
+            | string mod = __MODULE__, string func = __FUNCTION__,
+            | string pretty = __PRETTY_FUNCTION__)
+            | {
+            |     writefln(
+            |         "file: '%s', line: '%s', module: '%s',\\n"
+            |         ~ "function: '%s',\\n"
+            |         ~ "pretty function: '%s'",
+            |         file, line, mod, func, pretty
+            |     );
+            | }
+            |
+            | int main(string[] args)
+            | {
+            |     test();
+            |     return 0;
+            | }
+
+    p The above will output:
+
+    code
+        pre
+            | file: 'test.d', line: '13', module: 'test',
+            | function: 'test.main',
+            | pretty function: 'int test.main(string[] args)'
+
+    |!= h3(toc, "ddoc-deprecated-macro", "DDoc DEPRECATED Macro")
+
+    p Deprecated declarations in DDoc are now wrapped in a DEPRECATED macro:
+
+    code
+        pre
+            | module test;
+            |
+            | /// sum function
+            | deprecated int sum(int x, int y) { return x + y; }
+
+    p
+        | By default the macro expands to its argument.
+        | It can be overriden by the user, for example:
+
+    strong macros.ddoc:
+
+    code
+        pre DEPRECATED=<del>$0</del>
+
+    p
+        | The above ddoc file can then be used when the documentation
+        | is being generated:
+
+    |!= h3(toc, "documenting-unit-tests", "Documenting Unit Tests")
+
+    p
+        | Documented <strong>unittest</strong> blockss which follow any
+        | symbol declarations are now used to generate example sections
+        | for the symbol when generating DDOC documentation. Example:
+
+    code
+        pre
+            | /// sum function
+            | int sum(int x, int y) { return x + y; }
+            |
+            | ///
+            | unittest
+            | {
+            |     assert(sum(2, 2) == 4);
+            | }
+
+    p
+        | The body of the unittest will be part of the documentation of
+        | the sum function. This allows the implementor of the function
+        | to keep their examples always up-to-date.
+
+    p
+        | For more information, see the
+        a(href="unittest#documented-unittests") documentation page
+        | of documented unittests.
+
+    |!= h2(toc, "compiler-enhancements", "Compiler Enhancements")
+
+    |!= h3(toc, "main-switch", "-main Switch")
+
+    p
+        | A <strong>-main</strong> switch which adds an empty main function.
+        | The <strong>-main</strong> switch is primarily useful when
+        | unittesting libraries:
+
+    code
+        pre
+            | module test;
+            |
+            | int sum(int a, int b) { return a + b; }
+            | unittest
+            | {
+            |     assert(sum(2, 2) == 4);
+            | }
+
+    p
+        | The above library would need a <strong>main()</strong> function
+        | for the unittests to run, and <strong>-main</strong> can be used
+        | for this purpose:
+
+    code
+        pre $ dmd -unittest -main -run test.d
+
+    |!= h3(toc, "cov-switch", "-cov Switch")
+
+    p
+        | The <strong>-cov</strong> switch now has an optional percentage
+        | setting which makes the executable emit an error when the coverage
+        | doesn't meet the specified requirement:
+
+    code
+        pre
+            | module test;
+            |
+            | void test1() { int x = 5; }
+            | void test2() { int x = 5; }
+            | void test3() { int x = 5; }
+            |
+            | void main()
+            | {
+            |     test1();
+            |     test2();
+            | }
+
+    p Example of coverage testing:
+
+    code
+        pre
+            | $ dmd -cov=90 test.d
+            | $ test
+            | Error: test.d is 80% covered, less than required 90%
+
+    |!= h3(toc, "overriding-mangling", "Overriding Mangling")
+
+    p
+        | The new <strong>pragma(mangle, ...)</strong> directive allows you
+        | to set a custom mangling for any symbol:
+
+    code
+        pre pragma(mangle, "module") extern(C) void module_();
+
+    p
+        | The above allows linking to a C function named "module",
+        | which ordinarily we wouldn't be able to link to directly since
+        | "module" is a reserved D keyword.
+
+    |!= h2(toc, "phobos-changes", "Phobos Changes")
+
+    |!= h3(toc, "std-typecons-scoped", "std.typecons.scoped")
+
+    p
+        | std.typecons.scoped implementation changed, potentially
+        | breaking some user-code:
+
+    p
+        | User-code which used the <strong>std.traits.ReturnType</strong>
+        | trait to retrieve the type of a <strong>scoped</strong> call will
+        | have to be changed to use the <strong>typeof</strong> operator
+        | instead:
+
+    code
+        pre
+            | class A
+            | {
+            |     this() {}
+            |     this(int) {}
+            | }
+            |
+            | class B
+            | {
+            |     // disallowed in 2.063
+            |     // ReturnType!(scoped!A) a;
+            |
+            |     // rewritten, compiles in 2.063
+            |     typeof(scoped!A()) a;
+            |
+            |     this()
+            |     {
+            |         // would not compile in 2.062,
+            |         // but works with syntax used for 2.063
+            |         a = scoped!A(1);
+            |     }
+            | }
+
+    p
+        | The reason for this change is that the <strong>ReturnType</strong>
+        | trait would retrieve the wrong type when a class had multiple
+        | constructors, and this would cause initializing the field to fail.
+
+    p
+        | Another benefit of the new implementation is that
+        | <strong>scoped</strong> can now be aliased for usability purposes:
+
+    code
+        pre
+            | class A
+            | {
+            |     this(int) { }
+            | }
+            |
+            | void main()
+            | {
+            |     alias scoped!A scopeA;
+            |     auto a = scopeA(1);
+            | }
+
+    |!= h2(toc, "phobos-enchancements", "Phobos Enchancements")
+
+    |!= h3(toc, "std-process-redesigned", "std.process Redesigned")
+    p
+        - docLink("std.process");
+        | has been redesigned from the ground up and introduces a new
+        | API and functionality:
+
+    p
+        | The new
+        - docLink("std.process");
+        | module introduces functionality for invoking processes with custom
+        | pipe redirection, the ability to wait for processes to finish,
+        | and the ability to kill processes. The full list of features can be
+        | found in the
+        - docLink("std.process");
+        documentation.
+
+    |!= h3(toc, "std-getopt-false-booleans", "std.getopt false Booleans")
+
+    p std.getopt can now set booleans to false:
+
+    code
+        pre
+            | void main(string[] args)
+            | {
+            |     bool flag = true;
+            |     getopt(args, &flag);
+            | }
+
+    p
+        | When invoked via <strong>--flag=false</strong>,
+        | it will set <strong>flag</strong> to <strong>false</strong>.
+
+    |!= h3(toc, "std-concurrency-ownertid", "std.concurrency ownerTid")
+
+    p
+        | It is now easier to send a message from a child thread to its
+        | owner thread. Simply use the <strong>ownerTid</strong> property
+        | to get the owner thread's Tid identifier:
+
+    code
+        pre
+            | void fun()
+            | {
+            |     string res = receiveOnly!string();
+            |     assert(res == "Main calling");
+            |
+            |     // new
+            |     ownerTid.send("Child responding");
+            | }
+            |
+            | void main()
+            | {
+            |     auto child = spawn(&fun);
+            |     child.send("Main calling");
+            |
+            |     string res = receiveOnly!string();
+            |     assert(res == "Child responding");
+            | }
+
+    p
+        | If the owner thread has exited, accessing <strong>ownerTid</strong>
+        | from any of its child threads will throw a
+        | <strong>TidMissingException</strong>.
+
+    |!= h2(toc, "dmd-compiler-regressions-fixed", "DMD Compiler Regressions Fixed")
+
+    ul
+        - bugItem(9130, "Wrong codegen for compile time constructed struct");
+        - bugItem(9258, "opAssign with base class triggers \"identity assignment operator overload\" error");
+        - bugItem(9526, "ICE when compiling project with unittests");
+        - bugItem(9536, "IFTI fails when calling a static member from const member");
+        - bugItem(9538, "Regression (2.062): Can't use typeid on .ptr of static array");
+        - bugItem(9539, "Wrong implicit conversion of array to pointer");
+        - bugItem(9545, "[REG 2.063a] ICE with member template instantiation");
+        - bugItem(9552, "DMD crashed when taking member delegate from __traits(getOverloads)");
+        - bugItem(9566, "Regression (2.062): Cannot use struct .init when it contains a static array initialized from a single element.");
+        - bugItem(9568, "[64bit] wrong code for scope(exit)");
+        - bugItem(9633, "compiles trait wrongly returns true even when object method call actually does not compile");
+        - bugItem(9650, "__traits(compiles) + mixin");
+        - bugItem(9663, "[REG2.063a] ICE caused by issue 7444 change.");
+        - bugItem(9672, "mixin within cyclic import causes undefined properties");
+        - bugItem(9689, "std.typecons.Proxy breaks with @disable this(this)");
+        - bugItem(9694, "A member struct that has mutable opEquals reports weird error message");
+        - bugItem(9739, "Regression (1.077 git-head): DMD not considering ctor with default args as default ctor");
+        - bugItem(9759, "compiler segfault in StructLiteral::implicitConvTo(Type*) on invalid code");
+        - bugItem(9764, "Ddoc: Ddoc file name is incorrectly emphasized");
+        - bugItem(9775, "Can no longer create a const Date in CTFE if the variable is explicitly typed");
+        - bugItem(9806, "assertion failure in struct.c:668");
+        - bugItem(9834, "incorrect detection of lambda locality.");
+        - bugItem(9846, "regression of forward references");
+        - bugItem(9858, "const alias this fails when opAssign is present");
+        - bugItem(9865, "Crash on bogus import / circular reference");
+        - bugItem(9890, "Alias This + Alias Fields");
+        - bugItem(9903, "Broken ddoc in std.typecons and etc.c.sqlite3");
+        - bugItem(9919, "Regression (2.062): Symbol lookup fails with public import and mixin");
+        - bugItem(9952, "regression(HEAD): Attribute inference for virtual functions breaks subclasses");
+        - bugItem(9957, "[2.061 -> 2.062] Taking pointer of enum float array gives some garbage");
+        - bugItem(9974, "immutable class constructor is broken");
+        - bugItem(9984, "inout qualifier is skipped for constructor arguments (template constructor only)");
+        - bugItem(9987, "Declaring struct ModuleInfo should be allowed");
+        - bugItem(10002, "2.062 -> 2.063 calling \"remove\" is impure");
+        - bugItem(10003, "void* UFCS regression");
+        - bugItem(10016, "Incorrect error gagging using RefCounted");
+        - bugItem(10040, "struct-related ICE");
+        - bugItem(10041, "ufcs writeln of associative array");
+        - bugItem(10043, "ICE with __traits(compiles)");
+        - bugItem(10044, "Wrong di generation for IsExp with TemplateParameterList");
+        - bugItem(10047, "opDispatch instantiation failure should be gagged for UFCS");
+        - bugItem(10049, "Spurious \"Label already defined\" error inside a foreach over a range aggregate");
+        - bugItem(10050, "Regression (git-head): RDMD no longer emits error messages from DMD");
+        - bugItem(10053, "struct member with pure dtor forces declared dtor to be pure, too");
+        - bugItem(10055, "Incorrect attribute merging in dtor/postblit building");
+        - bugItem(10056, "Strange Error with templates and string.format");
+        - bugItem(10067, "[REG] Recursive template instantiation");
+        - bugItem(10073, "Default opEquals depends on class declaration order with DMD HEAD");
+        - bugItem(10076, "expression.c:4310: virtual Expression* TypeExp::semantic(Scope*): Assertion `0' failed.");
+        - bugItem(10089, "Strange function call error message with specified module");
+        - bugItem(10091, "[HEAD] Cannot cast struct member string enum to static ubyte array of same size");
+        - bugItem(10096, "Regression (git-head): __traits(allMembers) triggers out of bounds error");
+        - bugItem(10101, "static if conditional cannot be at global scope using mixin template");
+        - bugItem(10106, "[ICE] Ice in glue.c:1215 + 2 error messages without lines");
+        - bugItem(10134, "Mutual referencing templates error");
+        - bugItem(10142, "[REG2.063a] enum value semantic problem that declared in class member");
+        - bugItem(10144, "Using enum inside final class occurs weird errors");
+        - bugItem(10148, "regression 062=>063: unjustified 'safe function cannot call system function'");
+        - bugItem(10151, "final: before enum is now an error.");
+        - bugItem(10160, "No line number \"cannot modify struct ... with immutable members\"");
+        - bugItem(10166, "XXX is not a template");
+        - bugItem(10178, "Compiler segfault with zero-length tuple comparison");
+
+    |!= h2(toc, "dmd-compiler-bugs-fixed", "DMD Compiler Bugs Fixed")
+
+    ul
+        - bugItem(1520, "TypeInfo_Const.opEquals is incorrect");
+        - bugItem(1804, "Severe GC leaks with repetitive array allocations");
+        - bugItem(2356, "array literal as non static initializer generates horribly inefficient code.");
+        - bugItem(3789, "[TDPL] Structs members that require non-bitwise comparison not correctly compared");
+        - bugItem(4094, "ICE(expression.c): recursive struct templates with type inference");
+        - bugItem(4247, "Cannot create default-constructed struct on heap when constructor is defined");
+        - bugItem(4414, "ICE(cgcs.c) Taking item of static array returned by function");
+        - bugItem(4436, "Double bug regarding Tuple.init");
+        - bugItem(4479, "Module Foo is in multiple files Foo");
+        - bugItem(4617, "Alias this'ed symbols cannot be passed to templates");
+        - bugItem(4814, "rdmd: Doesn't rebuild when using -of and turning an -L linker option on or off");
+        - bugItem(5450, "no match for implicit super() call in constructor");
+        - bugItem(5625, "std.format unittest disabled");
+        - bugItem(6070, "CTFE UFCS forward reference error");
+        - bugItem(6089, "__gshared with not static 2D array");
+        - bugItem(6153, "Inserting to An Array!T inside an Array!(Array!T) causes a segfault.");
+        - bugItem(6312, "template instance cannot use argument from enclosing template");
+        - bugItem(6431, "[RDMD] Modifying a library doesn't trigger a rebuild");
+        - bugItem(6535, "RDMD outputs broken library files");
+        - bugItem(6539, "Incomprehensible error message with failed template instantiation");
+        - bugItem(6545, "[CTFE] Hard-coded array operations not yet supported");
+        - bugItem(6578, "Ignored const with struct with constructor");
+        - bugItem(6795, "ICE(cgcs.c): Incrementing an enum array item");
+        - bugItem(6852, "Cannot compare instances of ParameterStorageClassTuple");
+        - bugItem(7068, "copying array of pointers calls memset instead of memcpy with -d");
+        - bugItem(7437, "DMD enters infinite loop during overload resolution");
+        - bugItem(7569, "cannot void initialize tuple declarations");
+        - bugItem(7572, "f.fn!(void) is not an lvalue");
+        - bugItem(7719, "enum forward reference error when enum is in braces");
+        - bugItem(7980, "Stack overflow / recursive expansion with alias this");
+        - bugItem(8041, "__gshared/static problem");
+        - bugItem(8081, "pure nothrow unittest problem in generated 'header' file");
+        - bugItem(8130, "Memory corruption because without *.def file DMD compiles DLL with assumption `_tls_index = 0`");
+        - bugItem(8213, "Incorrect error message with pointer to ubyte[] and front");
+        - bugItem(8238, "templates can create ghost fields");
+        - bugItem(8245, "UFCS doesn't work for pointers");
+        - bugItem(8294, "complex breaks calling in 64 bit DMD");
+        - bugItem(8347, "Parser bug with const placed after ~this() in decl");
+        - bugItem(8366, "Overriding const member function in conjunction with mutable overload causes a strange error");
+        - bugItem(8589, "Incorrect conversion of function returning `typeof(null)` to function returning an array");
+        - bugItem(8609, "A forward reference error with static arrays");
+        - bugItem(8668, "public selective import makes functions conflict when otherwise they don't");
+        - bugItem(8670, "IFTI fails from aliases");
+        - bugItem(8697, "Invalid error message: Forward reference of interface");
+        - bugItem(8698, "Forward reference error with interfaces");
+        - bugItem(8827, "Cannot move contents of R12");
+        - bugItem(8828, "Long compilation time of a destroy() on a large fixed-sized matrix");
+        - bugItem(8833, "Odd error with expression tuples");
+        - bugItem(8902, "Unexpected \"duplicate union initialization for X\" error");
+        - bugItem(8945, "Can't call static struct initializer or constructor without qualifier for templated inner struct");
+        - bugItem(8953, "Parser rejects qualifier after destructor i.e. `~this() { }`");
+        - bugItem(8989, "cfloat argument passing broken");
+        - bugItem(8998, "'inout pure' returns immutable, which in reality is mutable");
+        - bugItem(9091, "Using __traits(getMember) on template argument fails inside member function");
+        - bugItem(9144, "synchronized CRITSECSIZE should be a target constant");
+        - bugItem(9199, "Module level qualified functions should be rejected");
+        - bugItem(9209, "ice(symbol.c) with const struct heap allocation");
+        - bugItem(9231, "overriding inout funcion with attribute inference reports weird error");
+        - bugItem(9232, "Parsing error on some templated methods calls");
+        - bugItem(9241, "2.061: Property call error message disappeared");
+        - bugItem(9280, "Runtime range violation with named capture groups in regex");
+        - bugItem(9311, "shared library file extension incorrectly modified");
+        - bugItem(9345, "CTFE fails when using std.string.format with imported string enum");
+        - bugItem(9346, "nested struct calls disabled postblit");
+        - bugItem(9386, "struct destructor called erroneously");
+        - bugItem(9393, "Partial template specialization and template lambda does not work");
+        - bugItem(9401, "destructor and nothrow syntax");
+        - bugItem(9413, "Incorrect modification inside contracts is not detected correctly");
+        - bugItem(9414, "Incorrect modification inside contracts is not detected on virtual function");
+        - bugItem(9415, "delegate inference should make function literal impure");
+        - bugItem(9417, "\"no size yet for forward reference\" error with nested structure");
+        - bugItem(9428, "Wrong array concatenation");
+        - bugItem(9441, "struct constructor missed on auto/type-inferred variable definition");
+        - bugItem(9445, "interpret.c:151: Assertion `v->ctfeAdrOnStack >= 0 && v->ctfeAdrOnStack < stackPointer()' failed.");
+        - bugItem(9451, "Listing abstract functions in diagnostic should show full signature");
+        - bugItem(9473, "Unittest docs should each be in their own section");
+        - bugItem(9474, "Ddoc'd unittests should work correctly with interspersed version(none)");
+        - bugItem(9475, "Should retain source formatting in ddoc's unittests");
+        - bugItem(9480, "The template name in the JSON output contains template and function arguments");
+        - bugItem(9494, "compiler stack overflow on invalid associative array");
+        - bugItem(9495, "Win64 vararg issue when first argument is > 8 byte");
+        - bugItem(9508, "RDMD doesn't generate new dependency list when a file is changed.");
+        - bugItem(9540, "Compiler crash on delegate context frame assignment");
+        - bugItem(9561, "Many error messages from std.format");
+        - bugItem(9590, "UFCS does not work with void lazy expressions");
+        - bugItem(9613, "Parser bug when using .init with type constructor");
+        - bugItem(9617, "ulong.max is wrongly accepted by smaller signed parameter");
+        - bugItem(9619, "Failed struct field typeof in inner function");
+        - bugItem(9622, "Range violation in rdmd");
+        - bugItem(9649, "DMD doesn't parse valid PostfixExpression . NewExpression syntax.");
+        - bugItem(9652, "__traits(getAttributes) doesn't work with manifest constants");
+        - bugItem(9654, "Template function cannot take string by ref T[len]");
+        - bugItem(9656, "Built-in dup result should behave as like unique array, if it is possible.");
+        - bugItem(9658, "Setting pre-initialized field should be allowed in qualified constructor.");
+        - bugItem(9677, "Crash on setting length property of array VC 2012 64 bit");
+        - bugItem(9679, "Refused const/immutable assignment in conditional");
+        - bugItem(9692, "__traits(allMembers) fails on module without a package");
+        - bugItem(9700, "std.typecons.Proxy with invaliant and in-place operation causes Access Violation");
+        - bugItem(9712, "IFTI does not support deducing static array types from array literal arguments");
+        - bugItem(9713, "Ddoc: Empty description suppress automatic example generation");
+        - bugItem(9714, "Ddoc: Combination of -D and -unittest reveals hidden unittest function");
+        - bugItem(9720, "OSX wrong code with -O Illegal instruction");
+        - bugItem(9722, "optimizer kills GOT to EBX load");
+        - bugItem(9729, "interface thunk doesn't set EBX to GOT");
+        - bugItem(9735, "Casting delegates to void* should be illegal");
+        - bugItem(9736, "VS2010 project file does full rebuild every time");
+        - bugItem(9743, "IFTI and polymorphic string literal should support implicit conversion to static array type");
+        - bugItem(9744, "Poor error message taking address of thread-local variable at compile time");
+        - bugItem(9747, "IFTI argument deduction fails for committed string literals which are implicitly converted to a static array");
+        - bugItem(9755, "JSON output is missing the protection attribute for templates");
+        - bugItem(9757, "Ddoc: documented unittest after ditto should work");
+        - bugItem(9758, "Ddoc: empty ddoc comment and unittest block generates no Examples section");
+        - bugItem(9768, "No line number for wrong foreach type");
+        - bugItem(9773, "ref parameter with default value should not compile");
+        - bugItem(9774, "Error message with __error using == on tuple members");
+        - bugItem(9777, "Calling final interface method leads to wrong code");
+        - bugItem(9781, "-inline will cause backend ICE");
+        - bugItem(9788, "-profile doesn't work if exceptions are thrown in the running program");
+        - bugItem(9790, "Internal error when compiling a invalid variable in template (in expression.c and backend\\evalu8.c)");
+        - bugItem(9791, "[ICE] (struct.c line 668) map with a missing tuple import");
+        - bugItem(9818, "Constant folding for static array does not work with initializing by element");
+        - bugItem(9829, "rdmd passes '--' to dmd");
+        - bugItem(9837, "IFTI should consider enum base type");
+        - bugItem(9844, "DMD (-m64) int long initialisation bug");
+        - bugItem(9845, "enum value should be able to contain forward references in global scope");
+        - bugItem(9863, "Incorrect generation of SAHF instruction on 64 bits");
+        - bugItem(9873, "Built-in tuple should support equality comparison");
+        - bugItem(9874, "Function call syntax disuniformity in template constraints");
+        - bugItem(9880, "Redundant template instance displaying in error message");
+        - bugItem(9883, "Error on using property as new dynamic array size");
+        - bugItem(9885, "IFTI should consider known tuple types.");
+        - bugItem(9892, "[ICE] forward reference in enum declaration members causes compiler segfault");
+        - bugItem(9899, "struct with pure/nothrow destructor cannot be used as a struct member in pure/nothrow functions");
+        - bugItem(9901, "string return from inner template function error");
+        - bugItem(9907, "Struct literal with destructor should match to non-ref overload");
+        - bugItem(9910, "Scalar op vector is broken.");
+        - bugItem(9928, "ice with void* and function literal");
+        - bugItem(9936, "Wrong opBinary/opBinaryRight rewrite.");
+        - bugItem(9939, "allMembers trait doesn't returns members of nested anonymous enum");
+        - bugItem(9940, "ICE applying getProtection to a functions obtained using getOverloads.");
+        - bugItem(9946, "A UFCS disallowed in dynamic array allocation");
+        - bugItem(9961, "Using UFCS properties suppress actual errors");
+        - bugItem(9965, "Wrong Assembly For DIL, SIL Registers");
+        - bugItem(9971, "eponymous function is not an lvalue");
+        - bugItem(9985, "Postblit isn't called on local struct return");
+        - bugItem(9990, "templates with function alias cause forward reference error");
+        - bugItem(9993, "const ctor should be preferred than mutable for const obj creation");
+        - bugItem(9994, "Built-in generated opAssign should call dtor on assignment");
+        - bugItem(10004, "tuple comparison with side-effect should work");
+        - bugItem(10005, "struct variable declaration and const-correctness");
+        - bugItem(10011, "Wrong JSON \"init\" property output for class reference initializers");
+        - bugItem(10029, "Update list of reserved version identifiers.");
+        - bugItem(10058, "Inconsistent mangling between C++ and extern(C++).");
+        - bugItem(10059, "export doesn't work for variable declarations");
+        - bugItem(10063, "inout+pure results in ability to produce immutable reference to mutable data");
+        - bugItem(10066, "Template opEquals sometimes obstructs struct compilation");
+        - bugItem(10102, "@disable incompletely implemented");
+        - bugItem(10103, "template mixin with property overloads");
+        - bugItem(10105, "ICE when converting string literal to static char array in enum initializer");
+        - bugItem(10115, "More @disabled holes");
+        - bugItem(10171, "Unexpected error \"cannot infer type from overloaded function symbol\"");
+        - bugItem(10180, "offsetof doesn't work through function call alias this");
+
+    |!= h2(toc, "dmd-compiler-ehancements", "DMD Compiler Enhancements")
+
+    ul
+        - bugItem(3449, "const and invariant struct members do not behave according to spec");
+        - bugItem(3502, "Fix for dropped Mac OS X 10.5");
+        - bugItem(3673, "inheritance + if clause = no go");
+        - bugItem(4528, "Better error message for private abstract method");
+        - bugItem(5140, "Add __FUNCTION__, __PRETTY_FUNCTION__, and __MODULE__");
+        - bugItem(6185, "Include non-global functions when resolving UFCS");
+        - bugItem(6453, "Allow multiple invariant per struct/class");
+        - bugItem(6809, "IFTI should imply const where inout is present on args, but not on return type");
+        - bugItem(7444, "Require [] for array copies too");
+        - bugItem(7511, "attribute inference should work for template functions");
+        - bugItem(8220, "invalid function call not detected during semantic analysis");
+        - bugItem(8669, "TemplateThisParameter should change member function's qualifier");
+        - bugItem(8819, "void static array should have init built-in propert");
+        - bugItem(8959, "IsExpression should support syntax which has no Identifier in all cases");
+        - bugItem(9033, "Remove __thread from the language");
+        - bugItem(9136, "Add isNested trait");
+        - bugItem(9155, "Ddoc: code section should strip leading spaces");
+        - bugItem(9170, "CTFE: Allow reinterpret casts float <-> int");
+        - bugItem(9185, "Add note about where -op is useful");
+        - bugItem(9574, "Diagnostic for old use of 'alias this = that' should be informative");
+        - bugItem(9627, "Not good enough error messages in some cases when using UFCS");
+        - bugItem(9635, "Improved error message for failed access of array field properties from static method");
+        - bugItem(9676, "Ddoc: Wrap deprecated declarations in a (DEPRECATED) macro");
+        - bugItem(9680, "Include entry point location in \"dmd -v -o-\" output");
+        - bugItem(9723, "Implement -main switch to inject a default main() function");
+        - bugItem(9726, "Add minimum % coverage required for -cov testing");
+        - bugItem(9727, "Documented unittest comment should appear before Example section");
+        - bugItem(9745, "Allow non-thread local static variables to have their address taken in CTFE");
+        - bugItem(9778, "RDMD: Support passing resource files to DMD");
+        - bugItem(9789, "Ddoc for aliases should use new \"alias x=y\" syntax");
+        - bugItem(9866, "movsxd not supported");
+        - bugItem(9920, "[Optimizer] Use mul/imul for integer division by constant");
+        - bugItem(9941, "[CTFE] Allow to store \"newed\" classes and structs in the data segment");
+        - bugItem(9943, "Allow to return typeid from CTFE");
+        - bugItem(9963, "Absurdly Inefficient Codegen For Adding Boolean Predicates");
+        - bugItem(9977, "Function local templates should be allowed");
+        - bugItem(10030, "Support '-l:' switch when passing default library to ld");
+        - bugItem(10077, "add pragma(mangle, \"...\") to override symbol mangle.");
+        - bugItem(10109, "add -transition compiler switch to aid in dealing with breaking changes");
+        - bugItem(10150, "Prefix method 'this' qualifiers should be just ignored anytime");
+        - bugItem(10179, "Tuple assignment should not cause \"has no effect\" error even if the length is zero");
+
+    |!= h2(toc, "phobos-regressions", "Phobos Regressions")
+
+    ul
+        - bugItem(9122, "std.concurrency send() fails with multiple arrays");
+        - bugItem(9742, "std.math.floor returns 0 for any value x > -1 and x < 0");
+        - bugItem(10122, "`Appender` doesn't work with disabled default construction ");
+
+    |!= h2(toc, "phobos-bugs-fixed", "Phobos Bugs Fixed")
+
+    ul
+        - bugItem(3795, "Problem with phobos std.variant");
+        - bugItem(4729, "std.algorithm: strange iota behaviour");
+        - bugItem(4798, "std.algorithm.map unusable for ranges with const elements");
+        - bugItem(4955, "struct dirent.d_type is not a mask");
+        - bugItem(5032, "std.file.rename acts differently on Windows and Linux when the target file already exists.");
+        - bugItem(5201, "std.string.indexOf and std.algorithm.indexOf return different things for narrow strings");
+        - bugItem(5310, "Variant == const(Variant) doesn't compile");
+        - bugItem(5359, "std.traits.isDelegate should work for types and expressions");
+        - bugItem(5360, "calling rdmd from different folder");
+        - bugItem(5514, "Erroneous documentation and lacking randomization for topN");
+        - bugItem(5658, "Undocumented fields in std.typecons.Tuple");
+        - bugItem(5924, "schwartzSort of Tuple!(char)[]");
+        - bugItem(8321, "std.range.put doesn't work with RefCounted output range");
+        - bugItem(8613, "std.typecons.Proxy cannot work with operator 'in'");
+        - bugItem(8655, "bitfields and Typedef don't mix");
+        - bugItem(9164, "Can't easily assign one Nullable to another");
+        - bugItem(9431, "Tuple creation problem with array of array");
+        - bugItem(9456, "decodeFront is inconsistent in whether it pops elements off of the range or not");
+        - bugItem(9512, "std.regex: Incorrect parsing of hex sequences composed from capital letters.");
+        - bugItem(9553, "SOCKET should be 64 bit wide on Win64");
+        - bugItem(9583, "std.getopt.getopt does not consume options terminator \"--\" from args list, as docs claim");
+        - bugItem(9612, "std.range.Cycle.opSlice tests on the bounds are missing");
+        - bugItem(9624, "fullyQualifiedName fails for functions");
+        - bugItem(9648, "Missing std.random import for std.algorithm.topN");
+        - bugItem(9753, "std.string.translate precondition asserts");
+        - bugItem(9794, "std.json cannot handle delete character");
+        - bugItem(9804, "`std.math.FloatingPointControl` corrupts floating point state");
+        - bugItem(9812, "std.conv.parse string fails on certain escape characters.");
+        - bugItem(9836, "std.array.popFront does not work with alias this.");
+        - bugItem(9950, "std.json should return empty string/array instead of null on empty input");
+        - bugItem(9956, "hasElaborateAssign trait does not work with static arrays");
+        - bugItem(9979, "Regex bug with \\b and look-behind");
+        - bugItem(10116, "stdio.File.byLine repeats last line forever, readln(ref C[],R) returns bad data");
+        - bugItem(10167, "Wrong Document Comment on std.format.d(181)");
+        - bugItem(10182, "std.bitmanip unit test has pointless/unused foreach loop");
+
+    |!= h2(toc, "phobos-enhancements", "Phobos Enchancements")
+
+    ul
+        - bugItem(4787, "std.algorithm.bisectRight()");
+        - bugItem(4921, "Synopsis code in std.variant documentation throws an assertion error");
+        - bugItem(5013, "std.typecons.Tuple should have constructor for static arrays");
+        - bugItem(5106, "makeIndex should return SortedRange");
+        - bugItem(5226, "indexOf() which takes a pred but no needle");
+        - bugItem(5401, "std.socket updates and boost license");
+        - bugItem(5507, "countUntil should take Ranges... instead of R2");
+        - bugItem(6224, "Add an ownerTid property in std.concurrency");
+        - bugItem(6486, "std.math.abs(BigInt)");
+        - bugItem(7405, "std.algorithm.schwartzSort.release");
+        - bugItem(9260, "getopt should allow setting booleans to false");
+        - bugItem(9265, "Nullable fixed-sized array wrapper");
+        - bugItem(9625, "assertNotThrown should print exception msg if no msg is provided");
+        - bugItem(9802, "Add `std.traits.{isNested,hasNested}`.");
+        - bugItem(9814, "Add std.traits.isNestedFunction");
+        - bugItem(9839, "std.traits.Select should be able to select symbols");
+        - bugItem(9888, "Allow passing a generator to std.random.uniform for enums");
+
+    |!= h2(toc, "druntime-bugs-fixed", "Druntime Bugs Fixed")
+
+    ul
+        - bugItem(4307, "spawn()'ed thread doesn't terminate");
+        - bugItem(6024, "Document that Windows 2000 SP4 is no longer supported");
+        - bugItem(10057, "[2.063 beta] Module info overwritten in shared phobos.");
+        - bugItem(10081, "Incorrect char array comparison");
+
+    |!= h2(toc, "optlink-bugs", "Optlink Bugs Fixed")
+
+    ul
+        - bugItem(6144, "Unexpected OPTLINK Termination at EIP=00428DA3");
+
+    |!= h2(toc, "installer-bugs", "Installer Bugs Fixed")
+
+    ul
+        - bugItem(9343, "Problem installing dmd-2.061-0.fedora.x86_64.rpm on Fedora 18");
+
+    |!= h2(toc, "website-bugs", "Website Bugs Fixed")
+
+    ul
+        - bugItem(4847, "std.algorithm.topN documentation");
+        - bugItem(9544, "D logo image is broken on non-root-level pages");
+        - bugItem(9609, "Ddoc tags for std.string.icmp seem wrong");
+        - bugItem(10036, "missing core.atomic docs on dlang.org");
+
+append extra-sidebar
+    |!= toc.write("On This Page")
