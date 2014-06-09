@@ -140,6 +140,7 @@ enum changelogTuple = TypeTuple!(
     "2.062",
     "2.063",
     "2.064",
+    "2.065",
 );
 
 shared static this() {
