@@ -1,16 +1,20 @@
+// Making the sidebar stay fixed at certain points, etc.
 $(function() {
     "use strict";
 
     var $aside = $(".extra-column > aside");
+
+    if ($aside.find("#twitter").length >= 1) {
+        // Don't do any dynamic fixed position stuff when there's the
+        // Twitter module in there.
+        return;
+    }
+
+    $aside.addClass("scrollable");
+
     var asideStyle = $aside[0].style;
     var asideTopStop = +$aside.data("offset-top");
     var asideBottomStop = +$aside.data("offset-bottom");
-
-    if ($aside.find("#twitter").length === 0) {
-        // Hack to only enable scrolling when the aside isn't holding
-        // the Twitter module.
-        $aside.addClass("scrollable");
-    }
 
     function adjustSidebar() {
         var scrollTop = window.pageYOffset
