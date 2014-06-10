@@ -8,7 +8,7 @@ append content
         h1 Changelogs
     p
         | Changelogs are available across several versions of the D
-        | programming langauge.
+        | programming language.
 
     - void entry(string versionString, string date)
         li
