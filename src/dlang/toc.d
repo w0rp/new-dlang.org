@@ -23,10 +23,11 @@ module dlang.toc;
 
 import std.array;
 import std.string;
+import std.regex;
 
 import vibe.textfilter.html;
 
-private enum HeadingLevel : ubyte {
+enum HeadingLevel : ubyte {
     h1 = 1,
     h2,
     h3,
@@ -35,7 +36,7 @@ private enum HeadingLevel : ubyte {
     h6
 }
 
-private struct HeadingEntry {
+struct HeadingEntry {
     string _anchor;
     string _title;
     HeadingLevel _level;
@@ -137,6 +138,10 @@ private string writeHeading(ref TableOfContents toc, HeadingEntry entry) {
     );
 }
 
+public void addHeading(ref TableOfContents toc, HeadingEntry entry) {
+    toc.entries ~= entry;
+}
+
 /**
  * Produce a heading as HTML, and add it to the table of contents.
  *
@@ -175,4 +180,48 @@ string h5(ref TableOfContents toc, string anchor, string title) {
 /// ditto
 string h6(ref TableOfContents toc, string anchor, string title) {
     return writeHeading(toc, HeadingEntry(HeadingLevel.h6, anchor, title));
+}
+
+
+TableOfContents tocFromHTML(string html) {
+    import arsd.dom;
+
+    TableOfContents toc;
+    HeadingLevel level;
+
+    auto document = new Document();
+    document.parseGarbage("<div>" ~ html ~ "</div>");
+
+    elementLoop: foreach(element; document.root.tree()) {
+        switch (element.tagName) {
+        case "h1":
+            level = HeadingLevel.h1;
+        break;
+        case "h2":
+            level = HeadingLevel.h2;
+        break;
+        case "h3":
+            level = HeadingLevel.h3;
+        break;
+        case "h4":
+            level = HeadingLevel.h4;
+        break;
+        case "h5":
+            level = HeadingLevel.h5;
+        break;
+        case "h6":
+            level = HeadingLevel.h6;
+        break;
+        default:
+            continue elementLoop;
+        }
+
+        string id = element.getAttribute("id");
+
+        if (id.length > 0) {
+            toc.addHeading(HeadingEntry(level, id, element.innerText()));
+        }
+    }
+
+    return toc;
 }

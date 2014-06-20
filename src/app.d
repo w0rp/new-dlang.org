@@ -8,83 +8,85 @@ import vibe.http.server;
 import vibe.http.fileserver;
 import vibe.appmain;
 
-template StaticArrayToExpressionTuple(alias array) {
-    import std.typetuple;
-
-    static if (array.length == 0) {
-        alias StaticArrayToExpressionTuple = TypeTuple!();
-    } else {
-        alias StaticArrayToExpressionTuple = Impl!(array.length - 1);
-
-        private template Impl(size_t index) {
-            static if (index == 0) {
-                alias Impl = TypeTuple!(array[index]);
-            } else {
-                alias Impl = TypeTuple!(Impl!(index - 1), array[index]);
-            }
-        }
-    }
-}
-
-/**
- * Convert a slice at compile time to a static array.
- *
- * Note: This doesn't account for a 0-size slice.
- */
-template SliceToStaticArray(alias slice) {
-    enum typeof(slice[0])[slice.length] SliceToStaticArray = slice[0 .. $];
-}
-
-/**
- * Convert a slice known at compile time to an expression tuple.
- *
- * Note: This doesn't account for a 0-size slice.
- */
-template SliceToExpressionTuple(alias slice) {
-    enum SliceToExpressionTuple =
-        StaticArrayToExpressionTuple!(SliceToStaticArray!slice);
-}
+import dlang.markdown;
 
 alias Request = HTTPServerRequest;
 alias Response = HTTPServerResponse;
 
-template basicPage(string templatePath) {
-    void basicPage(Request request, Response response) {
-        response.render!(templatePath, request);
+enum markdownDir = "../markdown";
+enum basicDir = "../markdown/basic";
+enum indexFilename = "../markdown/basic/index.md";
+
+void basicPage(Request request, Response response) {
+    import std.path;
+    import std.file;
+    import std.stdio;
+    import dlang.toc;
+
+    writeln(request.path);
+
+    if (!request.path.find("..").empty) {
+        writeln("match found!");
+        // Factor out paths going up a directory, for security.
+        return;
     }
+
+    string markdownFilename;
+
+    writeln(request.path);
+
+    if (request.path == "/") {
+        markdownFilename = indexFilename;
+    } else {
+        markdownFilename = buildPath(basicDir, request.path[1 .. $]);
+    }
+
+    writeln(markdownFilename);
+
+    if (!exists(markdownFilename) || !isFile(markdownFilename)) {
+        return;
+    }
+
+    string htmlContent = compileMarkdownFile(markdownFilename);
+    TableOfContents toc = tocFromHTML(htmlContent);
+
+    response.render!(
+        "basic_page.dt",
+        request,
+        htmlContent,
+        toc,
+    );
 }
 
-template changelogPage(string thisVersion) {
-    void changelogPage(Request request, Response response) {
+auto changelogPage(string thisVersion) {
+    import std.path;
+    import dlang.toc;
+
+    string markdownFilename = buildPath(
+        markdownDir, "changelog", thisVersion ~ ".md"
+    );
+
+    return (Request request, Response response) {
+        string htmlContent = compileMarkdownFile(markdownFilename);
+        TableOfContents toc = tocFromHTML(htmlContent);
+
         response.render!(
-            "changelog/" ~ thisVersion ~ ".dt",
+            "changelog.dt",
             request,
-            thisVersion
+            thisVersion,
+            htmlContent,
+            toc,
         );
-    }
+    };
 }
 
 // TODO: This uses an HTML style redirect.
 // This needs replacing with something else.
-template redirectPage(string toURL) {
-    void redirectPage(Request request, Response response) {
+auto redirectPage(string toURL) {
+    return (Request request, Response response) {
         response.redirect(toURL, 301);
-    }
+    };
 }
-
-// Load the list of basic view files we got from a pre-build step.
-enum basicFileTuple = SliceToExpressionTuple!(
-    import("basic_view_list").split("\n")
-);
-
-enum changelogTuple = SliceToExpressionTuple!(
-    chain(
-        iota(1, 24),
-        iota(25, 66)
-    )
-    .map!(x => "2.%03d".format(x))
-    .array
-);
 
 shared static this() {
     import vibe.http.router;
@@ -97,24 +99,22 @@ shared static this() {
 
     auto router = new URLRouter;
 
-    foreach(dietFilename; basicFileTuple) {
-        // Set up routes with compiled templates for each file that we found.
-        router.get(
-            "/" ~ dietFilename["basic/".length .. $ - ".dt".length],
-            &basicPage!dietFilename
-        );
-    }
+    auto changelogRange = chain(
+        iota(0, 24),
+        iota(25, 66)
+    ).map!(x => "2.%03d".format(x));
 
-    foreach(thisVersion; changelogTuple) {
-        router.get("/changelog/" ~ thisVersion, &changelogPage!thisVersion);
+    foreach(thisVersion; changelogRange) {
+        router.get("/changelog/" ~ thisVersion, changelogPage(thisVersion));
     }
 
     router
-    .get("/", &basicPage!"index.dt")
     // Old page URLs are 301 redirected to the new URLs.
-    .get("/download.html", &redirectPage!"/download")
-    .get("/changelog.html", &redirectPage!"/changelog")
+    .get("/download.html", redirectPage("/download"))
+    .get("/changelog.html", redirectPage("/changelog"))
     .get("/static/*", serveStaticFiles("../static/", fileSettings))
+    // Handle everything else with basic Markdown files.
+    .get("/*", &basicPage)
     ;
 
     listenHTTP(settings, router);

@@ -1,0 +1,10 @@
+extends base
+
+append head
+    title D Programming Language HEADING HERE
+
+append content
+    |!= htmlContent
+
+append extra-sidebar
+    |!= toc.write("On This Page")

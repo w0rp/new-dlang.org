@@ -1,0 +1,68 @@
+<header>
+<h1>The D Programming Language</h1>
+<p>Modern convenience. Modeling power. Native efficiency.</p>
+</header>
+
+<div class="code-sample"></div>
+
+D is a language with C-like syntax and static typing.
+It pragmatically combines efficiency, control, and
+modelling power, with safety and programmer productivity.
+
+## Convenience
+
+* D allows writing large code fragments without redundantly
+  specifying types, like dynamic languages do. On the other hand,
+  static inference deduces types and other code properties, giving
+  the best of both the static and the dynamic worlds.
+  [See Example](#).
+* Automatic memory management makes for safe, simple, and robust
+  code. D also supports scoped resource management
+  (aka the [RAII](#) idiom) and scope statements
+  for deterministic transactional code that is easy to write
+  and read.
+  [See Example](#).
+* Built-in linear and associative arrays, slices, and ranges
+  make daily programming simple and pleasant for tasks, both
+  small and large.
+  [See Example](#).
+
+## Power
+
+* The best paradigm is not to impose something at the expense
+  of others. D offers classic polymorphism, value semantics,
+  functional style, generics, generative programming,
+  contract programming, and more &ndash; all harmoniously
+  integrated.
+  [See Example](#).
+* D offers an innovative approach to concurrency, featuring
+  true immutable data, message passing, no sharing by
+  default, and controlled mutable sharing across threads.
+  [Read more](#).
+* From simple scripts to large projects, D has the breadth to
+  scale with any application's needs: unit testing, information
+  hiding, refined modularity, fast compilation, precise
+  interfaces.
+  [Read more](#).
+
+## Efficiency
+
+* D compiles naturally to efficient native code.
+* D is designed such that the most "obvious" code
+  is fast and safe. On occasion a function might need to
+  escape the confines of type safety for ultimate speed
+  and control. For such rare cases D offers native
+  pointers, type casts, access to any C function without
+  intervening translation, and even inline assembly code.
+  [See Example](#)
+* The ```@safe```, ```@trusted``` and ```@system``` modular
+  attributes allow the programmer to best decide the safety-efficiency
+  tradeoffs of an application, and have the compiler check for consistency.
+  [Read more](#).
+
+<!--
+append extra-sidebar
+    #twitter
+        a.twitter-timeline(data-dnt="true", href="https://twitter.com/D_Programming", data-widget-id="358057551562162176") Tweets by @D_Programming
+        | <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+-->
