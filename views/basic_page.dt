@@ -1,7 +1,7 @@
 extends base
 
 append head
-    title D Programming Language HEADING HERE
+    title #{title}
 
 append content
     |!= htmlContent

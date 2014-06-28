@@ -37,15 +37,15 @@ enum HeadingLevel : ubyte {
 }
 
 struct HeadingEntry {
-    string _anchor;
-    string _title;
-    HeadingLevel _level;
+    string anchor;
+    string title;
+    HeadingLevel level;
 
     @safe pure nothrow
     this(HeadingLevel level, string anchor, string title) {
-        _level = level;
-        _anchor = anchor;
-        _title = title;
+        this.level = level;
+        this.anchor = anchor;
+        this.title = title;
     }
 }
 
@@ -56,7 +56,18 @@ struct HeadingEntry {
  * with .write("My Title Here")
  */
 struct TableOfContents {
-    private HeadingEntry[] entries;
+    private HeadingEntry[] _entries;
+
+    @safe pure nothrow
+    @property
+    const(HeadingEntry)[] entries() const {
+        return _entries;
+    }
+
+    @safe pure nothrow
+    void removeFirst() {
+        _entries = _entries[1 .. $];
+    }
 
     /**
      * Produce the table of contents as a string.
@@ -78,12 +89,12 @@ struct TableOfContents {
         byte headingLevel = 0;
 
         if (entries.length > 0) {
-            zeroLevel = cast(byte) (entries[0]._level - 1);
+            zeroLevel = cast(byte) (entries[0].level - 1);
             headingLevel = cast(byte) (zeroLevel);
         }
 
         foreach(index, ref entry; entries) {
-            byte diff = cast(byte) (entry._level - headingLevel);
+            byte diff = cast(byte) (entry.level - headingLevel);
 
             if (diff > 0) {
                 // Open as many levels as we bump up.
@@ -103,13 +114,13 @@ struct TableOfContents {
 
             // Write the link out.
             result.put(`<a href="#`);
-            filterHTMLEscape(result, entry._anchor);
+            filterHTMLEscape(result, entry.anchor);
             result.put(`">`);
-            filterHTMLEscape(result, entry._title);
+            filterHTMLEscape(result, entry.title);
             result.put(`</a>`);
 
             // Set the level to the current one.
-            headingLevel = cast(byte) entry._level;
+            headingLevel = cast(byte) entry.level;
         }
 
         // Close any lists left open now, by using the last
@@ -125,21 +136,21 @@ struct TableOfContents {
 }
 
 private string writeHeading(ref TableOfContents toc, HeadingEntry entry) {
-    toc.entries ~= entry;
+    toc._entries ~= entry;
 
     auto result = appender!string();
 
     return `<h%d id="%s">%s <a class="toc-link" href="#%s">&para;</a></h1>`
     .format(
-        cast(ubyte) entry._level,
-        htmlEscape(entry._anchor),
-        htmlEscape(entry._title),
-        htmlEscape(entry._anchor)
+        cast(ubyte) entry.level,
+        htmlEscape(entry.anchor),
+        htmlEscape(entry.title),
+        htmlEscape(entry.anchor)
     );
 }
 
 public void addHeading(ref TableOfContents toc, HeadingEntry entry) {
-    toc.entries ~= entry;
+    toc._entries ~= entry;
 }
 
 /**

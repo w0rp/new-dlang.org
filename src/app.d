@@ -23,25 +23,18 @@ void basicPage(Request request, Response response) {
     import std.stdio;
     import dlang.toc;
 
-    writeln(request.path);
-
     if (!request.path.find("..").empty) {
-        writeln("match found!");
         // Factor out paths going up a directory, for security.
         return;
     }
 
     string markdownFilename;
 
-    writeln(request.path);
-
     if (request.path == "/") {
         markdownFilename = indexFilename;
     } else {
-        markdownFilename = buildPath(basicDir, request.path[1 .. $]);
+        markdownFilename = buildPath(basicDir, request.path[1 .. $] ~ ".md");
     }
-
-    writeln(markdownFilename);
 
     if (!exists(markdownFilename) || !isFile(markdownFilename)) {
         return;
@@ -50,9 +43,16 @@ void basicPage(Request request, Response response) {
     string htmlContent = compileMarkdownFile(markdownFilename);
     TableOfContents toc = tocFromHTML(htmlContent);
 
+    string title = "D Programming Language";
+
+    if (toc.entries.length > 0 && toc.entries[0].level == HeadingLevel.h1) {
+        title = toc.entries[0].title ~ " \u2013 " ~ title;
+        toc.removeFirst();
+    }
+
     response.render!(
         "basic_page.dt",
-        request,
+        title,
         htmlContent,
         toc,
     );
