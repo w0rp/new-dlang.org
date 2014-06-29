@@ -79,6 +79,10 @@ struct TableOfContents {
      *     The table of contents as HTML.
      */
     string write(string heading) const {
+        if (_entries.length == 0) {
+            return "";
+        }
+
         auto result = appender!string();
 
         result.put(`<div id="toc"><header>`);
@@ -228,10 +232,14 @@ TableOfContents tocFromHTML(string html) {
         }
 
         string id = element.getAttribute("id");
+        string title = element.innerText();
 
-        if (id.length > 0) {
-            toc.addHeading(HeadingEntry(level, id, element.innerText()));
+        if (id.length == 0) {
+            // Get the ID automatically from the title.
+            id = title.toLower().strip().replace(" ", "-");
         }
+
+        toc.addHeading(HeadingEntry(level, id, title));
     }
 
     return toc;

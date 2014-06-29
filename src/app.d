@@ -58,28 +58,6 @@ void basicPage(Request request, Response response) {
     );
 }
 
-auto changelogPage(string thisVersion) {
-    import std.path;
-    import dlang.toc;
-
-    string markdownFilename = buildPath(
-        markdownDir, "changelog", thisVersion ~ ".md"
-    );
-
-    return (Request request, Response response) {
-        string htmlContent = compileMarkdownFile(markdownFilename);
-        TableOfContents toc = tocFromHTML(htmlContent);
-
-        response.render!(
-            "changelog.dt",
-            request,
-            thisVersion,
-            htmlContent,
-            toc,
-        );
-    };
-}
-
 // TODO: This uses an HTML style redirect.
 // This needs replacing with something else.
 auto redirectPage(string toURL) {
@@ -98,15 +76,6 @@ shared static this() {
     fileSettings.serverPathPrefix = "/static";
 
     auto router = new URLRouter;
-
-    auto changelogRange = chain(
-        iota(0, 24),
-        iota(25, 66)
-    ).map!(x => "2.%03d".format(x));
-
-    foreach(thisVersion; changelogRange) {
-        router.get("/changelog/" ~ thisVersion, changelogPage(thisVersion));
-    }
 
     router
     // Old page URLs are 301 redirected to the new URLs.

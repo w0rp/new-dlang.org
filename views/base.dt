@@ -1,18 +1,5 @@
 !!! 5
 html(lang="en")
-    - import std.array;
-    - void docLink(string moduleName)
-        - string linkModuleName = moduleName.replace(".", "_");
-        a(href="/phobos/#{linkModuleName}") #{moduleName}
-
-    - void bugLink(uint bugID)
-        a(href="https://issues.dlang.org/show_bug.cgi?id=#{bugID}")
-            | Bugzilla #{bugID}
-    - void bugItem(uint bugID, string comment)
-        li
-            - bugLink(bugID);
-            | &mdash; #{comment}
-
     head
         meta(charset="UTF-8")
         script(src="/static/js/jquery-2.1.0.min.js")

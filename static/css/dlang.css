@@ -244,6 +244,10 @@ article ul.spaced-points > li {
     margin-top: 1em;
 }
 
+article ul > li > p {
+    margin: 0;
+}
+
 article > table {
     border-collapse: collapse;
 }
