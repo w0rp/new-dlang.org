@@ -46,7 +46,7 @@ void basicPage(Request request, Response response) {
     string title = "D Programming Language";
 
     if (toc.entries.length > 0 && toc.entries[0].level == HeadingLevel.h1) {
-        title = toc.entries[0].title ~ " \u2013 " ~ title;
+        title = toc.entries[0].title ~  " - " ~ title;
         toc.removeFirst();
     }
 
