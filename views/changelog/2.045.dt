@@ -1,7 +1,0 @@
-extends old_changelog
-
-append new_features
-
-append bugs_fixed
-    ul
-        li Another try at fixing the Dwarf issues.
