@@ -9,7 +9,7 @@ D is a language with C-like syntax and static typing.
 It pragmatically combines efficiency, control, and
 modelling power, with safety and programmer productivity.
 
-## Convenience
+<h2 id="convenience">Convenience</h2>
 
 * D allows writing large code fragments without redundantly
   specifying types, like dynamic languages do. On the other hand,
@@ -27,7 +27,7 @@ modelling power, with safety and programmer productivity.
   small and large.
   [See Example](#).
 
-## Power
+<h2 id="power">Power</h2>
 
 * The best paradigm is not to impose something at the expense
   of others. D offers classic polymorphism, value semantics,
@@ -45,7 +45,7 @@ modelling power, with safety and programmer productivity.
   interfaces.
   [Read more](#).
 
-## Efficiency
+<h2 id="efficiency">Efficiency</h2>
 
 * D compiles naturally to efficient native code.
 * D is designed such that the most "obvious" code
