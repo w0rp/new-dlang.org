@@ -234,11 +234,6 @@ TableOfContents tocFromHTML(string html) {
         string id = element.getAttribute("id");
         string title = element.innerText();
 
-        if (id.length == 0) {
-            // Get the ID automatically from the title.
-            id = title.toLower().strip().replace(" ", "-");
-        }
-
         toc.addHeading(HeadingEntry(level, id, title));
     }
 
