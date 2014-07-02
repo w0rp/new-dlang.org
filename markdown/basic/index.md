@@ -59,10 +59,3 @@ modelling power, with safety and programmer productivity.
   attributes allow the programmer to best decide the safety-efficiency
   tradeoffs of an application, and have the compiler check for consistency.
   [Read more](#).
-
-<!--
-append extra-sidebar
-    #twitter
-        a.twitter-timeline(data-dnt="true", href="https://twitter.com/D_Programming", data-widget-id="358057551562162176") Tweets by @D_Programming
-        | <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
--->

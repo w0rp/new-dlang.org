@@ -4,7 +4,7 @@ $(function() {
 
     var $aside = $(".extra-column > aside");
 
-    if ($aside.find("#twitter").length >= 1) {
+    if ($aside.find(".twitter-timeline").length >= 1) {
         // Don't do any dynamic fixed position stuff when there's the
         // Twitter module in there.
         return;

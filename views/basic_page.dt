@@ -4,7 +4,7 @@ append head
     title #{title}
 
 append content
-    |!= htmlContent
+    |!= mainContent
 
 append extra-sidebar
-    |!= toc.write("On This Page")
+    |!= sidebarContent

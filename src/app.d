@@ -6,6 +6,7 @@ import std.typetuple;
 
 import vibe.http.server;
 import vibe.http.fileserver;
+import vibe.core.file;
 import vibe.appmain;
 
 import dlang.markdown;
@@ -15,7 +16,6 @@ alias Response = HTTPServerResponse;
 
 enum markdownDir = "../markdown";
 enum basicDir = "../markdown/basic";
-enum indexFilename = "../markdown/basic/index.md";
 
 void basicPage(Request request, Response response) {
     import std.path;
@@ -28,33 +28,52 @@ void basicPage(Request request, Response response) {
         return;
     }
 
+    if (request.path.endsWith(".sidebar")
+    || request.path == "/index") {
+        // Remove paths for special filenames.
+        return;
+    }
+
     string markdownFilename;
+    string sidebarFilename;
 
     if (request.path == "/") {
-        markdownFilename = indexFilename;
+        markdownFilename = "../markdown/basic/index.md";
+        sidebarFilename = "../markdown/basic/index.sidebar.md";
     } else {
         markdownFilename = buildPath(basicDir, request.path[1 .. $] ~ ".md");
+        sidebarFilename = buildPath(
+            basicDir,
+            request.path[1 .. $] ~ ".sidebar.md"
+        );
     }
 
     if (!exists(markdownFilename) || !isFile(markdownFilename)) {
         return;
     }
 
-    string htmlContent = compileMarkdownFile(markdownFilename);
-    TableOfContents toc = tocFromHTML(htmlContent);
-
     string title = "D Programming Language";
+    string mainContent = compileMarkdownFile(markdownFilename);
+    string sidebarContent;
 
-    if (toc.entries.length > 0 && toc.entries[0].level == HeadingLevel.h1) {
-        title = toc.entries[0].title ~  " - " ~ title;
-        toc.removeFirst();
+    if (exists(sidebarFilename) && isFile(sidebarFilename)) {
+        sidebarContent = readFileUTF8(sidebarFilename);
+    } else {
+        TableOfContents toc = tocFromHTML(mainContent);
+
+        if (toc.entries.length > 0 && toc.entries[0].level == HeadingLevel.h1) {
+            title = toc.entries[0].title ~  " - " ~ title;
+            toc.removeFirst();
+        }
+
+        sidebarContent = toc.write("On This Page");
     }
 
     response.render!(
         "basic_page.dt",
         title,
-        htmlContent,
-        toc,
+        mainContent,
+        sidebarContent,
     );
 }
 
