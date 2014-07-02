@@ -158,6 +158,10 @@ header h1 + p {
     border-left: 1px solid black;
 }
 
+.navbar-static-top .navbar-form {
+    margin: 7px -15px;
+}
+
 .navbar-static-top .navbar-form.navbar-right button {
     margin-left: 4px;
 }

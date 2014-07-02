@@ -1,103 +1,24 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="48px"
-   height="48px"
-   id="svg2985"
-   version="1.1"
-   inkscape:version="0.48.4 r9939"
-   sodipodi:docname="d-icon.svg">
-  <defs
-     id="defs2987" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#000000"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="1"
-     inkscape:pageshadow="2"
-     inkscape:zoom="2.0001715"
-     inkscape:cx="30.067559"
-     inkscape:cy="23.220241"
-     inkscape:current-layer="layer1"
-     showgrid="true"
-     inkscape:grid-bbox="true"
-     inkscape:document-units="px"
-     inkscape:snap-midpoints="true"
-     inkscape:snap-smooth-nodes="true"
-     inkscape:snap-bbox="true"
-     inkscape:snap-global="true"
-     inkscape:snap-nodes="false"
-     inkscape:snap-to-guides="false"
-     inkscape:window-width="1453"
-     inkscape:window-height="794"
-     inkscape:window-x="304"
-     inkscape:window-y="96"
-     inkscape:window-maximized="0" />
-  <metadata
-     id="metadata2990">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <g
-     id="layer1"
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     style="display:inline">
-    <text
-       xml:space="preserve"
-       style="font-size:47.30293274000000281px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Droid Sans;-inkscape-font-specification:Droid Sans"
-       x="3.3994036"
-       y="43.898415"
-       id="text5346"
-       sodipodi:linespacing="125%"
-       transform="scale(1.1256003,0.8884148)"><tspan
-         sodipodi:role="line"
-         id="tspan5348"
-         x="3.3994036"
-         y="43.898415">D</tspan></text>
-    <path
-       sodipodi:type="arc"
-       style="fill:#ffffff;fill-opacity:1;stroke-width:0.99800003;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none"
-       id="path5350"
-       sodipodi:cx="32.372223"
-       sodipodi:cy="8.5658817"
-       sodipodi:rx="3.9996569"
-       sodipodi:ry="4.5621085"
-       d="m 36.37188,8.5658817 a 3.9996569,4.5621085 0 1 1 -7.999314,0 3.9996569,4.5621085 0 1 1 7.999314,0 z"
-       transform="matrix(1.3751179,0,0,1.2055829,-7.0156246,5.1731194)" />
-    <path
-       sodipodi:type="arc"
-       style="fill:#ffffff;fill-opacity:1;stroke-width:0.99800003;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none"
-       id="path5356"
-       sodipodi:cx="32.372223"
-       sodipodi:cy="7.6284623"
-       sodipodi:rx="1.8748392"
-       sodipodi:ry="1.6248606"
-       d="m 34.247062,7.6284623 a 1.8748392,1.6248606 0 1 1 -3.749678,0 1.8748392,1.6248606 0 1 1 3.749678,0 z"
-       transform="matrix(1.0667582,0,0,1.2308748,9.4666658,0.61031803)" />
-    <text
-       xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Droid Sans;-inkscape-font-specification:Droid Sans"
-       x="95.451225"
-       y="39.161922"
-       id="text5358"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan5360" /></text>
-  </g>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="63.713px" height="48px" viewBox="0 0 63.713 48" enable-background="new 0 0 63.713 48" xml:space="preserve">
+<g>
+	<path fill="#B02F25" d="M63.716,43.405c0,2.538-2.057,4.595-4.595,4.595H4.599c-2.538,0-4.598-2.057-4.598-4.595V0h63.714V43.405z"
+		/>
+	
+		<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="340.0876" y1="-295.5815" x2="294.1659" y2="-391.3409" gradientTransform="matrix(1 0 0 -1 -268.0156 -343.3955)">
+		<stop  offset="0" style="stop-color:#FFFFFF"/>
+		<stop  offset="1" style="stop-color:#B02F25"/>
+	</linearGradient>
+	<path fill="url(#SVGID_1_)" d="M63.716,43.357C51.85,30.549,35.542,22.378,15.432,22.378c-5.328,0-10.479,0.638-15.434,1.719V48
+		h63.713v-4.643H63.716z"/>
+	<g>
+		<path fill="#FFFFFF" d="M22.441,7.427c9.517,0,17.226,6.801,17.226,16.796c0,9.946-7.661,16.513-17.129,16.513H8.066V7.427H22.441
+			z M22.535,34.548c5.517,0,10.273-3.849,10.273-10.325c0-6.473-4.757-10.608-10.367-10.608h-7.758v20.934H22.535z"/>
+	</g>
+	<path fill="#FFFFFF" d="M41.483,9.188c4.855,0,8.792,3.938,8.792,8.793c0,4.857-3.937,8.792-8.792,8.792
+		c-4.859,0-8.795-3.935-8.795-8.792C32.688,13.125,36.624,9.188,41.483,9.188z"/>
+	<circle fill="#FFFFFF" cx="52.307" cy="8.1" r="2.682"/>
+</g>
 </svg>
