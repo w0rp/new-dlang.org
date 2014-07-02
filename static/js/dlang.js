@@ -63,3 +63,15 @@ $(function() {
 
     adjustSidebar();
 });
+
+$(function() {
+    "use strict";
+
+    $("h1[id], h2[id], h3[id], h4[id]").each(function() {
+        var $elem = $(this);
+
+        var $tocLink = $('<a class="toc-link">&para;</a>');
+        $tocLink.attr("href", "#" + $elem.attr("id"));
+        $elem.append($tocLink);
+    });
+});
