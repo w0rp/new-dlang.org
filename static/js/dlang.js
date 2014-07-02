@@ -67,7 +67,7 @@ $(function() {
 $(function() {
     "use strict";
 
-    $("h1[id], h2[id], h3[id], h4[id]").each(function() {
+    $("h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]").each(function() {
         var $elem = $(this);
 
         var $tocLink = $('<a class="toc-link">&para;</a>');

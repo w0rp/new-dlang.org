@@ -273,7 +273,9 @@ article > table th {
 h1 > .toc-link,
 h2 > .toc-link,
 h3 > .toc-link,
-h4 > .toc-link {
+h4 > .toc-link,
+h5 > .toc-link,
+h6 > .toc-link {
     visibility: hidden;
 
     font-weight: 400;
@@ -286,7 +288,9 @@ h4 > .toc-link {
 h1:hover > .toc-link,
 h2:hover > .toc-link,
 h3:hover > .toc-link,
-h4:hover > .toc-link {
+h4:hover > .toc-link,
+h5:hover > .toc-link,
+h6:hover > .toc-link {
     visibility: visible;
     text-decoration: none;
 }
