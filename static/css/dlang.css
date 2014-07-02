@@ -54,7 +54,7 @@ body {
 
     padding: 28px 0 21px 0;
 
-    border-top: 4px solid #a70b0b;
+    border-top: 4px solid #B02F25;
 
     background-color: #333232;
     color: #d8d8d8;
@@ -115,7 +115,7 @@ header h1 + p {
 .navbar-inverse .navbar-brand,
 .navbar-inverse .navbar-brand:hover,
 .navbar-inverse .navbar-brand:focus {
-    background: url("../image/d-icon.svg") no-repeat center, #a70b0b;
+    background: url("../image/d-icon.svg") no-repeat center, #B02F25;
     width: 56px;
     height: 48px;
     padding: 0;
@@ -126,7 +126,7 @@ header h1 + p {
     background-color: #333232;
     color: #d8d8d8;
 
-    border-top: 4px solid #a70b0b;
+    border-top: 4px solid #B02F25;
     margin-bottom: 0;
 }
 
