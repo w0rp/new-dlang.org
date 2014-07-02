@@ -55,7 +55,7 @@ modelling power, with safety and programmer productivity.
   pointers, type casts, access to any C function without
   intervening translation, and even inline assembly code.
   [See Example](#)
-* The ```@safe```, ```@trusted``` and ```@system``` modular
+* The <code>@safe</code>, <code>@trusted</code> and <code>@system</code> modular
   attributes allow the programmer to best decide the safety-efficiency
   tradeoffs of an application, and have the compiler check for consistency.
   [Read more](#).
