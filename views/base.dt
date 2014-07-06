@@ -47,11 +47,9 @@ html(lang="en")
                 .container.page-center
                     .row
                         .nav-column.hidden-xs.col-sm-2.col-md-2
-                            nav
-                                block nav-sidebar
-                        .col-sm-10.col-md-7
-                            article
-                                block content
+                            block nav-sidebar
+                        .col-sm-10.col-md-7#content-col
+                            block content
                         .extra-column.hidden-xs.hidden-sm.col-md-3
                             aside(data-offset-top="78", data-offset-bottom="145")
                                 block extra-sidebar

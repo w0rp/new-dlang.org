@@ -234,14 +234,12 @@ header h1 + p {
     border-top-color: transparent;
 }
 
-article {
+#content-col > * {
     background-color: #f1f1f1;
     color: #333232;
 
+    padding: 0 2em 2em 2em;
     overflow: auto;
-    padding: 0 1em;
-
-    padding-bottom: 2em;
 }
 
 article ul.spaced-points > li {
@@ -374,4 +372,54 @@ h6:hover > .toc-link {
 
 .changelog-version-list > li > a > .version {
     color: #428BCA;
+}
+
+/* The library documentation module tree */
+
+#ddox-tree-nav {
+    background-color: #f1f1f1;
+    padding-left: 14px;
+}
+
+#ddox-tree-nav > ul {
+    padding-left: 4px;
+}
+
+#ddox-tree-nav ul,
+#ddox-tree-nav li {
+    list-style-type: none;
+}
+
+#ddox-tree-nav ul > li > ul {
+    padding-left: 14px;
+}
+
+#ddox-tree-nav .package {
+    color: inherit;
+}
+
+#ddox-tree-nav .module {
+    padding-left: 0;
+    color: inherit;
+}
+
+#ddox-tree-nav .module.selected {
+    font-weight: bold;
+    color: #C7254E;
+}
+
+#ddox-tree-nav .package {
+    background-repeat: no-repeat;
+    background-image: url("/static/image/ddox/tree-item-open.png");
+    background-position: left center;
+    padding-left: 14px;
+    margin-left: -14px;
+}
+
+#ddox-tree-nav .package.closed {
+    background-image: url("/static/image/ddox/tree-item-closed.png");
+}
+
+#ddox-tree-nav .tree-view.closed {
+    display: none;
 }

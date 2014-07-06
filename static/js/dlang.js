@@ -64,14 +64,53 @@ $(function() {
     adjustSidebar();
 });
 
+// Add in table of contents backlinks.
 $(function() {
     "use strict";
 
-    $("h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]").each(function() {
+    $("article")
+    .find("h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]").each(function() {
         var $elem = $(this);
 
         var $tocLink = $('<a class="toc-link">&para;</a>');
         $tocLink.attr("href", "#" + $elem.attr("id"));
         $elem.append($tocLink);
+    });
+});
+
+// Set up tree views for documentation.
+$(function() {
+    "use strict";
+
+    var $treeNav = $("#ddox-tree-nav");
+
+    if ($treeNav.length === 0) {
+        return;
+    }
+
+    // Collapse all trees first.
+    $treeNav.find(".package").addClass("closed");
+    $treeNav.children("ul.tree-view").find("ul.tree-view").addClass("closed");
+
+    // Open trees up from the selected module.
+    $treeNav.find(".module.selected")
+    .parents("ul.tree-view").each(function() {
+        $(this).removeClass("closed");
+        $(this).prev("package").removeClass("closed");
+    });
+
+    // Bind a handling for opening and closing trees.
+    $treeNav.find(".package").click(function(event) {
+        event.preventDefault();
+
+        var $package = $(this);
+
+        if ($package.hasClass("closed")) {
+            $package.removeClass("closed");
+            $package.next(".tree-view").removeClass("closed");
+        } else {
+            $package.addClass("closed");
+            $package.next(".tree-view").addClass("closed");
+        }
     });
 });
