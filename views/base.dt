@@ -12,6 +12,10 @@ html(lang="en")
 
         link(rel="stylesheet", href="/static/css/dlang.css")
 
+        // We have to have this block, or ddox doesn't work.
+        block title
+        title= title
+
         block head
     body
         #site-container
@@ -26,7 +30,7 @@ html(lang="en")
                                     li
                                         a(href="/download") Download
                                     li
-                                        a(href="#") Documentation
+                                        a(href="/library/index.html") Documentation
                                     li
                                         a(href="#") Community
                                 form.navbar-form.navbar-right
@@ -44,27 +48,7 @@ html(lang="en")
                     .row
                         .nav-column.hidden-xs.col-sm-2.col-md-2
                             nav
-                                ul.nav.nav-pills.nav-stacked
-                                    li.active
-                                        a(href="/") D 2.065.0
-                                    li
-                                        a(href="#") Overview
-                                    li
-                                        a(href="#") Features
-                                    li
-                                        a(href="/changelog") Change Log
-                                    li
-                                        a(href="#") Bug Tracker
-                                    li
-                                        a(href="#") FAQ
-                                    li
-                                        a(href="#") Appendices
-                                    li
-                                        a(href="#") Thanks
-                                    li
-                                        a(href="#") Sitemap
-                                    li
-                                        a(href="#") D1 Home
+                                block nav-sidebar
                         .col-sm-10.col-md-7
                             article
                                 block content

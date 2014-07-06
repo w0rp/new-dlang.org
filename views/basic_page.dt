@@ -1,10 +1,30 @@
 extends base
 
-append head
-    title #{title}
+block nav-sidebar
+    ul.nav.nav-pills.nav-stacked
+        li.active
+            a(href="/") D 2.065.0
+        li
+            a(href="#") Overview
+        li
+            a(href="#") Features
+        li
+            a(href="/changelog") Change Log
+        li
+            a(href="#") Bug Tracker
+        li
+            a(href="#") FAQ
+        li
+            a(href="#") Appendices
+        li
+            a(href="#") Thanks
+        li
+            a(href="#") Sitemap
+        li
+            a(href="#") D1 Home
 
-append content
+block content
     |!= mainContent
 
-append extra-sidebar
+block extra-sidebar
     |!= sidebarContent

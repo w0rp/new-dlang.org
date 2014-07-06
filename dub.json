@@ -1,15 +1,25 @@
 {
     "name": "new-dlang.org",
-    "versions": ["VibeDefaultMain"],
     "description": "The Redesigned D website.",
     "copyright": "Copyright © 2014, w0rp",
     "authors": ["w0rp"],
     "license": "BSL-1.0",
     "targetPath": "bin",
     "dependencies": {
-        "vibe-d": {
-            "version": "~master",
-            "path": "../vibe.d"
+        "ddox": "==0.9.22"
+    },
+    "configurations" : [
+        {
+            "name": "server",
+            "targetType": "executable",
+            "targetPath": "bin",
+            "versions": ["VibeCustomMain"]
+        },
+        {
+            "name": "documentation",
+            "targetType": "executable",
+            "targetPath": "bin",
+            "versions": ["VibeCustomMain", "documentation"]
         }
-    }
+    ]
 }
