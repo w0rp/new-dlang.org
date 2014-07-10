@@ -1,0 +1,392 @@
+extends ddox.layout
+
+block ddox.defs
+    - import ddox.api;
+
+block ddox.title
+    - auto title = "D Library Documentation";
+
+block ddox.members
+    - void moduleInfoRec(Package pack)
+        - foreach( p; pack.packages )
+            - moduleInfoRec(p);
+        - foreach( m; pack.modules )
+            tr
+                td.name-col
+                    a.module-link(href="#{info.linkTo(m)}")= m.qualifiedName
+                td.description-col
+                    - if( m.docGroup )
+                        p.module-description
+                            |!= info.formatDoc(m.docGroup, 0, sec => sec == "$Short")
+
+    h1 D Library Documentation Overview
+
+    h2(id="phobos") D Standard Library &ndash; Phobos
+
+    p
+        | Phobos is D's standard library, offering many packages for covering
+        | a number of tasks.
+
+    table.module-overview-table
+        thead
+            tr
+                th.name-col Name
+                th.description-col Description
+        tbody
+            - foreach(p; info.rootPackage.packages)
+                - if (p.name == "std")
+                    - moduleInfoRec(p);
+
+    h2(id="druntime") D Runtime
+
+    p
+        | D's runtime library provides some modules core to D's functionality.
+
+    table.module-overview-table
+        thead
+            tr
+                th.name-col Name
+                th.description-col Description
+        tbody
+            - foreach(p; info.rootPackage.packages)
+                - if (p.name != "std")
+                    - moduleInfoRec(p);
+
+    h2(id="c99") C99 Standard Library
+
+    p
+        | D modules matching C99 header files are available. The D module
+        | names match the C header filenames exactly, except where the
+        | filenames conflict with D identifiers, and all
+        | begin with the prefix <em>core.stdc.</em>
+
+    table.module-overview-c-table
+        thead
+            tr
+                th D Module Name
+                th Matching C Header
+        tbody
+            tr
+                td.d-module core.stdc.complex
+                td.c-header complex.h
+            tr
+                td.d-module core.stdc.ctype
+                td.c-header ctype.h
+            tr
+                td.d-module core.stdc.ctype
+                td.c-header ctype.h
+            tr
+                td.d-module core.stdc.errno
+                td.c-header errno.h
+            tr
+                td.d-module core.stdc.fenv
+                td.c-header fenv.h
+            tr
+                td.d-module core.stdc.float_
+                td.c-header float.h
+            tr
+                td.d-module core.stdc.inttypes
+                td.c-header inttypes.h
+            tr
+                td.d-module core.stdc.limits
+                td.c-header limits.h
+            tr
+                td.d-module core.stdc.locale
+                td.c-header locale.h
+            tr
+                td.d-module core.stdc.math
+                td.c-header math.h
+            tr
+                td.d-module core.stdc.signal
+                td.c-header signal.h
+            tr
+                td.d-module core.stdc.stdarg
+                td.c-header stdarg.h
+            tr
+                td.d-module core.stdc.stddef
+                td.c-header stddef.h
+            tr
+                td.d-module core.stdc.stdint
+                td.c-header stdint.h
+            tr
+                td.d-module core.stdc.stdio
+                td.c-header stdio.h
+            tr
+                td.d-module core.stdc.stdlib
+                td.c-header stdlib.h
+            tr
+                td.d-module core.stdc.string
+                td.c-header string.h
+            tr
+                td.d-module core.stdc.tgmath
+                td.c-header tgmath.h
+            tr
+                td.d-module core.stdc.time
+                td.c-header time.h
+            tr
+                td.d-module core.stdc.wchar_
+                td.c-header wchar.h
+            tr
+                td.d-module core.stdc.wctype
+                td.c-header wctype.h
+
+    h2(id="posix") C Posix Bindings
+
+    table.module-overview-c-table
+        thead
+            tr
+                th D Module Name
+                th Matching C Header
+        tbody
+            tr
+                td.d-module core.sys.posix.arpa.inet
+                td.c-header arpa/inet.h
+            tr
+                td.d-module core.sys.posix.net.if_
+                td.c-header net/if_.h
+            tr
+                td.d-module core.sys.posix.netinet.if_
+                td.c-header netinet/if_.h
+            tr
+                td.d-module core.sys.posix.netinet.tcp
+                td.c-header netinet/tcp.h
+            tr
+                td.d-module core.sys.posix.sys.ioctl
+                td.c-header sys/ioctl.h
+            tr
+                td.d-module core.sys.posix.sys.ipc
+                td.c-header sys/ipc.h
+            tr
+                td.d-module core.sys.posix.sys.mman
+                td.c-header sys/mman.h
+            tr
+                td.d-module core.sys.posix.sys.resource
+                td.c-header sys/resource.h
+            tr
+                td.d-module core.sys.posix.sys.select
+                td.c-header sys/select.h
+            tr
+                td.d-module core.sys.posix.sys.shm
+                td.c-header sys/shm.h
+            tr
+                td.d-module core.sys.posix.sys.socket
+                td.c-header sys/socket.h
+            tr
+                td.d-module core.sys.posix.sys.stat
+                td.c-header sys/stat.h
+            tr
+                td.d-module core.sys.posix.sys.statvfs
+                td.c-header sys/statvfs.h
+            tr
+                td.d-module core.sys.posix.sys.time
+                td.c-header sys/time.h
+            tr
+                td.d-module core.sys.posix.sys.types
+                td.c-header sys/types.h
+            tr
+                td.d-module core.sys.posix.sys.uio
+                td.c-header sys/uio.h
+            tr
+                td.d-module core.sys.posix.sys.un
+                td.c-header sys/un.h
+            tr
+                td.d-module core.sys.posix.sys.wait
+                td.c-header sys/wait.h
+            tr
+                td.d-module core.sys.posix.dirent
+                td.c-header dirent.h
+            tr
+                td.d-module core.sys.posix.dlfcn
+                td.c-header dlfcn.h
+            tr
+                td.d-module core.sys.posix.fcntl
+                td.c-header fcntl.h
+            tr
+                td.d-module core.sys.posix.grp
+                td.c-header grp.h
+            tr
+                td.d-module core.sys.posix.inttypes
+                td.c-header inttypes.h
+            tr
+                td.d-module core.sys.posix.netdb
+                td.c-header netdb.h
+            tr
+                td.d-module core.sys.posix.poll
+                td.c-header poll.h
+            tr
+                td.d-module core.sys.posix.pthread
+                td.c-header pthread.h
+            tr
+                td.d-module core.sys.posix.pwd
+                td.c-header pwd.h
+            tr
+                td.d-module core.sys.posix.sched
+                td.c-header sched.h
+            tr
+                td.d-module core.sys.posix.semaphore
+                td.c-header semaphore.h
+            tr
+                td.d-module core.sys.posix.setjmp
+                td.c-header setjmp.h
+            tr
+                td.d-module core.sys.posix.signal
+                td.c-header signal.h
+            tr
+                td.d-module core.sys.posix.stdio
+                td.c-header stdio.h
+            tr
+                td.d-module core.sys.posix.stdlib
+                td.c-header stdlib.h
+            tr
+                td.d-module core.sys.posix.syslog
+                td.c-header syslog.h
+            tr
+                td.d-module core.sys.posix.termios
+                td.c-header termios.h
+            tr
+                td.d-module core.sys.posix.time
+                td.c-header time.h
+            tr
+                td.d-module core.sys.posix.ucontext
+                td.c-header ucontext.h
+            tr
+                td.d-module core.sys.posix.unistd
+                td.c-header unistd.h
+            tr
+                td.d-module core.sys.posix.utime
+                td.c-header utime.h
+
+    h2(id="linux") C Linux Bindings
+
+    table.module-overview-c-table
+        thead
+            tr
+                th D Module Name
+                th Matching C Header
+        tbody
+            tr
+                td.d-module core.sys.linux.sys.inotify
+                td.c-header sys/linux.h
+            tr
+                td.d-module core.sys.linux.sys.mman
+                td.c-header sys/mman.h
+            tr
+                td.d-module core.sys.linux.sys.signalfd
+                td.c-header sys/signalfd.h
+            tr
+                td.d-module core.sys.linux.sys.xattr
+                td.c-header sys/xattr.h
+            tr
+                td.d-module core.sys.linux.dlfcn
+                td.c-header dlfcn.h
+            tr
+                td.d-module core.sys.linux.elf
+                td.c-header elf.h
+            tr
+                td.d-module core.sys.linux.epoll
+                td.c-header epoll.h
+            tr
+                td.d-module core.sys.linux.errno
+                td.c-header errno.h
+            tr
+                td.d-module core.sys.linux.execinfo
+                td.c-header execinfo.h
+            tr
+                td.d-module core.sys.linux.link
+                td.c-header link.h
+            tr
+                td.d-module core.sys.linux.termios
+                td.c-header termios.h
+
+    h2(id="freebsd") C FreeBSD Bindings
+
+    table.module-overview-c-table
+        thead
+            tr
+                th D Module Name
+                th Matching C Header
+        tbody
+            tr
+                td.d-module core.sys.freebsd.sys.elf
+                td.c-header sys/elf.h
+            tr
+                td.d-module core.sys.freebsd.sys.elf32
+                td.c-header sys/elf32.h
+            tr
+                td.d-module core.sys.freebsd.sys.elf64
+                td.c-header sys/elf64.h
+            tr
+                td.d-module core.sys.freebsd.sys.elf_common
+                td.c-header sys/elf_common.h
+            tr
+                td.d-module core.sys.freebsd.sys.event
+                td.c-header sys/event.h
+            tr
+                td.d-module core.sys.freebsd.dlfcn
+                td.c-header sys/dlfcn.h
+            tr
+                td.d-module core.sys.freebsd.execinfo
+                td.c-header sys/execinfo.h
+
+    h2(id="windows") C Windows Bindings
+
+    table.module-overview-c-table
+        thead
+            tr
+                th D Module Name
+                th Matching C Header
+        tbody
+            tr
+                td.d-module core.sys.windows.windows
+                td.c-header windows.h
+
+    h2(id="mac-osx") C Mac OSX Bindings
+
+    table.module-overview-c-table
+        thead
+            tr
+                th D Module Name
+                th Matching C Header
+        tbody
+            tr
+                td.d-module core.sys.osx.mach.dyld
+                td.c-header mach-o/dyld.h
+            tr
+                td.d-module core.sys.osx.mach.getsect
+                td.c-header mach-o/getsect.h
+            tr
+                td.d-module core.sys.osx.mach.kern_return
+                td.c-header mach/kern_return.h
+            tr
+                td.d-module core.sys.osx.mach.loader
+                td.c-header mach-o/loader.h
+            tr
+                td.d-module core.sys.osx.mach.port
+                td.c-header mach/port.h
+            tr
+                td.d-module core.sys.osx.mach.semaphore
+                td.c-header mach/semaphore.h
+            tr
+                td.d-module core.sys.osx.mach.thread_act
+                td.c-header mach/thread_act.h
+
+block extra-sidebar
+    #toc
+        header On This Page
+        ul
+            li
+                a(href="#phobos") D Standard Library &ndash; Phobos
+            li
+                a(href="#druntime") D Runtime
+            li
+                a(href="#c99") C99 Standard Library
+            li
+                a(href="#posix") C Posix Bindings
+            li
+                a(href="#linux") C Linux Bindings
+            li
+                a(href="#freebsd") C FreeBSD Bindings
+            li
+                a(href="#windows") C Windows Bindings
+            li
+                a(href="#mac-osx") C Mac OSX Bindings

@@ -139,20 +139,23 @@ struct TableOfContents {
     }
 }
 
+/**
+ * Add a heading to the table of contents and produce the HTML for the
+ * heading.
+ */
 private string writeHeading(ref TableOfContents toc, HeadingEntry entry) {
     toc._entries ~= entry;
 
-    auto result = appender!string();
-
-    return `<h%d id="%s">%s <a class="toc-link" href="#%s">&para;</a></h1>`
-    .format(
+    return `<h%d id="%s">%s</h1>`.format(
         cast(ubyte) entry.level,
         htmlEscape(entry.anchor),
         htmlEscape(entry.title),
-        htmlEscape(entry.anchor)
     );
 }
 
+/**
+ * Add a heading to the table of contents.
+ */
 public void addHeading(ref TableOfContents toc, HeadingEntry entry) {
     toc._entries ~= entry;
 }
@@ -198,6 +201,10 @@ string h6(ref TableOfContents toc, string anchor, string title) {
 }
 
 
+/**
+ * Given some HTML, create the table of contents object by parsing the
+ * headings in the document.
+ */
 TableOfContents tocFromHTML(string html) {
     import arsd.dom;
 

@@ -65,7 +65,16 @@ int dlangDocMain(string[] args) {
         "--only-documented",
         "--ex=gc.",
         "--ex=rt.",
+        "--ex=core.internal.",
+        // C modules will be hidden and otherwise documented.
+        "--ex=core.stdc.",
+        "--ex=core.sys.posix.",
+        "--ex=core.sys.linux.",
+        "--ex=core.sys.freebsd.",
+        "--ex=core.sys.windows.windows",
+        "--ex=core.sys.osx.",
         "--ex=std.internal.",
+        "--ex=std.c.",
     ]);
 
     if (filterResult) {

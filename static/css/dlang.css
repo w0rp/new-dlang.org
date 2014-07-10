@@ -423,3 +423,27 @@ h6:hover > .toc-link {
 #ddox-tree-nav .tree-view.closed {
     display: none;
 }
+
+.module-overview-table .name-col {
+    width: 14em;
+    word-wrap: break-word;
+    vertical-align: top;
+}
+
+.module-overview-table td {
+    padding-top: 0.25em;
+}
+
+/* Hack to remove bad headings from generated module descriptions */
+.module-overview-table h3 {
+    display: none;
+}
+
+.module-overview-c-table th:first-child,
+.module-overview-c-table td:first-child {
+    padding-right: 2em;
+}
+
+.module-overview-c-table .d-module {
+    width: 16em;
+}
