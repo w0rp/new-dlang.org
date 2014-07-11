@@ -18,15 +18,15 @@ block content
 
         - if( cast(Module)info.node )
             section
-                h2 Authors
+                h2(id="authors") Authors
                 block ddox.authors
 
             section
-                h2 License
+                h2(id="license") License
                 block ddox.license
 
         section
-            h2 Comments
+            h2(id="comments") Comments
             - if (req is null)
                 include inc.disqus
 
