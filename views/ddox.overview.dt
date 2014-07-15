@@ -19,8 +19,6 @@ block ddox.members
                         p.module-description
                             |!= info.formatDoc(m.docGroup, 0, sec => sec == "$Short")
 
-    h1 D Library Documentation Overview
-
     h2(id="phobos") D Standard Library &ndash; Phobos
 
     p

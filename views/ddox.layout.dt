@@ -10,6 +10,8 @@ block nav-sidebar
 
 block content
     section#ddox-document
+        h1= title
+
         block ddox.description
 
         block ddox.sections
