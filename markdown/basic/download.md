@@ -210,9 +210,9 @@ Windows for compiling and linking D programs.
     </li>
 </ul>
 
-<h2 id="documentation">Documentation</h2>
+<h2 id="language-specifications">Language Specifications</h2>
 
-Downloadable documentation is also offered.
+Language specifications are available.
 
 <ul class="download-list docs">
     <li>
