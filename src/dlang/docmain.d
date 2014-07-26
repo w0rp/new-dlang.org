@@ -84,6 +84,10 @@ int dlangDocMain(string[] args) {
     return cmdGenerateHtml([
         args[0],
         "generate-html",
+        "--file-name-style=lowerUnderscored",
+        "--std-macros=../src/ddoc/std.ddoc",
+        "--std-macros=../src/ddoc/std-ddox.ddoc",
+        "--override-macros=../src/ddoc/std-ddox-override.ddoc",
         "docs.json",
         "../docs",
     ]);

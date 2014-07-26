@@ -66,8 +66,11 @@ block ddox.members
                     - foreach( f; getDocGroups!kind(info.mod)  )
                         dt(id="#{f.name}", class=declStyleClasses(f))
                             a(href="#{info.linkTo(f)}")
-                                - if( f.type )
-                                    |!= info.formatType(f.type)
+                                // Removed because we can't print the formatted
+                                // type without also outputting hyperlinks.
+                                //
+                                // - if( f.type )
+                                //    |= f.type)
                                 code= f.name
                         dd!= info.formatDoc(f.docGroup, 3, sec => sec == "$Short")
 

@@ -448,8 +448,24 @@ h6:hover > .toc-link {
     width: 16em;
 }
 
-section.symbols {
+section.brief {
+}
 
+section.brief dl > dt {
+    display: block;
+
+    margin: 1em 0;
+}
+
+section.brief dl > dt code {
+    padding: 0;
+}
+
+section.brief dl > dd code {
+    padding: 0;
+}
+
+section.symbols {
 }
 
 section.symbols dl > dt {
@@ -460,4 +476,40 @@ section.symbols dl > dt {
 
 section.symbols dl > dt code {
     padding: 0;
+}
+
+.inheritance-list {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+.brief-definitions {
+}
+
+.brief-definitions > .definition {
+    margin-bottom: 1em;
+}
+
+.brief-definitions > .definition > .line {
+}
+
+.brief-definitions > .definition > .line code {
+    padding: 0px;
+}
+
+.brief-definitions > .definition > .line:first-child {
+    font-size: 16px;
+}
+
+.brief-definitions > .definition > .line:first-child code {
+    color: inherit;
+    background-color: inherit;
+}
+
+.brief-definitions > .definition > .line > a:first-child + a {
+    margin-left: 1em;
+}
+
+.brief-definitions > .definition > .line > a + a {
+    margin-right: 1em;
 }

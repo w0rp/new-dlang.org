@@ -6,21 +6,16 @@ This is a project for redesigning dlang.org.
 
 First, you should use dub to build the druntime and phobos documentation.
 First, clone druntime and phobos to the same directory you cloned this
-repository to, and checkout the stable D dlanguage version for each repository
+repository to, and checkout the stable D language version for each repository
 to match your DMD compiler in each repository. Then you will be able to
 build the documentation.
 
 ```
-dub run --config=documentation
+dub run --force --config=documentation
 ```
 
-If you make changes to the diet templates used for the documentation, remember
-to rebuild the documentation and run again to see the results.
-
-```
-dub build --force --config=documentation
-dub run --config=documentation
-```
+You should run this command again if you make changes to the documentation, or
+layout diet templates used by the documentation.
 
 To run the site itself, use dub again.
 
