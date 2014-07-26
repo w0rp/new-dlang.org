@@ -447,3 +447,17 @@ h6:hover > .toc-link {
 .module-overview-c-table .d-module {
     width: 16em;
 }
+
+section.symbols {
+
+}
+
+section.symbols dl > dt {
+    display: block;
+
+    margin: 1em 0;
+}
+
+section.symbols dl > dt code {
+    padding: 0;
+}

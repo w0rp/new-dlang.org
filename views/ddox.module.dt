@@ -31,38 +31,45 @@ block ddox.members
     - foreach( i, kind; kinds )
         - if( hasChild!kind(info.mod) )
             section
-                h2(id="#{kindids[i]}")= kindnames[i]
-                table
-                    col.caption
-                    tr
-                        th Name
-                        th Description
-                    - foreach( grp; getDocGroups!kind(info.mod) )
-                        tr
-                            td
-                                a(id="#{grp.name}", class=declStyleClasses(grp), href="#{info.linkTo(grp)}")
-                                    code= grp.name
-                            td!= info.formatDoc(grp.docGroup, 3, sec => sec == "$Short")
+                section.symbols
+                    h2(id="#{kindids[i]}")= kindnames[i]
+
+                    dl
+                        - static if(is(kind == FunctionDeclaration))
+                            - foreach( grp; getDocGroups!kind(info.mod) )
+                                - auto rettype = grp.name == "this" ? "" : info.formatType(grp.returnType, false) ~ " ";
+                                - auto attribsstr = grp.attributes.length ? " " ~ grp.attributes.join(" ") : "";
+
+                                dt(id="#{grp.name}", class=declStyleClasses(grp))
+                                    code
+                                        a(href="#{info.linkTo(grp)}")><= grp.name
+
+                                        |(
+                                        - foreach (size_t parameterIndex, p; grp.parameters)
+                                            |#{p.name}#{parameterIndex+1 < grp.parameters.length ? ", " : ""}
+                                        |)
+
+                                dd!= info.formatDoc(grp.docGroup, 3, sec => sec == "$Short")
+                        - else
+                            - foreach( grp; getDocGroups!kind(info.mod) )
+                                dt(id="#{grp.name}", class=declStyleClasses(grp))
+                                    code
+                                        a(href="#{info.linkTo(grp)}")= grp.name
+                                dd!= info.formatDoc(grp.docGroup, 3, sec => sec == "$Short")
 
     - foreach( i, kind; tkinds )
         - if( hasChild!kind(info.mod) )
-            section
+            section.symbols
                 h2(id="#{tkindids[i]}")= tkindnames[i]
-                table
-                    col.caption
-                    tr
-                        th Name
-                        th Type
-                        th Description
+
+                dl
                     - foreach( f; getDocGroups!kind(info.mod)  )
-                        tr
-                            td
-                                a(id="#{f.name}", class=declStyleClasses(f), href="#{info.linkTo(f)}")
-                                    code= f.name
-                            td
+                        dt(id="#{f.name}", class=declStyleClasses(f))
+                            a(href="#{info.linkTo(f)}")
                                 - if( f.type )
                                     |!= info.formatType(f.type)
-                            td!= info.formatDoc(f.docGroup, 3, sec => sec == "$Short")
+                                code= f.name
+                        dd!= info.formatDoc(f.docGroup, 3, sec => sec == "$Short")
 
 block ddox.authors
     |!= info.formatDoc(info.mod.docGroup, 0, sec => sec == "Authors")
