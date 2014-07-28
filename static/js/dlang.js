@@ -96,7 +96,7 @@ $(function() {
     $treeNav.find(".module.selected")
     .parents("ul.tree-view").each(function() {
         $(this).removeClass("closed");
-        $(this).prev("package").removeClass("closed");
+        $(this).prev(".package").removeClass("closed");
     });
 
     // Bind a handling for opening and closing trees.
