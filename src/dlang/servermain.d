@@ -10,6 +10,7 @@ import vibe.http.server;
 import vibe.http.fileserver;
 import vibe.core.file;
 import vibe.vibe : finalizeCommandLineOptions, lowerPrivileges, runEventLoop;
+import vibe.http.router;
 
 import dlang.markdown;
 
@@ -88,8 +89,53 @@ auto redirectPage(string toURL) {
     };
 }
 
+/**
+ * Set up routing on "/library/" for the D library documentation.
+ *
+ * The HTML for the documentation pages will be served directly without
+ * generating HTML files.
+ */
+void routeDocs(URLRouter router) {
+    import std.file : readText;
+
+    import vibe.inet.url;
+    import vibe.data.json;
+
+    import ddox.entities;
+    import ddox.settings;
+    import ddox.htmlserver;
+    import ddox.ddox;
+    import ddox.jsonparser;
+
+    auto generatorSettings = new GeneratorSettings();
+
+    generatorSettings.siteUrl = URL("/library/");
+    generatorSettings.fileNameStyle = MethodStyle.lowerUnderscored;
+
+    auto ddoxSettings = new DdoxSettings();
+
+    Package pack;
+
+    {
+        auto text = readText("docs.json");
+        pack = parseJsonDocs(parseJson(text));
+    }
+
+    registerApiDocs(router, pack, generatorSettings);
+}
+
 int dlangServerMain(string args[]) {
-    import vibe.http.router;
+    import ddox.ddoc : setDefaultDdocMacroFiles, setOverrideDdocMacroFiles;
+
+    // Set global scope ddoc files to be loaded for documentation pages.
+    setDefaultDdocMacroFiles([
+        "../src/ddoc/std.ddoc",
+        "../src/ddoc/std-ddox.ddoc"
+    ]);
+
+    setOverrideDdocMacroFiles([
+        "../src/ddoc/std-ddox-override.ddoc"
+    ]);
 
     auto settings = new HTTPServerSettings;
     settings.port = 8010;
@@ -111,8 +157,10 @@ int dlangServerMain(string args[]) {
     .get("/static/*", serveStaticFiles("../static/", fileSettings))
     // Handle everything else with basic Markdown files.
     .get("/*", &basicPage)
-    .get("/library/*", serveStaticFiles("../docs/", docFileSettings))
     ;
+
+    // Set up routing for library files.
+    routeDocs(router);
 
     listenHTTP(settings, router);
 

@@ -11,7 +11,7 @@ to match your DMD compiler in each repository. Then you will be able to
 build the documentation.
 
 ```
-dub run --force --config=documentation
+dub run --config=documentation
 ```
 
 You should run this command again if you make changes to the documentation, or

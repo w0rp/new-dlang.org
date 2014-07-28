@@ -30,7 +30,7 @@ html(lang="en")
                                     li
                                         a(href="/download") Download
                                     li
-                                        a(href="/library/index.html") Documentation
+                                        a(href="/library/") Documentation
                                     li
                                         a(href="#") Community
                                 form.navbar-form.navbar-right
