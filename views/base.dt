@@ -20,7 +20,7 @@ html(lang="en")
     body
         #site-container
             nav.navbar.navbar-default.navbar-inverse.navbar-static-top
-                .container
+                .container-fluid
                     .row
                         .col-md-12
                             .navbar-header
@@ -44,7 +44,7 @@ html(lang="en")
                 and goes down to just the 1 column on extra
                 small devices.
             #page-wrapper
-                .container.page-center
+                .container-fluid.page-center
                     .row
                         .nav-column.hidden-xs.col-sm-2.col-md-2
                             block nav-sidebar
@@ -54,7 +54,7 @@ html(lang="en")
                             aside(data-offset-top="78", data-offset-bottom="145")
                                 block extra-sidebar
             footer#site-footer
-                .container
+                .container-fluid
                     .row
                         .col-md-12
                             ul.footer-links

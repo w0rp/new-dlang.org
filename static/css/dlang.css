@@ -31,6 +31,13 @@ body {
     padding-bottom: 145px;
 }
 
+/* Set the max site size, apart from things which keep expanding for style. */
+.navbar-static-top > .container-fluid,
+#page-wrapper > .container-fluid,
+#site-footer > .container-fluid {
+    max-width: 1300px;
+}
+
 #site-footer {
     position: absolute;
     bottom: 0;
@@ -130,10 +137,6 @@ header h1 + p {
     margin-bottom: 0;
 }
 
-.navbar-static-top .container-fluid {
-    padding: 0;
-}
-
 .navbar-static-top .navbar-collapse {
     padding: 0;
 }
@@ -166,13 +169,18 @@ header h1 + p {
     margin-left: 4px;
 }
 
-.page-center > .row > .nav-column,
+.page-center > .row > .nav-column {
+    padding-left: 15px;
+    padding-right: 0px;
+}
+
 .page-center > .row > .extra-column {
-    padding: 0;
+    padding-left: 0px;
+    padding-right: 15px;
 }
 
 .page-center > .row > .extra-column > aside {
-    width: 243px;
+    width: 100%;
     top: 0px;
 }
 
@@ -238,7 +246,7 @@ header h1 + p {
     background-color: #f1f1f1;
     color: #333232;
 
-    padding: 0 2em 2em 2em;
+    padding: 0 1em 2em 1em;
     overflow: auto;
 }
 
@@ -512,4 +520,28 @@ section.symbols dl > dt code {
 
 .brief-definitions > .definition > .line > a + a {
     margin-right: 1em;
+}
+
+/* Size specific adjustments */
+
+.navbar-static-top > .container-fluid > .row > .col-md-12,
+#site-footer > .container-fluid > .row > .col-md-12,
+#content-col {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+@media (min-width: 580px) {
+    #content-col > * {
+        padding: 0 2em 2em 2em;
+    }
+}
+
+@media (min-width: 768px) {
+    .navbar-static-top > .container-fluid > .row > .col-md-12,
+    #site-footer > .container-fluid > .row > .col-md-12,
+    #content-col {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
 }
