@@ -175,12 +175,13 @@ header h1 + p {
 }
 
 .page-center > .row > .extra-column {
+    width: 300px;
     padding-left: 0px;
     padding-right: 15px;
 }
 
 .page-center > .row > .extra-column > aside {
-    width: 100%;
+    width: 285px;
     top: 0px;
 }
 
@@ -537,11 +538,27 @@ section.symbols dl > dt code {
     }
 }
 
+/* The 'small' screen size begins here */
 @media (min-width: 768px) {
     .navbar-static-top > .container-fluid > .row > .col-md-12,
     #site-footer > .container-fluid > .row > .col-md-12,
     #content-col {
         padding-left: 15px;
         padding-right: 15px;
+    }
+}
+
+/* The 'medium' screen size begins here */
+@media (min-width: 992px) {
+    /* Give the nav column 16% of the center width */
+    .page-center > .row > .nav-column {
+        width: 16%;
+    }
+
+    /* Give the content column the rest, except the right sidebar width */
+    #content-col {
+        width: -webkit-calc(84% - 300px);
+        width: -moz-calc(84% - 300px);
+        width: calc(84% - 300px);
     }
 }

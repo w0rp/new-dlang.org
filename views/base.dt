@@ -46,11 +46,11 @@ html(lang="en")
             #page-wrapper
                 .container-fluid.page-center
                     .row
-                        .nav-column.hidden-xs.col-sm-2.col-md-2
+                        .nav-column.hidden-xs.col-sm-2
                             block nav-sidebar
-                        .col-sm-10.col-md-7#content-col
+                        .col-sm-10#content-col
                             block content
-                        .extra-column.hidden-xs.hidden-sm.col-md-3
+                        .extra-column.hidden-xs.hidden-sm
                             aside(data-offset-top="78", data-offset-bottom="145")
                                 block extra-sidebar
             footer#site-footer
