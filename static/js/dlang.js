@@ -114,3 +114,9 @@ $(function() {
         }
     });
 });
+
+$(function() {
+    "use strict";
+
+    prettyPrint();
+});
