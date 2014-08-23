@@ -557,6 +557,19 @@ section.symbols dl > dt code {
 
     /* Give the content column the rest, except the right sidebar width */
     #content-col {
+        /* Use a pessimistic small size for IE8, etc. */
+        width: 533px;
+        width: -webkit-calc(84% - 300px);
+        width: -moz-calc(84% - 300px);
+        width: calc(84% - 300px);
+    }
+}
+
+/* The 'large' screen size begins here */
+@media (min-width: 1200px) {
+    #content-col {
+        /* Use a pessimistic small size for IE8, etc. */
+        width: 708px;
         width: -webkit-calc(84% - 300px);
         width: -moz-calc(84% - 300px);
         width: calc(84% - 300px);
