@@ -124,17 +124,20 @@ void routeDocs(URLRouter router) {
     registerApiDocs(router, pack, generatorSettings);
 }
 
-int dlangServerMain(string args[]) {
+int dlangServerMain(string rootDir, string args[]) {
     import ddox.ddoc : setDefaultDdocMacroFiles, setOverrideDdocMacroFiles;
 
     // Set global scope ddoc files to be loaded for documentation pages.
+    import std.path : buildPath;
+
+    immutable ddocDir = buildPath(rootDir, "src", "ddoc");
     setDefaultDdocMacroFiles([
-        "../src/ddoc/std.ddoc",
-        "../src/ddoc/std-ddox.ddoc"
+        buildPath(ddocDir, "std.ddoc"),
+        buildPath(ddocDir, "std-ddox.ddoc"),
     ]);
 
     setOverrideDdocMacroFiles([
-        "../src/ddoc/std-ddox-override.ddoc"
+        buildPath(ddocDir, "std-ddox-override.ddoc"),
     ]);
 
     auto settings = new HTTPServerSettings;
@@ -154,7 +157,7 @@ int dlangServerMain(string args[]) {
     .get("/changelog.html", redirectPage("/changelog"))
     // This should stay forever.
     .get("/library/?", redirectPage("/library/index.html"))
-    .get("/static/*", serveStaticFiles("../static/", fileSettings))
+    .get("/static/*", serveStaticFiles(buildPath(rootDir, "static/"), fileSettings))
     // Handle everything else with basic Markdown files.
     .get("/*", &basicPage)
     ;
