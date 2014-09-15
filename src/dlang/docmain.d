@@ -14,16 +14,16 @@ import vibe.core.log;
 
 import ddox.main;
 
-void buildFileList() {
+void buildFileList(string rootDir) {
     enum runtimeRE = ctRegex!`unittest\.d$|gcstub|aaA.d$|cpuid.d$`;
     enum phobosRE = ctRegex!`unittest\.d$|format\.d$|linux|osx`;
 
     File file = File("files.txt", "w");
 
     chain(
-        dirEntries("../../druntime/src", "*.d", SpanMode.depth)
+        dirEntries(buildPath(rootDir, "..", "druntime", "src"), "*.d", SpanMode.depth)
         .filter!(x => !x.name.matchFirst(runtimeRE)),
-        dirEntries("../../phobos", "*.d", SpanMode.depth)
+        dirEntries(buildPath(rootDir, "..", "phobos"), "*.d", SpanMode.depth)
         .filter!(x => !x.name.matchFirst(phobosRE)),
     )
     .map!(x => x.name.absolutePath.buildNormalizedPath)
@@ -47,8 +47,8 @@ void buildDocJSON() {
     }
 }
 
-int dlangDocMain(string[] args) {
-    buildFileList();
+int dlangDocMain(string rootDir, string[] args) {
+    buildFileList(rootDir);
     buildDocJSON();
 
     string git_target = "master";
